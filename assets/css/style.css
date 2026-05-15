@@ -178,3 +178,22 @@ footer {
     text-align: center;
   }
 }
+
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.card-links a {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: 0.2s ease;
+}
+
+.card-links a:hover {
+  background: rgba(255,255,255,0.12);
+}
