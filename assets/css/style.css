@@ -21,6 +21,12 @@ body {
   border-radius: 24px;
   padding: 42px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+
+  text-align: center;
+}
+
+.page-content {
+  text-align: left;
 }
 
 h1 {
@@ -92,6 +98,63 @@ a:hover {
   background: rgba(255,255,255,0.06);
 }
 
+.highlight {
+  color: #f59e0b;
+}
+
+.subtitle {
+  color: #d1d5db;
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 42px;
+}
+
+.apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 26px;
+  transition: 0.25s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.08);
+}
+
+.card h2 {
+  margin-bottom: 14px;
+  font-size: 24px;
+}
+
+.card p {
+  color: #d1d5db;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.email-box {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+}
+
+footer {
+  margin-top: 42px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
 @media (max-width: 768px) {
 
   .container {
@@ -104,5 +167,14 @@ a:hover {
 
   p {
     font-size: 16px;
+  }
+
+  .navbar {
+    gap: 10px;
+  }
+
+  .navbar a {
+    width: 100%;
+    text-align: center;
   }
 }
