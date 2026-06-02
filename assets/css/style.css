@@ -4,6 +4,44 @@
   box-sizing: border-box;
 }
 
+.screenshot-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.screenshot-column {
+  text-align: center;
+}
+
+.screenshot-column h3 {
+  margin-bottom: 20px;
+  color: #f59e0b;
+}
+
+.screenshot-column img {
+  width: 180px;
+  max-width: 100%;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+
+  .screenshot-table {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .screenshot-column img {
+    width: 160px;
+  }
+
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: linear-gradient(135deg, #0f172a, #111827);
