@@ -4,43 +4,9 @@
   box-sizing: border-box;
 }
 
-.screenshot-table {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  margin-top: 30px;
-}
-
-.screenshot-column {
-  text-align: center;
-}
-
-.screenshot-column h3 {
-  margin-bottom: 20px;
-  color: #f59e0b;
-}
-
-.screenshot-column img {
-  width: 180px;
-  max-width: 100%;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-}
-
-@media (max-width: 768px) {
-
-  .screenshot-table {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .screenshot-column img {
-    width: 160px;
-  }
-
-}
+/* =========================
+   Base
+========================= */
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -48,12 +14,11 @@ body {
   color: white;
   min-height: 100vh;
   padding: 40px 20px;
-
   animation: fadeIn 0.4s ease;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1100px;
   margin: auto;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255,255,255,0.1);
@@ -61,13 +26,18 @@ body {
   border-radius: 24px;
   padding: 42px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-
   text-align: center;
 }
 
 .page-content {
   text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
+/* =========================
+   Typography
+========================= */
 
 h1 {
   font-size: 42px;
@@ -80,6 +50,11 @@ h2 {
   margin-bottom: 14px;
 }
 
+h3 {
+  margin-bottom: 20px;
+  color: #f59e0b;
+}
+
 p {
   color: #d1d5db;
   font-size: 17px;
@@ -87,16 +62,20 @@ p {
   margin-bottom: 22px;
 }
 
-ul {
-  padding-left: 22px;
-  margin-bottom: 20px;
+.highlight {
+  color: #f59e0b;
 }
 
-li {
+.subtitle {
   color: #d1d5db;
-  margin-bottom: 10px;
+  font-size: 18px;
   line-height: 1.7;
+  margin-bottom: 42px;
 }
+
+/* =========================
+   Links
+========================= */
 
 a {
   color: #fbbf24;
@@ -109,21 +88,9 @@ a:hover {
   color: #fde68a;
 }
 
-.links {
-  margin-top: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.home-link {
-  margin-top: 40px;
-  display: inline-block;
-  padding: 12px 20px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.08);
-}
+/* =========================
+   Navbar
+========================= */
 
 .navbar {
   display: flex;
@@ -142,16 +109,50 @@ a:hover {
   background: rgba(255,255,255,0.12);
 }
 
-.highlight {
-  color: #f59e0b;
+/* =========================
+   Features
+========================= */
+
+.features {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 24px;
 }
 
-.subtitle {
+.features li {
   color: #d1d5db;
-  font-size: 18px;
+  margin-bottom: 12px;
   line-height: 1.7;
-  margin-bottom: 42px;
+  font-size: 17px;
 }
+
+/* =========================
+   Screenshots
+========================= */
+
+.screenshot-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.screenshot-column {
+  text-align: center;
+}
+
+.screenshot-column img {
+  width: 220px;
+  max-width: 100%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+/* =========================
+   App Cards
+========================= */
 
 .apps {
   display: grid;
@@ -166,12 +167,6 @@ a:hover {
   transition: 0.25s ease;
   border: 1px solid rgba(255,255,255,0.08);
   text-align: left;
-}
-
-.page-content {
-  text-align: left;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 .card:hover {
@@ -191,6 +186,10 @@ a:hover {
   margin-bottom: 22px;
 }
 
+/* =========================
+   Buttons / Links
+========================= */
+
 .card-links {
   display: flex;
   flex-wrap: wrap;
@@ -202,7 +201,6 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 10px 14px;
   border-radius: 10px;
   background: rgba(255,255,255,0.06);
@@ -213,6 +211,26 @@ a:hover {
 .card-links a:hover {
   background: rgba(255,255,255,0.12);
 }
+
+.links {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.home-link {
+  margin-top: 40px;
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* =========================
+   Utility
+========================= */
 
 .email-box {
   margin-top: 20px;
@@ -227,6 +245,10 @@ footer {
   color: #9ca3af;
   font-size: 14px;
 }
+
+/* =========================
+   Mobile
+========================= */
 
 @media (max-width: 768px) {
 
@@ -258,10 +280,22 @@ footer {
   .card-links a {
     width: 100%;
   }
+
+  .screenshot-table {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .screenshot-column img {
+    width: 180px;
+  }
 }
 
-@keyframes fadeIn {
+/* =========================
+   Animation
+========================= */
 
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(8px);
