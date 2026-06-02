@@ -292,6 +292,26 @@ footer {
 }
 
 /* =========================
+   AppStore Badge
+========================= */
+
+.store-badge {
+  margin: 20px 0 30px;
+  text-align: center;
+}
+
+.store-badge img {
+  height: 60px;
+  width: auto;
+  transition: transform 0.2s ease;
+}
+
+.store-badge img:hover {
+  transform: scale(1.05);
+}
+
+
+/* =========================
    Animation
 ========================= */
 
