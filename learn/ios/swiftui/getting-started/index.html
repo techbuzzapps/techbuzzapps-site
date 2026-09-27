@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Getting Started with SwiftUI — SwiftUI for Beginners, Lesson 1 — TechBuzz Apps</title>
+  <meta name="description" content="Lesson 1 of SwiftUI for Beginners: learn what SwiftUI is, how a View and its body work, and how Text, Image, modifiers and VStack combine into your first SwiftUI screen.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swiftui/getting-started/">
+
+  <meta property="og:title" content="Getting Started with SwiftUI — SwiftUI for Beginners, Lesson 1">
+  <meta property="og:description" content="Understand View, body, Text, Image and modifiers while building your first simple SwiftUI interface.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swiftui/getting-started/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swiftui/">SwiftUI</a></li>
+          <li aria-current="page">Getting Started with SwiftUI</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#what-is-swiftui">What is SwiftUI?</a></li>
+                <li><a href="#describe-dont-instruct">Describe, Don't Instruct</a></li>
+                <li><a href="#your-first-swiftui-code">Your First SwiftUI Code</a></li>
+                <li><a href="#showing-text">Showing Text</a></li>
+                <li><a href="#modifiers">Modifiers</a></li>
+                <li><a href="#images-and-sf-symbols">Images &amp; SF Symbols</a></li>
+                <li><a href="#stacking-views-with-vstack">Stacking Views with VStack</a></li>
+                <li><a href="#putting-it-together">Putting It Together</a></li>
+                <li><a href="#experiment">Experiment</a></li>
+                <li><a href="#recap">Recap</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>SwiftUI for Beginners</summary>
+            <nav data-series aria-label="SwiftUI for Beginners lessons">
+              <ul>
+                <li><span class="is-current" aria-current="page">1. Getting Started</span></li>
+                <li><a href="/learn/ios/swiftui/building-your-first-screen/">2. Your First Screen</a></li>
+                <li><span class="is-future">3. Interactivity</span></li>
+                <li><span class="is-future">4. Lists of Data</span></li>
+                <li><span class="is-future">5. Navigation</span></li>
+                <li><span class="is-future">6. Sharing State</span></li>
+                <li><span class="is-future">7. Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow">SwiftUI for Beginners · Lesson 1 of 9</p>
+            <h1>Getting Started with SwiftUI</h1>
+            <p class="subtitle">
+              In this first lesson you'll learn what SwiftUI is, read
+              your first SwiftUI code line by line, and build a small
+              screen with a symbol, a title and a subtitle. No previous
+              SwiftUI or UIKit experience needed.
+            </p>
+          </header>
+
+          <h2 id="what-is-swiftui">What is SwiftUI?</h2>
+
+          <p>
+            Every app you use has a <strong>user interface</strong>, or
+            UI: the part you can see and touch. The text, the images,
+            the buttons, the lists you scroll through — all of that is
+            the UI.
+          </p>
+
+          <p>
+            <strong>SwiftUI</strong> is Apple's framework for building
+            that UI in Swift. You write Swift code that describes what
+            should appear on screen, and SwiftUI takes care of drawing
+            it. The same ideas work on iPhone, iPad, Mac, Apple Watch
+            and Apple TV, so what you learn here carries across all of
+            Apple's platforms.
+          </p>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              To follow along, create a new project in Xcode
+              (<em>File → New → Project → iOS → App</em>) and make sure
+              the interface is set to <strong>SwiftUI</strong>. Open
+              <code>ContentView.swift</code>. The canvas on the right
+              shows a live preview of your code, and it updates as you
+              type. The small <code>#Preview</code> block at the bottom
+              of the file is what powers that preview; you can leave it
+              as it is.
+            </p>
+          </div>
+
+          <h2 id="describe-dont-instruct">Describe, Don't Instruct</h2>
+
+          <p>
+            SwiftUI is <strong>declarative</strong>. That word sounds
+            technical, but the idea is friendly: you <em>declare</em>
+            what you want the screen to look like, and SwiftUI works
+            out how to make it happen.
+          </p>
+
+          <p>
+            Think about ordering at a café. You don't walk into the
+            kitchen and tell the barista which cupboard holds the cups,
+            how long to steam the milk and where to put the lid. You
+            say "a large cappuccino, please", and they handle the steps.
+          </p>
+
+          <p>
+            SwiftUI works the same way. Instead of writing step-by-step
+            instructions such as "create a label, set its text, set its
+            font, add it to the screen at this position", you write
+            something closer to:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A plain-language description: show a star, then the words Hello, SwiftUI in a large bold font, then a smaller line underneath.">Show a star.
+Under it, show "Hello, SwiftUI!"
+in a large, bold font.
+Under that, show a smaller
+line of text.</pre>
+            <figcaption>Declarative UI: describe the result you want, not the steps to get there.</figcaption>
+          </figure>
+
+          <p>
+            By the end of this lesson, you'll have written exactly that
+            screen in real SwiftUI code.
+          </p>
+
+          <h2 id="your-first-swiftui-code">Your First SwiftUI Code</h2>
+
+          <p>
+            Here is the smallest useful piece of SwiftUI. It shows one
+            line of text in the middle of the screen:
+          </p>
+
+          <pre><code class="language-swift">import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, SwiftUI!")
+    }
+}</code></pre>
+
+          <p>
+            Only seven lines, but each one has a job. Let's go through
+            them one at a time.
+          </p>
+
+          <h3 id="import-swiftui"><code>import SwiftUI</code></h3>
+
+          <p>
+            This line gives your file access to everything SwiftUI
+            provides: <code>View</code>, <code>Text</code>,
+            <code>Image</code>, <code>VStack</code> and much more.
+            Without it, Swift wouldn't know what any of those words
+            mean. You'll see it at the top of every SwiftUI file.
+          </p>
+
+          <h3 id="struct-contentview"><code>struct ContentView: View</code></h3>
+
+          <p>
+            This creates a new type called <code>ContentView</code>. The
+            <code>: View</code> part is a promise: "ContentView is a
+            view, and it can be shown on screen."
+          </p>
+
+          <p>
+            In SwiftUI, <strong>everything you see is a view</strong>.
+            A piece of text is a view. An image is a view. A whole
+            screen is a view too — it's simply a view that contains
+            other views. The name <code>ContentView</code> is only the
+            default Xcode picks; you'll create views with names like
+            <code>WelcomeView</code> or <code>ProfileView</code> later.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>A SwiftUI screen is a <strong>View</strong>.</p>
+          </div>
+
+          <h3 id="var-body"><code>var body: some View</code></h3>
+
+          <p>
+            Every view has a <code>body</code>. The body answers one
+            question: <em>"What should this view show?"</em> Whatever you
+            put inside the curly braces of <code>body</code> is what
+            appears on screen. Here, the answer is a single piece of
+            text.
+          </p>
+
+          <p>
+            The <code>some View</code> part means "this returns some
+            kind of view". You don't have to spell out the exact type;
+            Swift works it out from what you write inside the body. For
+            now, that's all you need to know about it — you'll write
+            <code>var body: some View</code> the same way in every view
+            you create.
+          </p>
+
+          <h3 id="text-hello"><code>Text("Hello, SwiftUI!")</code></h3>
+
+          <p>
+            This is the actual content: a view that displays a string.
+            It's the first real building block, so let's look at it
+            more closely.
+          </p>
+
+          <h2 id="showing-text">Showing Text</h2>
+
+          <p>
+            <code>Text</code> displays read-only text. You give it a
+            string in quotes, and it appears on screen:
+          </p>
+
+          <pre><code class="language-swift">Text("Hello, SwiftUI!")</code></pre>
+
+          <p>
+            On its own, the text uses the system's standard body font
+            and color. That's a sensible default, but most screens need
+            a clear hierarchy: a big title, a smaller subtitle, maybe a
+            highlighted word. That's where modifiers come in.
+          </p>
+
+          <h2 id="modifiers">Modifiers</h2>
+
+          <p>
+            A <strong>modifier</strong> customizes a view. You add it by
+            writing a dot and the modifier's name after the view:
+          </p>
+
+          <pre><code class="language-swift">Text("Hello, SwiftUI!")
+    .font(.title)</code></pre>
+
+          <p>
+            <code>.font(.title)</code> makes the text larger, using the
+            system's title style. You can keep adding modifiers, one
+            per line, and each one changes something else:
+          </p>
+
+          <pre><code class="language-swift">Text("Hello, SwiftUI!")
+    .font(.title)
+    .fontWeight(.bold)
+    .foregroundStyle(.blue)</code></pre>
+
+          <p>
+            Now the text is large, bold and blue. Reading the code from
+            top to bottom tells you exactly what you'll see.
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Diagram: Text Hello, SwiftUI flows into a font title modifier, then fontWeight bold, then foregroundStyle blue, producing large bold blue text.">Text("Hello, SwiftUI!")
+    │
+    ▼  .font(.title)            → larger
+    │
+    ▼  .fontWeight(.bold)       → bold
+    │
+    ▼  .foregroundStyle(.blue)  → blue
+
+Result: large, bold, blue text</pre>
+            <figcaption>Each modifier takes the view above it and returns a customized version.</figcaption>
+          </figure>
+
+          <p>
+            A few font styles you'll use often, from largest to
+            smallest: <code>.largeTitle</code>, <code>.title</code>,
+            <code>.headline</code>, <code>.body</code>,
+            <code>.subheadline</code> and <code>.caption</code>. Using
+            these named styles, rather than exact point sizes, means
+            your text also respects the user's preferred text size in
+            Settings.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              This is the pattern you'll use in every SwiftUI screen:
+              <strong>create a view, then customize it with
+              modifiers.</strong> View first, modifiers after.
+            </p>
+          </div>
+
+          <h2 id="images-and-sf-symbols">Images and SF Symbols</h2>
+
+          <p>
+            Text is one building block; images are another. Apple ships
+            thousands of ready-made icons called <strong>SF
+            Symbols</strong>. They're designed to sit nicely next to
+            text, and you can use them without adding any image files to
+            your project.
+          </p>
+
+          <p>
+            To show one, create an <code>Image</code> with the symbol's
+            name:
+          </p>
+
+          <pre><code class="language-swift">Image(systemName: "star.fill")</code></pre>
+
+          <p>
+            <code>systemName:</code> tells SwiftUI to look for an SF
+            Symbol with that name. <code>"star.fill"</code> is a filled
+            star; <code>"star"</code> would be an outline. You can browse
+            every available name in Apple's free <em>SF Symbols</em> app
+            for Mac.
+          </p>
+
+          <p>
+            Because SF Symbols behave like text, you size them with the
+            same <code>.font()</code> modifier you used on
+            <code>Text</code>, and color them with
+            <code>.foregroundStyle()</code>:
+          </p>
+
+          <pre><code class="language-swift">Image(systemName: "star.fill")
+    .font(.largeTitle)
+    .foregroundStyle(.yellow)</code></pre>
+
+          <p>
+            Notice the pattern again: an <code>Image</code> is a view,
+            and modifiers customize it. The same modifier even works on
+            both kinds of view.
+          </p>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Tip</span>
+            <p>
+              A few symbol names to try: <code>"heart.fill"</code>,
+              <code>"sun.max.fill"</code>, <code>"bolt.fill"</code>,
+              <code>"person.circle"</code> and
+              <code>"gearshape"</code>. If a name is misspelled, nothing
+              appears — so if an image goes missing, check the name
+              first.
+            </p>
+          </div>
+
+          <h2 id="stacking-views-with-vstack">Stacking Views with VStack</h2>
+
+          <p>
+            So far each example has shown one view. A real screen has
+            several, and they need to be arranged somehow. For that,
+            SwiftUI has <strong>containers</strong>: views whose job is
+            to hold and position other views.
+          </p>
+
+          <p>
+            The first container to learn is <code>VStack</code>, a
+            <strong>vertical stack</strong>. It places its views one
+            below the other, from top to bottom, in the order you write
+            them:
+          </p>
+
+          <pre><code class="language-swift">VStack {
+    Image(systemName: "star.fill")
+    Text("Hello, SwiftUI!")
+    Text("Build beautiful iOS apps")
+}</code></pre>
+
+          <p>
+            You can picture it as a small family tree, with the
+            <code>VStack</code> at the top and its children underneath:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Tree diagram: a VStack containing, in order, an Image, a Text, and another Text.">VStack
+│
+├── Image
+│
+├── Text
+│
+└── Text</pre>
+            <figcaption>The VStack is the parent; the Image and the two Text views are its children, shown top to bottom.</figcaption>
+          </figure>
+
+          <p>
+            By default a <code>VStack</code> centers its children and
+            leaves a small standard gap between them. You can choose
+            the gap yourself with <code>spacing</code>:
+          </p>
+
+          <pre><code class="language-swift">VStack(spacing: 16) {
+    Image(systemName: "star.fill")
+    Text("Hello, SwiftUI!")
+    Text("Build beautiful iOS apps")
+}</code></pre>
+
+          <p>
+            Now there are 16 points of space between each view. Try
+            changing the number and watch the preview update.
+          </p>
+
+          <h2 id="putting-it-together">Putting It Together</h2>
+
+          <p>
+            You now know every piece needed for this lesson's screen.
+            Here's what we're building:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the finished screen: a star symbol, the title Hello, SwiftUI! in bold, and the subtitle Build beautiful iOS apps, centered and stacked vertically.">          ★
+
+    Hello, SwiftUI!
+
+ Build beautiful iOS apps</pre>
+            <figcaption>The finished Lesson 1 screen: a symbol, a bold title and a subtitle, stacked vertically.</figcaption>
+          </figure>
+
+          <p>
+            Before looking at the code, try describing it the
+            declarative way: <em>a vertical stack containing a large
+            star, a big bold title, and a smaller subtitle.</em> That
+            sentence maps almost directly to SwiftUI:
+          </p>
+
+          <pre><code class="language-swift">import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "star.fill")
+                .font(.largeTitle)
+
+            Text("Hello, SwiftUI!")
+                .font(.title)
+                .fontWeight(.bold)
+
+            Text("Build beautiful iOS apps")
+                .font(.subheadline)
+        }
+    }
+}</code></pre>
+
+          <p>Read it from the outside in:</p>
+
+          <ol>
+            <li><code>ContentView</code> is a view — it's our screen.</li>
+            <li>Its <code>body</code> describes what the screen shows: one <code>VStack</code>.</li>
+            <li>The <code>VStack</code> arranges three views vertically, 16 points apart.</li>
+            <li>Each of those views is customized with its own modifiers.</li>
+          </ol>
+
+          <p>
+            Notice the indentation. Each view's modifiers sit one level
+            further in than the view itself, and the blank lines
+            separate one child from the next. SwiftUI doesn't require
+            the blank lines, but they make it much easier to see where
+            each view starts and ends — a habit worth keeping.
+          </p>
+
+          <h2 id="experiment">Experiment</h2>
+
+          <p>
+            The fastest way to learn SwiftUI is to change things and
+            watch the preview. Try each of these, one at a time:
+          </p>
+
+          <ul>
+            <li>Change <code>"star.fill"</code> to <code>"sun.max.fill"</code> or <code>"bolt.fill"</code>.</li>
+            <li>Add <code>.foregroundStyle(.orange)</code> under the image's <code>.font(.largeTitle)</code>.</li>
+            <li>Change <code>.font(.title)</code> to <code>.font(.largeTitle)</code> and compare.</li>
+            <li>Change <code>spacing: 16</code> to <code>spacing: 4</code>, then to <code>spacing: 40</code>.</li>
+            <li>Add a fourth <code>Text</code> inside the <code>VStack</code> with <code>.font(.caption)</code>.</li>
+          </ul>
+
+          <p>
+            If something breaks, don't worry. Compare your code to the
+            version above, especially the curly braces: every
+            <code>{</code> needs a matching <code>}</code>.
+          </p>
+
+          <h2 id="recap">Recap</h2>
+
+          <div class="callout callout-takeaway">
+            <span class="callout-title">What you learned</span>
+            <ul>
+              <li><strong>A SwiftUI screen is a View.</strong> Everything you see — text, images, whole screens — is a view.</li>
+              <li><strong><code>body</code> describes what appears.</strong> SwiftUI reads it to know what to draw.</li>
+              <li><strong><code>Text</code> and <code>Image</code> are views.</strong> <code>Image(systemName:)</code> shows an SF Symbol.</li>
+              <li><strong>Modifiers customize views</strong> — <code>.font()</code>, <code>.fontWeight()</code>, <code>.foregroundStyle()</code>.</li>
+              <li><strong>Containers arrange views.</strong> <code>VStack</code> stacks them vertically, with optional <code>spacing</code>.</li>
+            </ul>
+          </div>
+
+          <p>
+            If you only remember one thing, make it the pattern:
+            <strong>view, then modifiers — and containers to arrange
+            views.</strong> Everything in the next lesson builds on it.
+          </p>
+
+          <h2 id="challenge">Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+            <p>Build this screen in a new view, without copying the code above:</p>
+            <figure class="diagram">
+              <pre role="img" aria-label="Sketch of the challenge screen: a heart symbol, the word Welcome! in bold, and the line I'm learning SwiftUI, centered and stacked vertically.">       ♥︎
+
+    Welcome!
+
+I'm learning SwiftUI</pre>
+            </figure>
+            <p>Use:</p>
+            <ul>
+              <li>a <code>VStack</code></li>
+              <li>an <code>Image</code> with an SF Symbol (hint: look for a heart)</li>
+              <li>two <code>Text</code> views</li>
+              <li><code>.font()</code> and <code>.fontWeight()</code></li>
+            </ul>
+            <p>
+              Once it works, make it your own: try a different color for
+              the heart, a different font style for each line, or more
+              space between them. There's no single correct answer —
+              if it looks right to you in the preview, you've done it.
+            </p>
+          </div>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <span class="pagination-placeholder">This is the first lesson</span>
+            <a href="/learn/ios/swiftui/building-your-first-screen/" class="pagination-link is-next">
+              <span class="pagination-label">Next lesson</span>
+              Lesson 2 — Building Your First Screen
+            </a>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
