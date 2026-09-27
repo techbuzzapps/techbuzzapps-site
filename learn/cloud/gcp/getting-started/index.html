@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Getting Started with Google Cloud — GCP for Beginners, Lesson 1 — TechBuzz Apps</title>
+  <meta name="description" content="Lesson 1 of GCP for Beginners: what the cloud is, Google Cloud as a toolbox, projects, regions and zones, the Google Cloud Console and Cloud Shell — explained from zero.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/cloud/gcp/getting-started/">
+
+  <meta property="og:title" content="Getting Started with Google Cloud — GCP for Beginners, Lesson 1">
+  <meta property="og:description" content="What the cloud is, projects, regions and zones, the Console and Cloud Shell — your first orientation in Google Cloud.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/cloud/gcp/getting-started/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/cloud/">Cloud</a></li>
+          <li><a href="/learn/cloud/gcp/">GCP</a></li>
+          <li aria-current="page">Getting Started</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#what-are-we-learning">What Are We Learning?</a></li>
+                <li><a href="#what-is-the-cloud">What Is "the Cloud"?</a></li>
+                <li><a href="#gcp-as-a-toolbox">GCP as a Giant Toolbox</a></li>
+                <li><a href="#google-cloud-project">What Is a Google Cloud Project?</a></li>
+                <li><a href="#regions-and-zones">Regions and Zones</a></li>
+                <li><a href="#google-cloud-console">Meet the Google Cloud Console</a></li>
+                <li><a href="#cloud-shell">And Eventually: Cloud Shell</a></li>
+                <li><a href="#what-did-we-learn">What Did We Actually Learn?</a></li>
+                <li><a href="#tiny-challenge">Tiny Challenge</a></li>
+                <li><a href="#coming-next">Coming Next</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>GCP for Beginners</summary>
+            <nav aria-label="GCP for Beginners lessons">
+              <ul>
+                <li><span class="is-current" aria-current="page">1. Getting Started with Google Cloud</span></li>
+                <li><span class="is-future">2. Your First Server in the Cloud</span></li>
+                <li><span class="is-future">3. Storing Files in the Cloud</span></li>
+                <li><span class="is-future">4. Deploying an Application Without Managing Servers</span></li>
+                <li><span class="is-future">5. Databases in Google Cloud</span></li>
+                <li><span class="is-future">6. Users, Permissions &amp; Security</span></li>
+                <li><span class="is-future">7. Networking Without the Headache</span></li>
+                <li><span class="is-future">8. Connecting Services Together</span></li>
+                <li><span class="is-future">9. Monitoring, Logs &amp; Costs</span></li>
+                <li><span class="is-future">10. Beginner GCP Project</span></li>
+              </ul>
+              <a href="/learn/cloud/gcp/" class="sidebar-back">← GCP for Beginners</a>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow"><span aria-hidden="true">☁️</span> GCP for Beginners · Lesson 1 of 10</p>
+            <h1>Getting Started with Google Cloud</h1>
+            <p class="subtitle">
+              What the cloud actually is, how Google Cloud is organised,
+              and your first look around the Google Cloud Console — no
+              previous cloud experience needed, and nothing to set up or
+              pay for in this lesson.
+            </p>
+          </header>
+
+          <h2 id="what-are-we-learning"><span aria-hidden="true">👋</span> What Are We Learning?</h2>
+
+          <p>
+            Imagine you've built an application. Maybe it's a small
+            study app, a website, or an API. It works perfectly on your
+            own computer.
+          </p>
+
+          <p>
+            But now you want people around the world to use it. Your
+            computer can't realistically stay switched on forever,
+            serving thousands of users, day and night. You need
+            computers somewhere else that can:
+          </p>
+
+          <ul>
+            <li>run your application</li>
+            <li>store your files</li>
+            <li>store your database</li>
+            <li>handle your users</li>
+            <li>process their requests</li>
+            <li>stay available 24/7</li>
+          </ul>
+
+          <p>
+            That is what a cloud platform gives you. In this course,
+            that platform is <strong>Google Cloud Platform</strong> —
+            <strong>GCP</strong> for short.
+          </p>
+
+          <p>
+            We won't start with a long list of product names. Instead,
+            here's the first picture to keep in your head:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Google Cloud contains a Project. The project contains three kinds of resources: Compute to run apps, Storage to store files, and Database to store data.">            Google Cloud
+                 │
+          ┌──────┴──────┐
+          │   Project   │
+          └──────┬──────┘
+                 │
+    ┌────────────┼────────────┐
+    │            │            │
+ Compute      Storage     Database
+    │            │            │
+ Run apps   Store files  Store data</pre>
+            <figcaption>Your resources live inside a project in Google Cloud: somewhere to run apps, store files and store data.</figcaption>
+          </figure>
+
+          <p>By the end of this lesson, every part of that picture will make sense.</p>
+
+          <h2 id="what-is-the-cloud"><span aria-hidden="true">🌩️</span> First: What Is "the Cloud"?</h2>
+
+          <p>The simplest honest definition is:</p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p><strong>The cloud is somebody else's computers that you can use over the internet.</strong></p>
+          </div>
+
+          <p>
+            Google owns enormous buildings called
+            <strong>data centers</strong>, filled with thousands of
+            powerful computers called <strong>servers</strong>. When
+            you use Google Cloud, you're borrowing a small part of those
+            computers — only what you need, only for as long as you need
+            it.
+          </p>
+
+          <p>So instead of buying and running your own hardware, you can simply ask for what you need:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Three example requests: I need a computer. I need 100 GB of storage. I need somewhere to store my application's data.">"I need a computer."
+
+"I need 100 GB of storage."
+
+"I need somewhere to store
+ my application's data."</pre>
+            <figcaption>Three everyday cloud requests.</figcaption>
+          </figure>
+
+          <p>
+            Google Cloud has a service for each of these. You ask, and
+            within moments the computer, storage or database is ready to
+            use.
+          </p>
+
+          <h2 id="gcp-as-a-toolbox"><span aria-hidden="true">🧩</span> Think of GCP as a Giant Toolbox</h2>
+
+          <p>
+            Google Cloud has a lot of services — far too many to learn
+            at once. The good news is that you don't need to. Think of
+            GCP as a giant toolbox, organised into a few kinds of
+            tools:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="GCP as a toolbox with five kinds of tools: Compute to run applications, Storage to store files, Databases to store structured data, Networking to connect everything, and IAM to control who can do what.">GCP
+ │
+ ├── 🖥️ Compute
+ │      Run applications
+ │
+ ├── 📦 Storage
+ │      Store files
+ │
+ ├── 🗄️ Databases
+ │      Store structured data
+ │
+ ├── 🌐 Networking
+ │      Connect everything
+ │
+ └── 🔐 IAM
+        Control who can do what</pre>
+            <figcaption>Five kinds of tools: compute, storage, databases, networking and IAM (Identity and Access Management).</figcaption>
+          </figure>
+
+          <p>
+            Each kind of tool solves a kind of problem. When you have a
+            problem, you pick the tool for it:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Problems mapped to Google Cloud services: need a computer, use Compute Engine. Need file storage, use Cloud Storage. Need to run an app without managing servers, use Cloud Run. Need a relational database, use Cloud SQL.">Need a computer?
+        ↓
+Compute Engine
+
+Need file storage?
+        ↓
+Cloud Storage
+
+Need to run an app without
+managing servers?
+        ↓
+Cloud Run
+
+Need a relational database?
+        ↓
+Cloud SQL</pre>
+            <figcaption>Start from the problem; the service follows.</figcaption>
+          </figure>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              <strong>Services come after concepts.</strong> First
+              understand what you need — a computer, storage, a
+              database — and then learn the Google Cloud service that
+              provides it. That's the order this whole course follows.
+            </p>
+          </div>
+
+          <h2 id="google-cloud-project"><span aria-hidden="true">📁</span> What Is a Google Cloud Project?</h2>
+
+          <p>
+            Everything you create in Google Cloud lives inside a
+            <strong>project</strong>. Imagine you're building an app
+            called <em>StudyBuddy</em>. Its server, its files and its
+            database would all belong to one project:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Google Cloud contains the StudyBuddy Project, which contains a VM, Storage and a Database.">    Google Cloud
+          │
+          ▼
+┌────────────────────┐
+│ StudyBuddy Project │
+└────────────────────┘
+          │
+   ┌──────┼───────┐
+   │      │       │
+   ▼      ▼       ▼
+  VM   Storage  Database</pre>
+            <figcaption>The StudyBuddy project holds everything that belongs to the StudyBuddy app.</figcaption>
+          </figure>
+
+          <p>
+            A project is a <strong>container</strong> — an
+            organisational boundary around a set of cloud resources. It
+            keeps everything for one app or purpose together, and
+            separate from everything else. A project organises your:
+          </p>
+
+          <ul>
+            <li><strong>Resources</strong> — the servers, storage, databases and other things you create.</li>
+            <li><strong>Permissions</strong> — who is allowed to see or change them.</li>
+            <li><strong>APIs</strong> — which Google Cloud services are switched on for this project. A service's API needs to be enabled in a project before you can use it there.</li>
+            <li><strong>Billing</strong> — the project is linked to a billing account, which pays for what the project uses.</li>
+            <li><strong>Monitoring</strong> — the logs and metrics that tell you what's happening inside it.</li>
+          </ul>
+
+          <p>
+            Every project has a <strong>Project ID</strong>: a unique
+            name that identifies it across all of Google Cloud, such as
+            <code>studybuddy-app-12345</code>. You'll see it in the
+            Console and use it with command-line tools. The display name
+            of a project can be changed later, but the Project ID stays
+            the same for the life of the project.
+          </p>
+
+          <h2 id="regions-and-zones"><span aria-hidden="true">🌍</span> Regions and Zones</h2>
+
+          <p>
+            Google's data centers are spread across the world. When you
+            create something in Google Cloud, you choose roughly
+            <em>where</em> it runs, using regions and zones:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A region contains several zones: Zone A, Zone B and Zone C.">Region
+│
+├── Zone A
+├── Zone B
+└── Zone C</pre>
+            <figcaption>Each region contains several zones.</figcaption>
+          </figure>
+
+          <ul>
+            <li>A <strong>region</strong> is a geographic area — for example, <code>us-central1</code> in Iowa or <code>europe-west2</code> in London.</li>
+            <li>A <strong>zone</strong> is a separate deployment area inside a region, such as <code>us-central1-a</code>.</li>
+          </ul>
+
+          <p>
+            Why have several zones in one region? Because things
+            occasionally go wrong — a power problem, a network fault, a
+            hardware failure. Zones are kept separate from each other,
+            so if one zone has a problem, the others can keep running.
+            You'll mostly just pick a region close to your users for
+            now; designing across zones and regions comes much later.
+          </p>
+
+          <h2 id="google-cloud-console"><span aria-hidden="true">🖥️</span> Meet the Google Cloud Console</h2>
+
+          <p>
+            The <strong>Google Cloud Console</strong>, at
+            <code>console.cloud.google.com</code>, is the website where
+            you manage everything in Google Cloud. It's where most of
+            the hands-on work in this course happens.
+          </p>
+
+          <p>At a high level, it looks like this:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The Google Cloud Console has a project selector. Within the selected project you can reach Compute Engine, Cloud Storage, Cloud Run, IAM and Billing.">Google Cloud Console
+
+Project selector
+      │
+      ├── Compute Engine
+      ├── Cloud Storage
+      ├── Cloud Run
+      ├── IAM
+      └── Billing</pre>
+            <figcaption>Choose a project first; then the services you open work inside that project.</figcaption>
+          </figure>
+
+          <p>
+            The <strong>project selector</strong> decides which project
+            you're working in. Everything you open after that —
+            Compute Engine, Cloud Storage, Cloud Run, IAM, Billing —
+            shows the resources of the selected project.
+          </p>
+
+          <p>
+            In the coming lessons, you'll use the Console a lot. But
+            the goal is never just:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Not the goal: click this, then click that, then done.">Click this → click that → done.</pre>
+          </figure>
+
+          <p>
+            Each time, we'll stop and look at what Google Cloud actually
+            did underneath — what was created, where it lives, and how
+            it connects to everything else. That understanding is what
+            lets you solve problems the Console buttons don't show you.
+          </p>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              Google updates the Console's layout from time to time, so
+              menus may not sit exactly where a screenshot or video
+              suggests. The concepts in this course don't change — and
+              you can always use the Console's search to find a service
+              by name.
+            </p>
+          </div>
+
+          <h2 id="cloud-shell"><span aria-hidden="true">💻</span> And Eventually: Cloud Shell</h2>
+
+          <p>
+            Clicking through the Console is a great way to learn. But
+            there's a second way to work with Google Cloud: typing
+            commands. <strong>Cloud Shell</strong> is a terminal that
+            opens in your browser from the Console, with Google Cloud's
+            command-line tool, <code>gcloud</code>, already installed and
+            signed in as you.
+          </p>
+
+          <p>For example, this command lists the projects you have access to:</p>
+
+          <pre><code class="language-bash">gcloud projects list</code></pre>
+
+          <p>The important thing to understand is that the Console and Cloud Shell aren't two different clouds:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The Console and Cloud Shell with gcloud both work with the same cloud resources.">Console
+   │
+   │ same cloud resources
+   │
+Cloud Shell / gcloud</pre>
+            <figcaption>Two ways to work with the same cloud environment.</figcaption>
+          </figure>
+
+          <p>
+            A project created in the Console shows up in
+            <code>gcloud</code>, and something created with
+            <code>gcloud</code> appears in the Console. We'll introduce
+            commands gradually, one at a time, alongside the Console —
+            you don't need to learn <code>gcloud</code> yet.
+          </p>
+
+          <h2 id="what-did-we-learn"><span aria-hidden="true">🧠</span> What Did We Actually Learn?</h2>
+
+          <p><strong>Cloud computing</strong> means your app runs on Google's computers instead of yours:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Your app runs on Google Cloud, which provides servers, storage and databases.">Your App
+   ↓
+Google Cloud
+   ↓
+Servers / Storage / Databases</pre>
+          </figure>
+
+          <p>A <strong>project</strong> holds your cloud resources together:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A project contains Compute, Storage and Database.">Project
+ ├── Compute
+ ├── Storage
+ └── Database</pre>
+          </figure>
+
+          <p><strong>Regions</strong> are geographic areas, and each contains several <strong>zones</strong>:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A region contains Zone A, Zone B and Zone C.">Region
+ ├── Zone A
+ ├── Zone B
+ └── Zone C</pre>
+          </figure>
+
+          <p>
+            And you work with all of it through the <strong>Console</strong>
+            — and, gradually, through <strong>Cloud Shell</strong> and
+            <code>gcloud</code>.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              <strong>You don't need to learn all of GCP.</strong> You
+              learn the services you need to solve a particular problem —
+              and each lesson in this course is built around one of those
+              problems.
+            </p>
+          </div>
+
+          <h2 id="tiny-challenge"><span aria-hidden="true">🎯</span> Tiny Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+            <p>
+              Open the Google Cloud Console and look at the
+              <strong>project selector</strong>. For the project that's
+              selected, find its:
+            </p>
+            <ul>
+              <li>Project Name</li>
+              <li>Project ID</li>
+              <li>Project Number</li>
+            </ul>
+            <p>Then find each of these services in the Console:</p>
+            <ul>
+              <li>Compute Engine</li>
+              <li>Cloud Storage</li>
+              <li>Cloud Run</li>
+              <li>IAM</li>
+              <li>Billing</li>
+            </ul>
+            <p><strong>Important: don't create anything yet.</strong> This challenge is only about finding your way around:</p>
+            <ul>
+              <li>No VM.</li>
+              <li>No bucket.</li>
+              <li>No database.</li>
+              <li>No billing changes.</li>
+              <li>No deployments.</li>
+            </ul>
+            <p>Just look around and get comfortable. Creating things starts in Lesson 2.</p>
+          </div>
+
+          <h2 id="coming-next"><span aria-hidden="true">🚀</span> Coming Next</h2>
+
+          <p>
+            In <strong>Lesson 2 — Your First Server in the Cloud</strong>,
+            you'll create a virtual machine in Google Cloud and use it to
+            put a web page on the internet:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 2 architecture: your computer connects over the internet to a Google Cloud VM running Linux, a web server and your web page, which is reachable at a public web address.">Your Computer
+      │
+      │ Internet
+      ▼
+┌─────────────────────┐
+│   Google Cloud VM   │
+│                     │
+│   Linux             │
+│   Web Server        │
+│   Your Web Page     │
+└─────────────────────┘
+      │
+      ▼
+https://...</pre>
+            <figcaption>Your first server: a Google Cloud VM serving a web page.</figcaption>
+          </figure>
+
+          <p>
+            Along the way you'll meet <strong>Compute Engine</strong>,
+            <strong>VMs</strong>, <strong>CPU</strong>,
+            <strong>RAM</strong>, <strong>disks</strong>,
+            <strong>IP addresses</strong>, <strong>SSH</strong> and
+            <strong>firewalls</strong> — not as a list of terms to
+            memorise, but as parts of one story: getting your web page
+            online.
+          </p>
+
+          <p>Every lesson in this course follows the same rhythm:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The course rhythm: concept, visual explanation, Console hands-on, understand what happened, experiment, tiny challenge, real project.">concept
+  → visual explanation
+  → Console hands-on
+  → understand what happened
+  → experiment
+  → tiny challenge
+  → real project</pre>
+          </figure>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <span class="pagination-placeholder">This is the first lesson</span>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 2 — Your First Server in the Cloud
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
