@@ -410,3 +410,402 @@ footer {
     transform: translateY(0);
   }
 }
+
+
+/* =========================================================
+   SITE SHELL — shared by Apps (/) and Learn (/learn/)
+   Header, footer, page shell and the small set of primitives
+   both areas use. Area-specific UI lives in apps.css / learn.css.
+========================================================= */
+
+/* =========================
+
+   Shell foundation
+   Pages opt in with <body class="site-shell">, so the
+   legacy app pages (Dharma Connect, Simply Inspiring) that
+   also load this file are unaffected.
+========================= */
+
+body.site-shell {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-shell :focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--page-gutter);
+  top: -100px;
+  z-index: 100;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-link);
+  color: var(--color-bg);
+  transition: none;
+}
+
+.skip-link:focus-visible {
+  top: var(--space-sm);
+  color: var(--color-bg);
+}
+
+/* Reserves the header's space while the shared component loads,
+   so page content doesn't jump when it's inserted. */
+[data-component="site-header"] {
+  min-height: calc(var(--header-height) + 1px);
+}
+
+/* =========================
+   Site header (components/site-header.html)
+========================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.92);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: saturate(140%) blur(8px);
+}
+
+.site-header-inner {
+  max-width: calc(var(--content-width) + 2 * var(--page-gutter));
+  min-height: var(--header-height);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.site-header .brand {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.site-header .brand:hover {
+  color: var(--color-text);
+}
+
+.top-nav ul,
+.footer-nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.top-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--color-text-body);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.top-nav a:hover {
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+}
+
+/* Active indicator: a short accent bar under the current section. */
+.top-nav a::after {
+  content: "";
+  position: absolute;
+  left: var(--space-md);
+  right: var(--space-md);
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-link);
+  transform: scaleX(0);
+  transition: transform var(--transition-normal);
+}
+
+.top-nav a[aria-current] {
+  color: var(--color-link);
+}
+
+.top-nav a[aria-current]::after {
+  transform: scaleX(1);
+}
+
+/* =========================
+   Site footer (components/site-footer.html)
+========================= */
+
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.site-footer-inner {
+  max-width: calc(var(--content-width) + 2 * var(--page-gutter));
+  margin: 0 auto;
+  padding: var(--space-xl) var(--page-gutter) var(--space-2xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm) var(--space-lg);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.site-footer .site-footer-brand {
+  font-weight: 700;
+  color: var(--color-text-body);
+}
+
+.site-footer-legal {
+  flex-basis: 100%;
+}
+
+.footer-nav ul {
+  gap: var(--space-lg);
+}
+
+.footer-nav a {
+  display: inline-block;
+  padding: var(--space-2xs) 0;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer-nav a:hover {
+  color: var(--color-link);
+}
+
+/* =========================
+   Page shell
+========================= */
+
+.site-main {
+  flex: 1;
+  width: 100%;
+  padding: var(--space-xl) var(--page-gutter) var(--space-3xl);
+}
+
+.site-main > .container {
+  max-width: var(--content-width);
+  text-align: left;
+  padding: clamp(24px, 4vw, 48px);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* =========================
+   Section headers + hero helpers
+========================= */
+
+.eyebrow {
+  margin: 0 0 var(--space-sm);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs) var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+/* Page hero: the intro block at the top of every shell page. */
+.page-intro {
+  max-width: 720px;
+  margin-bottom: var(--space-2xl);
+}
+
+.page-intro h1 {
+  font-size: clamp(30px, 4vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-md);
+}
+
+.page-intro .subtitle {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-text-body);
+  margin-bottom: 0;
+}
+
+.page-section + .page-section {
+  margin-top: var(--space-2xl);
+}
+
+.section-lead {
+  max-width: 68ch;
+  margin-bottom: var(--space-lg);
+}
+
+/* Square tile holding a decorative emoji/icon (card headers). */
+.icon-tile {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* =========================
+   Buttons + badges
+========================= */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-link);
+  background: var(--color-link);
+  color: var(--color-bg);
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.button:hover {
+  background: var(--color-link-hover);
+  border-color: var(--color-link-hover);
+  color: var(--color-bg);
+}
+
+.button-secondary {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.button-secondary:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.badge-accent {
+  color: var(--color-link);
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-border);
+}
+
+/* =========================
+   Shell responsive + motion
+========================= */
+
+@media (max-width: 768px) {
+
+  .site-main {
+    padding-top: var(--space-lg);
+  }
+
+  .page-intro {
+    margin-bottom: var(--space-xl);
+  }
+
+  .page-intro .subtitle {
+    font-size: 17px;
+  }
+
+  .site-main .button {
+    width: 100%;
+  }
+}
+
+/* On phones the outer panel would only waste width, so the
+   page content sits directly on the background. */
+@media (max-width: 600px) {
+
+  .site-main > .container {
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  body.site-shell {
+    animation: none;
+  }
+
+  .site-shell *,
+  .site-shell *::before,
+  .site-shell *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

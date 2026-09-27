@@ -2,219 +2,28 @@
    Learn — design system for the /learn/ section
 
    Loaded after /assets/css/style.css on every Learn page.
-   style.css owns the reset, the design tokens (:root) and the
-   base typography shared with the app pages; this file builds
-   Learn's reusable primitives on top of those tokens.
+   style.css owns the design tokens (:root), the base typography
+   and the shared site shell used by Apps + Learn (header,
+   footer, page shell, focus, buttons, badges, section headers);
+   this file only adds Learn's own primitives on top.
 
    Contents
-     1. Page foundation (body, focus, motion, skip link)
-     2. Site header (components/site-header.html)
-     3. Site footer (components/site-footer.html)
-     4. Page shell + breadcrumbs
-     5. Hero / section headers
-     6. Buttons + badges
-     7. Topic cards (category / track cards)
-     8. Topic pills + topic index (track topic lists)
-     9. Article layout + sidebar
-    10. Article typography
-    11. Code
-    12. Callouts
-    13. Article pagination
-    14. Responsive
-    15. Reduced motion
+     1. Breadcrumbs
+     2. Learn headings
+     3. Topic cards (category / track cards)
+     4. Topic pills + topic index (track topic lists)
+     5. Article layout + sidebar
+     6. Article typography
+     7. Code
+     8. Callouts
+     9. Article pagination
+    10. Responsive
+    11. Reduced motion
 ========================================================= */
 
 /* =========================
-   1. Page foundation
+   1. Breadcrumbs
 ========================= */
-
-body {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-link);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
-}
-
-.skip-link {
-  position: absolute;
-  left: var(--page-gutter);
-  top: -100px;
-  z-index: 100;
-  padding: var(--space-xs) var(--space-md);
-  border-radius: var(--radius-sm);
-  background: var(--color-link);
-  color: var(--color-bg);
-}
-
-.skip-link:focus-visible {
-  top: var(--space-sm);
-  color: var(--color-bg);
-}
-
-/* Reserves the header's space while the shared component loads,
-   so page content doesn't jump when it's inserted. */
-[data-component="site-header"] {
-  min-height: calc(var(--header-height) + 1px);
-}
-
-/* =========================
-   2. Site header
-========================= */
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(15, 23, 42, 0.92);
-  border-bottom: 1px solid var(--color-border);
-  backdrop-filter: saturate(140%) blur(8px);
-}
-
-.site-header-inner {
-  max-width: calc(var(--content-width) + 2 * var(--page-gutter));
-  min-height: var(--header-height);
-  margin: 0 auto;
-  padding: 0 var(--page-gutter);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-.site-header .brand {
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
-}
-
-.site-header .brand:hover {
-  color: var(--color-text);
-}
-
-.top-nav ul,
-.footer-nav ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs);
-}
-
-.top-nav a {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 0 var(--space-md);
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  color: var(--color-text-body);
-  transition: color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.top-nav a:hover {
-  color: var(--color-text);
-  background: var(--color-surface-raised);
-}
-
-/* Active indicator: a short accent bar under the current section. */
-.top-nav a::after {
-  content: "";
-  position: absolute;
-  left: var(--space-md);
-  right: var(--space-md);
-  bottom: 4px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--color-link);
-  transform: scaleX(0);
-  transition: transform var(--transition-normal);
-}
-
-.top-nav a[aria-current] {
-  color: var(--color-link);
-}
-
-.top-nav a[aria-current]::after {
-  transform: scaleX(1);
-}
-
-/* =========================
-   3. Site footer
-========================= */
-
-.site-footer {
-  margin-top: auto;
-  border-top: 1px solid var(--color-border);
-}
-
-.site-footer-inner {
-  max-width: calc(var(--content-width) + 2 * var(--page-gutter));
-  margin: 0 auto;
-  padding: var(--space-xl) var(--page-gutter) var(--space-2xl);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-sm) var(--space-lg);
-  font-size: 14px;
-  color: var(--color-text-muted);
-}
-
-.site-footer p {
-  margin: 0;
-  font-size: 14px;
-  color: var(--color-text-muted);
-}
-
-.site-footer .site-footer-brand {
-  font-weight: 700;
-  color: var(--color-text-body);
-}
-
-.site-footer-legal {
-  flex-basis: 100%;
-}
-
-.footer-nav ul {
-  gap: var(--space-lg);
-}
-
-.footer-nav a {
-  display: inline-block;
-  padding: var(--space-2xs) 0;
-  color: var(--color-text-muted);
-  font-weight: 500;
-  transition: color var(--transition-fast);
-}
-
-.footer-nav a:hover {
-  color: var(--color-link);
-}
-
-/* =========================
-   4. Page shell + breadcrumbs
-========================= */
-
-.learn-main {
-  flex: 1;
-  width: 100%;
-  padding: var(--space-xl) var(--page-gutter) var(--space-3xl);
-}
-
-.learn-main > .container {
-  max-width: var(--content-width);
-  text-align: left;
-  padding: clamp(24px, 4vw, 48px);
-  background: var(--color-surface);
-  border-color: var(--color-border);
-}
 
 .breadcrumbs {
   margin-bottom: var(--space-xl);
@@ -257,142 +66,16 @@ body {
 }
 
 /* =========================
-   5. Hero / section headers
+   2. Learn headings
 ========================= */
-
-.learn-intro {
-  max-width: 720px;
-  margin-bottom: var(--space-2xl);
-}
-
-.learn-intro h1,
-.article-header h1 {
-  font-size: clamp(30px, 4vw, 40px);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-md);
-}
-
-.learn-intro .subtitle,
-.article-header .subtitle {
-  font-size: 18px;
-  line-height: 1.7;
-  color: var(--color-text-body);
-  margin-bottom: 0;
-}
-
-.eyebrow {
-  margin: 0 0 var(--space-sm);
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
 
 .heading-icon {
   margin-right: 0.15em;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  margin-top: var(--space-lg);
-}
-
-.learn-section + .learn-section {
-  margin-top: var(--space-2xl);
-}
-
-.section-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-xs) var(--space-md);
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-sm);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.section-title {
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
-}
-
-.section-lead {
-  max-width: 68ch;
-  margin-bottom: var(--space-lg);
-}
 
 /* =========================
-   6. Buttons + badges
-========================= */
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-xs);
-  min-height: 44px;
-  padding: 0 var(--space-lg);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-link);
-  background: var(--color-link);
-  color: var(--color-bg);
-  font-size: 15px;
-  font-weight: 700;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
-}
-
-.button:hover {
-  background: var(--color-link-hover);
-  border-color: var(--color-link-hover);
-  color: var(--color-bg);
-}
-
-.button-secondary {
-  background: var(--color-surface-raised);
-  border-color: var(--color-border-strong);
-  color: var(--color-text);
-}
-
-.button-secondary:hover {
-  background: var(--color-surface-hover);
-  border-color: var(--color-border-strong);
-  color: var(--color-text);
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-raised);
-  font-size: 11px;
-  line-height: 1.5;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.badge-accent {
-  color: var(--color-link);
-  background: var(--color-accent-soft);
-  border-color: var(--color-accent-border);
-}
-
-/* =========================
-   7. Topic cards
+   3. Topic cards
    One primitive for every "go to this area" card:
    Learn categories, iOS/Cloud/AI tracks, and future
    learning paths. The whole card is clickable through the
@@ -428,18 +111,6 @@ body {
   border-color: var(--color-border-strong);
   background: var(--color-surface-hover);
   box-shadow: var(--shadow-md);
-}
-
-.topic-card-icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-raised);
-  font-size: 22px;
-  line-height: 1;
 }
 
 .topic-card-title {
@@ -512,7 +183,7 @@ body {
 }
 
 /* =========================
-   8. Topic pills + topic index
+   4. Topic pills + topic index
    Future topics are never links — they render as
    muted, non-interactive items with a "Coming soon" label.
 ========================= */
@@ -649,7 +320,7 @@ a.topic-pill:hover {
 }
 
 /* =========================
-   9. Article layout + sidebar
+   5. Article layout + sidebar
 ========================= */
 
 .article-layout {
@@ -734,7 +405,7 @@ a.topic-pill:hover {
 }
 
 /* =========================
-   10. Article typography
+   6. Article typography
    The reading column is capped at --article-width so line
    length stays comfortable; block elements (code, callouts,
    and any future in-article modules) share one spacing rhythm.
@@ -745,7 +416,9 @@ a.topic-pill:hover {
   min-width: 0;
 }
 
+/* Also a .page-intro (shared hero type scale); these override its box. */
 .article-header {
+  max-width: none;
   margin-bottom: var(--space-xl);
   padding-bottom: var(--space-xl);
   border-bottom: 1px solid var(--color-border);
@@ -797,7 +470,7 @@ a.topic-pill:hover {
 }
 
 /* =========================
-   11. Code
+   7. Code
 ========================= */
 
 code {
@@ -837,7 +510,7 @@ pre code {
 }
 
 /* =========================
-   12. Callouts
+   8. Callouts
    Variants: note · tip · key · warning (alias: mistake) ·
    interview · takeaway. Each variant only sets its color.
 ========================= */
@@ -897,7 +570,7 @@ pre code {
 }
 
 /* =========================
-   13. Article pagination
+   9. Article pagination
 ========================= */
 
 .article-pagination {
@@ -950,7 +623,7 @@ pre code {
 }
 
 /* =========================
-   14. Responsive
+   10. Responsive
 ========================= */
 
 @media (max-width: 960px) {
@@ -995,19 +668,6 @@ pre code {
 
 @media (max-width: 768px) {
 
-  .learn-main {
-    padding-top: var(--space-lg);
-  }
-
-  .learn-intro {
-    margin-bottom: var(--space-xl);
-  }
-
-  .learn-intro .subtitle,
-  .article-header .subtitle {
-    font-size: 17px;
-  }
-
   .article-content h2 {
     font-size: 23px;
     margin-top: var(--space-xl);
@@ -1037,24 +697,9 @@ pre code {
   .pagination-placeholder.is-next {
     text-align: left;
   }
-
-  .button {
-    width: 100%;
-  }
 }
 
-/* On phones the outer panel would only waste width, so the
-   page content sits directly on the background. */
 @media (max-width: 600px) {
-
-  .learn-main > .container {
-    padding: 0;
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    backdrop-filter: none;
-  }
 
   .topic-card {
     padding: var(--space-md) var(--space-lg) var(--space-lg);
@@ -1066,21 +711,10 @@ pre code {
 }
 
 /* =========================
-   15. Reduced motion
+   11. Reduced motion
 ========================= */
 
 @media (prefers-reduced-motion: reduce) {
-
-  body {
-    animation: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 
   .topic-card:hover,
   .topic-card:hover .topic-card-cta,
