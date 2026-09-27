@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Getting Started with Jetpack Compose — Jetpack Compose for Beginners, Lesson 1 — TechBuzz Apps</title>
+  <meta name="description" content="Lesson 1 of Jetpack Compose for Beginners: what Compose is, @Composable functions, Text, Icon, Column, Preview and Modifier — building your first Android UI from zero.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/android/jetpack-compose/getting-started/">
+
+  <meta property="og:title" content="Getting Started with Jetpack Compose — Jetpack Compose for Beginners, Lesson 1">
+  <meta property="og:description" content="Your first composable: @Composable, Text, Icon, Column, Preview and Modifier, explained visually for complete beginners.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/android/jetpack-compose/getting-started/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/android/">Android</a></li>
+          <li><a href="/learn/android/jetpack-compose/">Jetpack Compose</a></li>
+          <li aria-current="page">Getting Started</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#hello-compose">Hello, Compose!</a></li>
+                <li><a href="#what-is-jetpack-compose">What Is Jetpack Compose?</a></li>
+                <li><a href="#your-first-composable">Your First Composable</a></li>
+                <li><a href="#just-a-kotlin-function">Just a Kotlin Function</a></li>
+                <li><a href="#showing-text">Showing Text</a></li>
+                <li><a href="#showing-an-icon">Showing an Icon</a></li>
+                <li><a href="#arranging-with-column">Arranging with Column</a></li>
+                <li><a href="#spacing-dp-and-sp">Spacing, dp and sp</a></li>
+                <li><a href="#seeing-it-with-preview">Seeing It with Preview</a></li>
+                <li><a href="#modifier">Modifier</a></li>
+                <li><a href="#lesson-recap">Lesson Recap</a></li>
+                <li><a href="#tiny-challenge">Tiny Challenge</a></li>
+                <li><a href="#coming-up-in-lesson-2">Coming Up in Lesson 2</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>Jetpack Compose for Beginners</summary>
+            <nav aria-label="Jetpack Compose for Beginners lessons">
+              <ul>
+                <li><span class="is-current" aria-current="page">1. Getting Started with Jetpack Compose</span></li>
+                <li><span class="is-future">2. Building Your First Screen</span></li>
+                <li><span class="is-future">3. Making the Screen Interactive</span></li>
+                <li><span class="is-future">4. Working with Lists of Data</span></li>
+                <li><span class="is-future">5. Navigation &amp; Multiple Screens</span></li>
+                <li><span class="is-future">6. Sharing &amp; Managing State</span></li>
+                <li><span class="is-future">7. Building Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+              <a href="/learn/android/jetpack-compose/" class="sidebar-back">← Jetpack Compose for Beginners</a>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow">Jetpack Compose for Beginners · Lesson 1 of 9</p>
+            <h1>Getting Started with Jetpack Compose</h1>
+            <p class="subtitle">
+              Your first step into modern Android UI: what Jetpack
+              Compose is, how a composable function describes the
+              screen, and how Text, Icon, Column, Preview and Modifier
+              fit together into your first small screen.
+            </p>
+          </header>
+
+          <h2 id="hello-compose">Hello, Compose!</h2>
+
+          <p>
+            Imagine we want our Android phone to display a simple
+            message:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A phone screen showing the text Hello, Compose!">Hello, Compose!</pre>
+          </figure>
+
+          <p>
+            That's where we'll start. In this lesson we'll keep things
+            deliberately small and friendly:
+          </p>
+
+          <ul>
+            <li>No MVVM.</li>
+            <li>No repositories.</li>
+            <li>No dependency injection.</li>
+            <li>No complicated Android architecture.</li>
+          </ul>
+
+          <p>
+            All of those have their place, and we'll get to the ones
+            you need later in the course. For now, the only goal is to
+            understand how Compose puts things on the screen. By the
+            end of this lesson, you'll have built this:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the target screen: a star icon, the title Hello, Compose!, and the line Build beautiful Android apps, stacked vertically.">        ★
+
+   Hello, Compose!
+
+ Build beautiful Android apps</pre>
+            <figcaption>The screen you'll build in this lesson: an icon, a title and a subtitle.</figcaption>
+          </figure>
+
+          <h2 id="what-is-jetpack-compose">What Is Jetpack Compose?</h2>
+
+          <p>
+            <strong>Jetpack Compose is Android's modern toolkit for
+            building user interfaces.</strong>
+          </p>
+
+          <p>
+            The <strong>user interface</strong>, or UI, is everything
+            you see and touch in an app:
+          </p>
+
+          <ul>
+            <li>Text</li>
+            <li>Images</li>
+            <li>Buttons</li>
+            <li>Lists</li>
+            <li>Forms</li>
+            <li>Screens</li>
+            <li>Animations</li>
+          </ul>
+
+          <p>
+            For many years, Android UI was built in two separate places.
+            You described the layout in an <strong>XML</strong> file,
+            and then wrote <strong>Kotlin or Java</strong> code that
+            found those views and changed them — setting text, hiding
+            and showing things, reacting to taps.
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Comparison: traditionally, an XML layout file describes the screen and a separate Kotlin or Java file finds and updates the views. With Jetpack Compose, Kotlin code describes the UI directly.">Traditional Android
+  layout.xml    → the layout
+  Activity.kt   → updates the views
+
+Jetpack Compose
+  Kotlin        → describes the UI</pre>
+            <figcaption>Compose replaces the XML-plus-code split with UI written in Kotlin.</figcaption>
+          </figure>
+
+          <p>With Compose, you describe the UI directly in Kotlin:</p>
+
+          <pre><code class="language-kotlin">Text("Hello, Compose!")</code></pre>
+
+          <p>
+            That single line says "show some text that reads Hello,
+            Compose!". You don't create a view, look it up, and then set
+            its text in a separate step. You simply describe what should
+            appear, and Compose works out how to draw it. This style is
+            called <strong>declarative UI</strong>: you
+            <em>declare</em> what the screen should look like, rather
+            than giving step-by-step instructions to change it.
+          </p>
+
+          <p>
+            If you've seen SwiftUI, Apple's UI framework for iOS, this
+            might look familiar:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Side by side: in SwiftUI you write Text Hello, SwiftUI! and in Compose you write Text Hello, Compose!">SwiftUI:   Text("Hello, SwiftUI!")
+Compose:   Text("Hello, Compose!")</pre>
+            <figcaption>Both frameworks describe UI declaratively.</figcaption>
+          </figure>
+
+          <p>
+            You don't need to know SwiftUI to follow this course — but
+            if you're learning both, it helps to notice the ideas they
+            share.
+          </p>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              To follow along, create a new project in Android Studio
+              with the <em>Empty Activity</em> template, which uses
+              Compose. Your code goes in <code>MainActivity.kt</code>,
+              and the <em>Split</em> or <em>Design</em> view shows
+              previews of your UI — you'll set one up later in this
+              lesson.
+            </p>
+          </div>
+
+          <h2 id="your-first-composable">Your First Composable</h2>
+
+          <p>Here is a complete piece of Compose UI:</p>
+
+          <pre><code class="language-kotlin">@Composable
+fun Greeting() {
+    Text("Hello, Compose!")
+}</code></pre>
+
+          <p>
+            The line to notice is <code>@Composable</code>. It's an
+            <strong>annotation</strong> — a label attached to the
+            function — and it means:
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p><strong>"This function can describe part of the user interface."</strong></p>
+          </div>
+
+          <p>
+            A function marked with <code>@Composable</code> is called a
+            <strong>composable function</strong>, or just a
+            <strong>composable</strong>. <code>Greeting</code> is a
+            composable, and so is <code>Text</code>.
+          </p>
+
+          <p>
+            Composables come in every size. A whole screen can be a
+            composable, and so can a tiny piece of one:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Examples of composables. Whole screens: HomeScreen, ProfileScreen, SettingsScreen, LoginScreen. Smaller pieces: ProfileCard, UserAvatar, FollowButton, SearchBar.">Whole screens         Smaller pieces
+HomeScreen            ProfileCard
+ProfileScreen         UserAvatar
+SettingsScreen        FollowButton
+LoginScreen           SearchBar</pre>
+            <figcaption>Screens and small components are all composable functions.</figcaption>
+          </figure>
+
+          <p>
+            A <code>ProfileScreen</code> might contain a
+            <code>ProfileCard</code>, which contains a
+            <code>UserAvatar</code> and a <code>FollowButton</code>. Big
+            pieces are made from smaller pieces.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>Compose apps are built by combining composable functions.</p>
+          </div>
+
+          <h2 id="just-a-kotlin-function">Just a Kotlin Function</h2>
+
+          <p>
+            Let's take a step back. Without the annotation and the
+            text, <code>Greeting</code> is an ordinary Kotlin function —
+            one that doesn't do anything yet:
+          </p>
+
+          <pre><code class="language-kotlin">fun Greeting() {
+}</code></pre>
+
+          <p>Now add <code>@Composable</code> and put a <code>Text</code> inside:</p>
+
+          <pre><code class="language-kotlin">@Composable
+fun Greeting() {
+    Text("Hello, Compose!")
+}</code></pre>
+
+          <p>
+            It's still a Kotlin function. <code>@Composable</code>
+            changes its <em>role</em>: instead of being a function that
+            only runs some code, it can now take part in describing the
+            UI. That's all you need to know about it for now — there's
+            no need to worry about what happens behind the scenes.
+          </p>
+
+          <h2 id="showing-text">Showing Text</h2>
+
+          <p><code>Text</code> shows a piece of text on the screen. The simplest version takes just the words:</p>
+
+          <pre><code class="language-kotlin">Text("Hello!")</code></pre>
+
+          <p>Change the words, and the screen changes with them:</p>
+
+          <pre><code class="language-kotlin">Text("I'm learning Jetpack Compose!")</code></pre>
+
+          <p>
+            Most of the time you'll want more than the words. You might
+            want the text bigger, for example. To do that, we give
+            <code>Text</code> more information by naming each piece:
+          </p>
+
+          <pre><code class="language-kotlin">Text(
+    text = "I'm learning Jetpack Compose!",
+    fontSize = 24.sp
+)</code></pre>
+
+          <p>
+            <code>text =</code> says which words to show, and
+            <code>fontSize = 24.sp</code> says how big they should be.
+            We'll come back to what <code>sp</code> means shortly.
+          </p>
+
+          <p>We can make it bold too:</p>
+
+          <pre><code class="language-kotlin">Text(
+    text = "I'm learning Jetpack Compose!",
+    fontSize = 24.sp,
+    fontWeight = FontWeight.Bold
+)</code></pre>
+
+          <p>
+            Each named piece answers one question about the text. You
+            can picture it like this:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Text answers three questions: what text, what size, and what weight.">Text
+ │
+ ├── What text?
+ ├── What size?
+ └── What weight?</pre>
+            <figcaption><code>text</code> answers "what text?", <code>fontSize</code> answers "what size?", and <code>fontWeight</code> answers "what weight?".</figcaption>
+          </figure>
+
+          <p>
+            You only include the ones you need. Leave out
+            <code>fontWeight</code>, and the text uses the normal
+            weight.
+          </p>
+
+          <h2 id="showing-an-icon">Showing an Icon</h2>
+
+          <p>Our target screen has a star at the top. To show an icon, use <code>Icon</code>:</p>
+
+          <pre><code class="language-kotlin">Icon(
+    imageVector = Icons.Default.Star,
+    contentDescription = "Star"
+)</code></pre>
+
+          <p>
+            <code>imageVector</code> chooses which icon to draw — here,
+            the built-in star. <code>contentDescription</code> is a
+            short description of the icon. It's read aloud by screen
+            readers such as TalkBack, so people who can't see the
+            screen still know what's there.
+          </p>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Tip</span>
+            <p>
+              Always give meaningful icons a
+              <code>contentDescription</code>. It's a small habit that
+              makes your apps usable by far more people.
+            </p>
+          </div>
+
+          <p>
+            Notice that <code>Text</code> and <code>Icon</code> are both
+            <strong>composables</strong>. They're pieces of UI that you
+            place inside your own composable functions. Compose has many
+            more, which you'll meet as the course goes on — for example:
+          </p>
+
+          <ul>
+            <li><code>Button</code></li>
+            <li><code>Image</code></li>
+            <li><code>Card</code></li>
+            <li><code>TextField</code></li>
+            <li><code>Switch</code></li>
+          </ul>
+
+          <p>You don't need to learn those yet. They all work on the same idea: a composable that describes a piece of UI.</p>
+
+          <h2 id="arranging-with-column">Arranging with Column</h2>
+
+          <p>Our target screen has three pieces:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Three pieces: an Icon, a Text, and another Text.">Icon
+Text
+Text</pre>
+          </figure>
+
+          <p>
+            They need to be arranged one above the other. For that,
+            Compose gives us <code>Column</code>: a container that
+            places its children <strong>vertically</strong>, from top
+            to bottom.
+          </p>
+
+          <pre><code class="language-kotlin">Column {
+    Icon(
+        imageVector = Icons.Default.Star,
+        contentDescription = "Star"
+    )
+
+    Text("Hello, Compose!")
+
+    Text("Build beautiful Android apps")
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Tree diagram: a Column containing, from top to bottom, an Icon, a Text and another Text.">Column
+   │
+   ├── Icon
+   ├── Text
+   └── Text</pre>
+            <figcaption>The Column holds its children and shows them top to bottom, in the order you write them.</figcaption>
+          </figure>
+
+          <p>If you've used SwiftUI, here's the one comparison worth making at this point:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Comparison: SwiftUI's VStack corresponds to Compose's Column.">SwiftUI        Compose
+
+VStack    →    Column</pre>
+            <figcaption>Both arrange views vertically.</figcaption>
+          </figure>
+
+          <p>
+            We'll introduce comparisons like this gradually, only when
+            they genuinely help — not as a big table to memorise.
+          </p>
+
+          <h2 id="spacing-dp-and-sp">Spacing, dp and sp</h2>
+
+          <p>
+            By default, a <code>Column</code> places its children right
+            against each other. To add space between them, tell the
+            <code>Column</code> how to arrange its children:
+          </p>
+
+          <pre><code class="language-kotlin">verticalArrangement = Arrangement.spacedBy(16.dp)</code></pre>
+
+          <p>Here's the complete example, with our title styled as well:</p>
+
+          <pre><code class="language-kotlin">@Composable
+fun Greeting() {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Star,
+            contentDescription = "Star"
+        )
+
+        Text(
+            text = "Hello, Compose!",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = "Build beautiful Android apps"
+        )
+    }
+}</code></pre>
+
+          <p>
+            Now there are 16 units of space between each item. You've
+            probably noticed two new little endings,
+            <code>dp</code> and <code>sp</code>. For now, all you need
+            is this:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="16.dp is used for spacing. 24.sp is used for text size.">16.dp  →  spacing
+24.sp  →  text size</pre>
+            <figcaption>Use <code>dp</code> for sizes and spacing, and <code>sp</code> for text.</figcaption>
+          </figure>
+
+          <p>
+            Both are Android's way of measuring things so they look
+            right on phones with very different screens. You'll
+            understand them properly later in the course; for this
+            lesson, <em>dp for spacing, sp for text</em> is enough.
+          </p>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Tip</span>
+            <p>
+              Android Studio usually adds the <code>import</code> lines
+              for you — if a name shows up in red, click it and press
+              <kbd>Alt</kbd>+<kbd>Enter</kbd> (<kbd>Option</kbd>+<kbd>Enter</kbd>
+              on a Mac). For reference, this lesson uses:
+            </p>
+            <pre><code class="language-kotlin">import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp</code></pre>
+            <p>
+              If <code>Icons</code> can't be found in a newer project,
+              add the Material icons library to your app's
+              dependencies:
+              <code>implementation("androidx.compose.material:material-icons-core")</code>.
+            </p>
+          </div>
+
+          <h2 id="seeing-it-with-preview">Seeing It with Preview</h2>
+
+          <p>
+            You don't have to run the app on a phone every time you
+            change something. Android Studio can show a
+            <strong>preview</strong> of a composable right next to your
+            code. To get one, write a small composable marked with
+            <code>@Preview</code>:
+          </p>
+
+          <pre><code class="language-kotlin">@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    Greeting()
+}</code></pre>
+
+          <p>
+            <code>GreetingPreview</code> simply shows
+            <code>Greeting</code>, and <code>showBackground = true</code>
+            gives it a plain background so it's easy to see. Open the
+            <em>Split</em> view in Android Studio and your screen
+            appears beside the code, updating as you work.
+          </p>
+
+          <p>
+            Notice what just happened: one composable
+            (<code>GreetingPreview</code>) used another
+            (<code>Greeting</code>). That's exactly how larger UI is
+            built. A home screen, for example, might be put together
+            like this:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Tree diagram: a HomeScreen composable made from four smaller composables: Header, WelcomeCard, RecentItems and BottomSection.">HomeScreen
+   │
+   ├── Header
+   ├── WelcomeCard
+   ├── RecentItems
+   └── BottomSection</pre>
+            <figcaption>Larger UI is built from smaller composables.</figcaption>
+          </figure>
+
+          <h2 id="modifier">Modifier</h2>
+
+          <p>
+            So far we've changed <em>what</em> a composable shows. But
+            what about the space around it, or how wide it is? For that,
+            Compose has <code>Modifier</code>:
+          </p>
+
+          <pre><code class="language-kotlin">Text(
+    text = "Hello, Compose!",
+    modifier = Modifier.padding(16.dp)
+)</code></pre>
+
+          <p>
+            <code>Modifier.padding(16.dp)</code> adds 16 units of space
+            around the text. Padding is only one of many things a
+            modifier can control. Modifiers can affect:
+          </p>
+
+          <ul>
+            <li>padding</li>
+            <li>size</li>
+            <li>background</li>
+            <li>click behavior</li>
+            <li>alignment</li>
+            <li>borders</li>
+          </ul>
+
+          <p>You can also chain several modifiers together, one after another:</p>
+
+          <pre><code class="language-kotlin">Modifier
+    .padding(16.dp)
+    .fillMaxWidth()</code></pre>
+
+          <p>
+            This adds padding <em>and</em> lets the composable fill the
+            full width available. You'll use modifier chains in almost
+            every screen you build, and Lesson 2 explores them further.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p><code>Modifier</code> changes how a composable looks, behaves, or is laid out.</p>
+          </div>
+
+          <h2 id="lesson-recap">Lesson Recap</h2>
+
+          <p>Here's everything from this lesson in one picture:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Recap: @Composable makes a composable function. Text and Icon are UI pieces. Column arranges UI. Modifier changes layout, appearance and behavior.">@Composable
+    ↓
+Composable function
+
+Text / Icon
+    ↓
+UI pieces
+
+Column
+    ↓
+arranges UI
+
+Modifier
+    ↓
+changes layout / appearance / behavior</pre>
+          </figure>
+
+          <p>And the big idea behind all of it:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Tree diagram: a Screen made of several composables.">Screen
+  │
+  ├── Composable
+  ├── Composable
+  └── Composable</pre>
+            <figcaption>Every screen is made of composables.</figcaption>
+          </figure>
+
+          <div class="callout callout-takeaway">
+            <span class="callout-title">What you learned</span>
+            <ul>
+              <li><code>@Composable</code> turns a Kotlin function into a <strong>composable function</strong> that describes part of the UI.</li>
+              <li><code>Text</code> and <code>Icon</code> are <strong>UI pieces</strong>.</li>
+              <li><code>Column</code> <strong>arranges UI</strong> from top to bottom.</li>
+              <li><code>Modifier</code> <strong>changes layout, appearance and behavior</strong>.</li>
+              <li>Screens are built by <strong>combining composables</strong>.</li>
+            </ul>
+          </div>
+
+          <p>
+            You don't need to memorise every API from this lesson.
+            What matters is the idea: small composables, combined into
+            bigger ones, describe the whole screen.
+          </p>
+
+          <h2 id="tiny-challenge">Tiny Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+            <p>Create a new composable that shows this:</p>
+            <figure class="diagram">
+              <pre role="img" aria-label="Sketch of the challenge screen: a heart icon, the word Welcome!, and the line I'm learning Jetpack Compose, stacked vertically.">        ♥️
+
+       Welcome!
+
+ I'm learning Jetpack Compose</pre>
+            </figure>
+            <p>Use:</p>
+            <ul>
+              <li><code>Column</code></li>
+              <li><code>Icon</code> (hint: look for a heart in <code>Icons.Default</code>)</li>
+              <li><code>Text</code></li>
+              <li><code>fontSize</code></li>
+              <li><code>FontWeight</code></li>
+            </ul>
+            <p>
+              Don't worry about centering everything perfectly or making
+              it look polished yet — that's what Lesson 2 is for. The
+              goal here is <strong>composition</strong>: building your
+              screen from composables inside composables.
+            </p>
+            <figure class="diagram">
+              <pre role="img" aria-label="Composition: a composable inside a composable inside a composable.">Composable
+     ↓
+Composable
+     ↓
+Composable</pre>
+            </figure>
+          </div>
+
+          <h2 id="coming-up-in-lesson-2">Coming Up in Lesson 2</h2>
+
+          <p>
+            In <strong>Lesson 2 — Building Your First Screen</strong>,
+            you'll meet the tools for real layouts:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Preview of Lesson 2 topics. Layout: Column, Row, Box, Spacer. Modifier: padding, size, fillMaxWidth, background. Styling: Alignment, Arrangement, Colors.">Column · Row · Box · Spacer
+
+Modifier
+  padding · size
+  fillMaxWidth · background
+
+Alignment · Arrangement · Colors</pre>
+          </figure>
+
+          <p>
+            But we won't study them as a list of disconnected APIs.
+            Lesson 2 uses them together to build <strong>one complete,
+            attractive Android screen</strong> — following the same
+            rhythm as this lesson:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The lesson rhythm: explain, visualize, code, experiment, build, challenge.">Explain → visualize → code
+  → experiment → build → challenge</pre>
+          </figure>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <span class="pagination-placeholder">This is the first lesson</span>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 2 — Building Your First Screen
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
