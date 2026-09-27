@@ -319,6 +319,30 @@ a.topic-pill:hover {
   transform: translateX(3px);
 }
 
+/* Ordered learning path (course lessons): a single column where
+   planned lessons keep their description but stay non-links. */
+.topic-index.is-path {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Planned lessons share the linked lessons' inner padding so every
+   lesson's text starts on the same edge. */
+.topic-index.is-path .topic-item.is-future {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.topic-item-step {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.topic-item.is-future .topic-item-desc {
+  color: var(--color-text-muted);
+}
+
 /* =========================
    5. Article layout + sidebar
 ========================= */
@@ -509,10 +533,39 @@ pre code {
   overflow-wrap: normal;
 }
 
+/* Diagrams: plain-text sketches (view trees, spacing, rough UI
+   previews). Deliberately not styled as code — lighter dashed
+   surface, body text colour — and captioned with <figcaption>.
+   Markup: <figure class="diagram"><pre role="img" aria-label="…">…</pre>
+   <figcaption>…</figcaption></figure> */
+.diagram {
+  margin: 0 0 var(--space-lg);
+}
+
+.diagram pre {
+  margin: 0;
+  border-style: dashed;
+  background: var(--color-surface);
+  box-shadow: none;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.25; /* tight enough for box-drawing lines to connect */
+  color: var(--color-text-body);
+  white-space: pre;
+}
+
+.diagram figcaption {
+  margin-top: var(--space-xs);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 /* =========================
    8. Callouts
    Variants: note · tip · key · warning (alias: mistake) ·
-   interview · takeaway. Each variant only sets its color.
+   interview · takeaway · challenge. Each variant only sets
+   its color; the visible title always names the type.
 ========================= */
 
 .callout {
@@ -534,6 +587,10 @@ pre code {
 }
 
 .callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout > :last-child {
   margin-bottom: 0;
 }
 
@@ -564,6 +621,7 @@ pre code {
 .callout-mistake   { --callout-color: var(--color-danger); }
 .callout-interview { --callout-color: var(--color-special); }
 .callout-takeaway  { --callout-color: var(--color-success); }
+.callout-challenge { --callout-color: var(--color-special); }
 
 .callout-key {
   background: var(--color-accent-soft);
@@ -689,6 +747,10 @@ pre code {
     font-size: 13px;
   }
 
+  .diagram pre {
+    font-size: 12px;
+  }
+
   .article-pagination {
     grid-template-columns: 1fr;
   }
@@ -705,7 +767,8 @@ pre code {
     padding: var(--space-md) var(--space-lg) var(--space-lg);
   }
 
-  .topic-item.is-available > a {
+  .topic-item.is-available > a,
+  .topic-index.is-path .topic-item.is-future {
     padding: var(--space-md);
   }
 }

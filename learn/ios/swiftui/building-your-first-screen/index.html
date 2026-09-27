@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Building Your First Screen — SwiftUI for Beginners, Lesson 2 — TechBuzz Apps</title>
+  <meta name="description" content="Lesson 2 of SwiftUI for Beginners: learn VStack, HStack, ZStack, alignment, Spacer, padding, backgrounds, frames and why modifier order matters, by building a complete welcome screen.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swiftui/building-your-first-screen/">
+
+  <meta property="og:title" content="Building Your First Screen — SwiftUI for Beginners, Lesson 2">
+  <meta property="og:description" content="Learn stacks, spacing, alignment, padding, frames and backgrounds by building a complete SwiftUI screen.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swiftui/building-your-first-screen/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swiftui/">SwiftUI</a></li>
+          <li aria-current="page">Building Your First Screen</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#thinking-in-stacks">Thinking in Stacks</a></li>
+                <li><a href="#vstack">VStack</a></li>
+                <li><a href="#hstack">HStack</a></li>
+                <li><a href="#nesting-stacks">Nesting Stacks</a></li>
+                <li><a href="#alignment">Alignment</a></li>
+                <li><a href="#spacer">Spacer</a></li>
+                <li><a href="#padding">Padding</a></li>
+                <li><a href="#backgrounds">Backgrounds</a></li>
+                <li><a href="#modifier-order">Modifier Order Matters</a></li>
+                <li><a href="#frame">Frame</a></li>
+                <li><a href="#zstack">ZStack</a></li>
+                <li><a href="#building-the-welcome-screen">Building the Welcome Screen</a></li>
+                <li><a href="#breaking-down-any-screen">Breaking Down Any Screen</a></li>
+                <li><a href="#recap">Recap</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>SwiftUI for Beginners</summary>
+            <nav data-series aria-label="SwiftUI for Beginners lessons">
+              <ul>
+                <li><a href="/learn/ios/swiftui/getting-started/">1. Getting Started</a></li>
+                <li><span class="is-current" aria-current="page">2. Your First Screen</span></li>
+                <li><span class="is-future">3. Interactivity</span></li>
+                <li><span class="is-future">4. Lists of Data</span></li>
+                <li><span class="is-future">5. Navigation</span></li>
+                <li><span class="is-future">6. Sharing State</span></li>
+                <li><span class="is-future">7. Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow">SwiftUI for Beginners · Lesson 2 of 9</p>
+            <h1>Building Your First Screen</h1>
+            <p class="subtitle">
+              In Lesson 1 you put a few views on screen. Now you'll
+              learn how to arrange them: stacks, spacing, alignment,
+              padding, backgrounds and frames. By the end you'll build
+              a complete welcome screen — and, more importantly, learn
+              how to look at any design and work out how to build it.
+            </p>
+          </header>
+
+          <h2 id="thinking-in-stacks">Thinking in Stacks</h2>
+
+          <p>
+            Open almost any app and look closely at one screen. You'll
+            notice that nearly everything is lined up in one of two
+            directions: <strong>top to bottom</strong>, or
+            <strong>side by side</strong>. A title sits above a
+            subtitle. An icon sits next to a label. A row of buttons
+            runs across the bottom.
+          </p>
+
+          <p>
+            SwiftUI gives you a container for each direction —
+            <code>VStack</code> for vertical and <code>HStack</code> for
+            horizontal — plus <code>ZStack</code> for placing things on
+            top of each other. With just these three, and a handful of
+            modifiers, you can build a surprising number of real
+            screens.
+          </p>
+
+          <p>
+            So the most useful question you can ask when looking at a
+            design is:
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              <strong>"Is this vertical or horizontal?"</strong> Answer
+              that for the whole screen, then for each part inside it,
+              and you'll know which stacks to use.
+            </p>
+          </div>
+
+          <p>
+            We'll come back to this question at the end of the lesson.
+            First, let's get comfortable with each stack.
+          </p>
+
+          <h2 id="vstack">VStack: Top to Bottom</h2>
+
+          <p>
+            You met <code>VStack</code> in Lesson 1. It places its
+            children one below the other, in the order you write them:
+          </p>
+
+          <pre><code class="language-swift">VStack {
+    Text("Good Morning!")
+    Text("Ready for a great day?")
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch: Good Morning! above Ready for a great day?, centered.">   Good Morning!
+Ready for a great day?</pre>
+            <figcaption>A VStack places views vertically and, by default, centers them.</figcaption>
+          </figure>
+
+          <p>
+            As in Lesson 1, <code>spacing</code> controls the gap between
+            children. <code>VStack(spacing: 8)</code> puts 8 points
+            between each view; <code>VStack(spacing: 0)</code> puts them
+            right against each other.
+          </p>
+
+          <h2 id="hstack">HStack: Side by Side</h2>
+
+          <p>
+            <code>HStack</code> is the horizontal version. Its children
+            sit next to each other, from leading to trailing — left to
+            right in English:
+          </p>
+
+          <pre><code class="language-swift">HStack {
+    Image(systemName: "star.fill")
+    Text("Today's Goal")
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch: a star icon to the left of the text Today's Goal, on one line.">★ Today's Goal</pre>
+            <figcaption>An HStack places views horizontally.</figcaption>
+          </figure>
+
+          <p>
+            This icon-plus-label pattern is everywhere: settings rows,
+            menu items, buttons with icons. <code>HStack</code> takes a
+            <code>spacing</code> value too, which controls the gap
+            between the icon and the text.
+          </p>
+
+          <h2 id="nesting-stacks">Nesting Stacks</h2>
+
+          <p>
+            Here's where stacks become powerful: a stack can contain
+            other stacks. Most real layouts are small stacks inside
+            bigger ones.
+          </p>
+
+          <p>
+            Take a typical profile row: a picture on the left, and a
+            name with a short description stacked on the right. The row
+            as a whole runs <em>horizontally</em>. The name and
+            description, on their own, run <em>vertically</em>.
+          </p>
+
+          <pre><code class="language-swift">HStack(spacing: 12) {
+    Image(systemName: "person.circle.fill")
+        .font(.largeTitle)
+
+    VStack {
+        Text("Maya Patel")
+            .font(.headline)
+
+        Text("iOS Developer")
+            .font(.subheadline)
+    }
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Tree diagram: an HStack containing an Image and a VStack; the VStack contains two Text views.">HStack
+│
+├── Image          (profile picture)
+│
+└── VStack
+    │
+    ├── Text       ("Maya Patel")
+    │
+    └── Text       ("iOS Developer")</pre>
+            <figcaption>An HStack holds the image and a VStack; the VStack holds the two lines of text.</figcaption>
+          </figure>
+
+          <p>
+            If you run this, you'll notice the two lines of text are
+            centered relative to each other, which looks slightly off
+            for a profile row. Names and descriptions usually line up
+            on their left edge. That's what alignment is for.
+          </p>
+
+          <h2 id="alignment">Alignment</h2>
+
+          <p>
+            A stack's <strong>alignment</strong> decides how its
+            children line up <em>with each other</em>. For a
+            <code>VStack</code>, the options are about the horizontal
+            edge: <code>.leading</code>, <code>.center</code> (the
+            default) or <code>.trailing</code>.
+          </p>
+
+          <pre><code class="language-swift">VStack(alignment: .leading) {
+    Text("Maya Patel")
+        .font(.headline)
+
+    Text("iOS Developer")
+        .font(.subheadline)
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Comparison: with center alignment, the shorter line is centered under the longer one; with leading alignment, both lines start at the same left edge.">.center (default)        .leading
+
+   Maya Patel             Maya Patel
+  iOS Developer           iOS Developer</pre>
+            <figcaption>Leading alignment lines up the left edges of the children.</figcaption>
+          </figure>
+
+          <p>
+            You can pass alignment and spacing together, as in
+            <code>VStack(alignment: .leading, spacing: 4)</code>.
+          </p>
+
+          <p>
+            <code>HStack</code> has alignment too, but because its
+            children sit side by side, the options are about the
+            vertical edge: <code>.top</code>, <code>.center</code> or
+            <code>.bottom</code>. That's useful when the items in a row
+            have different heights.
+          </p>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              Alignment lines children up relative to each other. It
+              does <em>not</em> push the whole stack to the edge of the
+              screen. For that, you'll use <code>Spacer</code> or
+              <code>frame</code>, both coming up next.
+            </p>
+          </div>
+
+          <h2 id="spacer">Spacer</h2>
+
+          <p>
+            A <code>Spacer</code> is an invisible view that takes up
+            all the free space it can. Put one between two views, and it
+            pushes them apart.
+          </p>
+
+          <p>
+            A classic example is a screen header with a title on the
+            left and a settings icon on the right:
+          </p>
+
+          <pre><code class="language-swift">HStack {
+    Text("Profile")
+        .font(.title2)
+        .fontWeight(.bold)
+
+    Spacer()
+
+    Image(systemName: "gearshape")
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Diagram: the text Profile on the far left, a gear icon on the far right, and a Spacer filling all the space between them.">Profile |&lt;------ Spacer ------&gt;| ⚙️</pre>
+            <figcaption>The Spacer expands to fill the gap, pushing the title and the icon to opposite ends.</figcaption>
+          </figure>
+
+          <p>
+            In an <code>HStack</code>, a <code>Spacer</code> pushes
+            things apart horizontally. In a <code>VStack</code>, it
+            pushes things apart vertically — for example, to move a
+            button all the way to the bottom of the screen. You'll use
+            exactly that in the final build.
+          </p>
+
+          <h2 id="padding">Padding</h2>
+
+          <p>
+            Views sit right up against each other and against the
+            screen edges unless you give them room. The
+            <code>.padding()</code> modifier adds space
+            <em>around</em> a view, inside whatever surrounds it.
+          </p>
+
+          <pre><code class="language-swift">Text("Learn something new today")
+    .padding()</code></pre>
+
+          <p>
+            With no value, <code>.padding()</code> adds a comfortable
+            system-standard amount on every side. You can also be more
+            specific:
+          </p>
+
+          <pre><code class="language-swift">Text("Hello")
+    .padding(24)             // 24 points on every side
+
+Text("Hello")
+    .padding(.horizontal)    // left and right only
+
+Text("Hello")
+    .padding(.top, 40)       // 40 points above only</code></pre>
+
+          <p>
+            Padding on its own is invisible — you only see its effect
+            as extra space. It becomes much easier to see once the view
+            has a background.
+          </p>
+
+          <h2 id="backgrounds">Backgrounds</h2>
+
+          <p>
+            <code>.background()</code> fills the area behind a view with
+            a color:
+          </p>
+
+          <pre><code class="language-swift">Text("Learn something new today")
+    .padding()
+    .background(.blue.opacity(0.1))</code></pre>
+
+          <p>
+            <code>.blue.opacity(0.1)</code> is blue at 10% strength —
+            a soft tint that keeps the text readable. To round the
+            corners, clip the view to a rounded rectangle:
+          </p>
+
+          <pre><code class="language-swift">Text("Learn something new today")
+    .padding()
+    .background(.blue.opacity(0.1))
+    .clipShape(
+        RoundedRectangle(cornerRadius: 16)
+    )</code></pre>
+
+          <p>
+            Now it looks like a card. There's one more modifier you'll
+            use in the final build: <code>.foregroundStyle()</code>,
+            which you met in Lesson 1. On a solid background you'll
+            often set the text to white with
+            <code>.foregroundStyle(.white)</code>, so it stays
+            readable.
+          </p>
+
+          <h2 id="modifier-order">Modifier Order Matters</h2>
+
+          <p>
+            Look at the padding and background example again. What
+            happens if you swap the two lines?
+          </p>
+
+          <pre><code class="language-swift">// A: padding first, then background
+Text("Hello")
+    .padding()
+    .background(.yellow)
+
+// B: background first, then padding
+Text("Hello")
+    .background(.yellow)
+    .padding()</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Comparison: in A, the yellow background fills a large box around Hello including the padding. In B, the yellow background only hugs the word Hello, and the padding is empty space outside it.">A: .padding() → .background()
+
+ ┌─────────────────┐
+ │░░░░░░░░░░░░░░░░░│
+ │░░░░░ Hello ░░░░░│
+ │░░░░░░░░░░░░░░░░░│
+ └─────────────────┘
+ yellow fills the padded area
+
+
+B: .background() → .padding()
+
+      ┌───────┐
+      │ Hello │
+      └───────┘
+ yellow hugs the text; the padding
+ is empty space around it</pre>
+            <figcaption>Same modifiers, different order, different result.</figcaption>
+          </figure>
+
+          <p>
+            The reason is that each modifier wraps everything above it.
+            In <strong>A</strong>, the text is first given padding —
+            it becomes a bigger box — and then that bigger box gets a
+            yellow background. In <strong>B</strong>, the text gets a
+            yellow background first, so only the text itself is yellow,
+            and then empty padding is added around the outside.
+          </p>
+
+          <p>
+            A helpful way to picture it is wrapping a present: each
+            modifier adds a new layer on the outside of whatever you
+            already have. Read the modifiers from top to bottom, and
+            imagine each one wrapping the result of the line before.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              <strong>Modifier order matters.</strong> Each modifier
+              applies to the result of the modifiers above it.
+            </p>
+          </div>
+
+          <div class="callout callout-mistake">
+            <span class="callout-title">Common mistake</span>
+            <p>
+              Assuming <code>.padding().background(…)</code> and
+              <code>.background(…).padding()</code> look the same. If a
+              background looks too tight around your text, check the
+              order: padding usually needs to come <em>before</em> the
+              background.
+            </p>
+          </div>
+
+          <h2 id="frame">Frame</h2>
+
+          <p>
+            Most views are only as big as their content needs. A
+            <code>Text</code> is as wide as its words; an
+            <code>Image</code> is as big as the symbol. The
+            <code>.frame()</code> modifier lets you change that.
+          </p>
+
+          <p>You can give a view a fixed size:</p>
+
+          <pre><code class="language-swift">Image(systemName: "star.fill")
+    .frame(width: 100, height: 100)</code></pre>
+
+          <p>
+            But the version you'll use most often lets a view stretch
+            as wide as it's allowed to:
+          </p>
+
+          <pre><code class="language-swift">Text("Get Started")
+    .frame(maxWidth: .infinity)
+    .padding()
+    .background(.blue)</code></pre>
+
+          <p>
+            <code>maxWidth: .infinity</code> means "take all the width
+            available". The text stays centered, but its frame — and so
+            its background — now stretches across the screen. That's
+            how you make a full-width button shape.
+          </p>
+
+          <p>
+            You can also choose where the content sits inside a wider
+            frame. <code>.frame(maxWidth: .infinity, alignment:
+            .leading)</code> stretches the view but keeps its content
+            against the leading edge — ideal for cards whose text
+            should start on the left.
+          </p>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Tip</span>
+            <p>
+              Modifier order applies here too. Put
+              <code>.frame(maxWidth: .infinity)</code> <em>before</em>
+              <code>.background()</code> if you want the background to
+              stretch with it.
+            </p>
+          </div>
+
+          <h2 id="zstack">ZStack: Layering Views</h2>
+
+          <p>
+            The third stack doesn't go down or across — it goes
+            <em>toward you</em>. A <code>ZStack</code> places its
+            children on top of each other, like layers. The first view
+            you write is at the back; each view after it sits in front.
+          </p>
+
+          <pre><code class="language-swift">ZStack {
+    Circle()
+        .fill(.blue.opacity(0.15))
+        .frame(width: 100, height: 100)
+
+    Image(systemName: "person.fill")
+        .font(.system(size: 44))
+        .foregroundStyle(.blue)
+}</code></pre>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Layer diagram: a pale blue circle at the back, and a person symbol in front of it, centered.">ZStack
+│
+├── Circle   ← back layer
+│
+└── Image    ← front layer
+
+Result: a person icon sitting
+on a soft blue circle</pre>
+            <figcaption>In a ZStack, later views are drawn in front of earlier ones.</figcaption>
+          </figure>
+
+          <p>
+            <code>.font(.system(size: 44))</code> sets an exact size in
+            points, which is handy for a large decorative symbol.
+            <code>ZStack</code> is great for avatars, badges and text
+            over an image. You won't need it in every screen, but it's
+            good to know it's there.
+          </p>
+
+          <h2 id="building-the-welcome-screen">Building the Welcome Screen</h2>
+
+          <p>Time to put everything together. Here's the screen we're building:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the welcome screen: a sun symbol at the top, the title Good Morning! and subtitle Ready for a great day?, a tinted rounded card containing a star with Today's Goal and the line Learn something new today, empty space, and a full-width blue Get Started button at the bottom.">              ☀️
+
+         Good Morning!
+     Ready for a great day?
+
+ ┌─────────────────────────────┐
+ │ [star] Today's Goal         │
+ │ Learn something new today   │
+ └─────────────────────────────┘
+
+
+
+
+ ┌─────────────────────────────┐
+ │         Get Started         │
+ └─────────────────────────────┘</pre>
+            <figcaption>The WelcomeView: a header, a goal card, and a button pinned to the bottom.</figcaption>
+          </figure>
+
+          <p>
+            Before writing code, ask the question from the start of the
+            lesson. <em>Is the whole screen vertical or horizontal?</em>
+            Vertical — everything runs top to bottom. So the outer
+            container is a <code>VStack</code>. Then break it into
+            sections:
+          </p>
+
+          <ol>
+            <li><strong>An icon</strong> — a large sun symbol.</li>
+            <li><strong>A greeting</strong> — title and subtitle, one above the other: a small <code>VStack</code>.</li>
+            <li><strong>A goal card</strong> — a heading row (star beside text: an <code>HStack</code>) above a line of text, so a <code>VStack</code> aligned to the leading edge, with padding, a tinted background and rounded corners.</li>
+            <li><strong>Empty space</strong> — a <code>Spacer</code> pushes the button to the bottom.</li>
+            <li><strong>A button</strong> — full-width text with a blue background.</li>
+          </ol>
+
+          <p>Now each section translates into code:</p>
+
+          <pre><code class="language-swift">import SwiftUI
+
+struct WelcomeView: View {
+    var body: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "sun.max.fill")
+                .font(.system(size: 60))
+
+            VStack(spacing: 8) {
+                Text("Good Morning!")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                Text("Ready for a great day?")
+                    .font(.subheadline)
+            }
+
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "star.fill")
+
+                    Text("Today's Goal")
+                        .font(.headline)
+                }
+
+                Text("Learn something new today")
+                    .font(.subheadline)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.blue.opacity(0.1))
+            .clipShape(
+                RoundedRectangle(cornerRadius: 16)
+            )
+
+            Spacer()
+
+            Text("Get Started")
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.blue)
+                .foregroundStyle(.white)
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 14)
+                )
+        }
+        .padding()
+    }
+}</code></pre>
+
+          <p>Let's walk through the parts that combine several ideas:</p>
+
+          <h3 id="the-goal-card">The goal card</h3>
+
+          <p>
+            The card is a <code>VStack(alignment: .leading, spacing:
+            12)</code>, so the heading row and the text line up on the
+            left. Then four modifiers turn it into a card, and their
+            order is deliberate:
+          </p>
+
+          <ol>
+            <li><code>.frame(maxWidth: .infinity, alignment: .leading)</code> stretches the card to full width while keeping its content on the left.</li>
+            <li><code>.padding()</code> adds breathing room inside the card.</li>
+            <li><code>.background(.blue.opacity(0.1))</code> tints the whole padded, full-width area.</li>
+            <li><code>.clipShape(RoundedRectangle(cornerRadius: 16))</code> rounds the corners.</li>
+          </ol>
+
+          <p>
+            Try moving <code>.padding()</code> below
+            <code>.background()</code> and watch the text end up pressed
+            against the edge of the tint — modifier order in action.
+          </p>
+
+          <h3 id="the-button">The "Get Started" button</h3>
+
+          <p>
+            The same recipe makes the button shape: stretch with
+            <code>.frame(maxWidth: .infinity)</code>, add
+            <code>.padding()</code>, fill with <code>.background(.blue)</code>,
+            make the text white with <code>.foregroundStyle(.white)</code>,
+            and round the corners.
+          </p>
+
+          <p>
+            It only <em>looks</em> like a button for now — tapping it
+            does nothing yet. Making things respond to taps is exactly
+            what Lesson 3 is about.
+          </p>
+
+          <h3 id="the-spacer-and-outer-padding">The Spacer and the outer padding</h3>
+
+          <p>
+            The <code>Spacer()</code> between the card and the button
+            takes up all the leftover height, which pushes the button to
+            the bottom of the screen. Finally, <code>.padding()</code>
+            on the outer <code>VStack</code> keeps everything away from
+            the screen edges.
+          </p>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Tip</span>
+            <p>
+              To preview this view in Xcode, change the preview at the
+              bottom of the file to show it:
+              <code>#Preview { WelcomeView() }</code>.
+            </p>
+          </div>
+
+          <h2 id="breaking-down-any-screen">Breaking Down Any Screen</h2>
+
+          <p>
+            The code for the welcome screen is useful, but the
+            <em>process</em> you used to write it is far more valuable.
+            You didn't start by remembering APIs. You started by
+            looking at the design and breaking it into smaller and
+            smaller pieces:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Diagram of the mental model: a screen breaks into sections, sections into stacks, stacks into views, and views are customized with modifiers.">SCREEN
+  ↓
+Sections
+  ↓
+Stacks
+  ↓
+Views
+  ↓
+Modifiers</pre>
+            <figcaption>How to approach any SwiftUI layout, from the outside in.</figcaption>
+          </figure>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>When you look at any UI, work from the outside in:</p>
+            <ol>
+              <li><strong>Screen</strong> — is the whole thing vertical or horizontal?</li>
+              <li><strong>Sections</strong> — what are the main blocks?</li>
+              <li><strong>Stacks</strong> — is each block vertical or horizontal?</li>
+              <li><strong>Views</strong> — which texts, images and shapes are inside?</li>
+              <li><strong>Modifiers</strong> — how is each one styled and spaced?</li>
+            </ol>
+          </div>
+
+          <p>
+            This works for screens far more complex than today's. The
+            layouts get bigger, but the question stays the same:
+            <em>"Is this vertical or horizontal?"</em> — and then
+            break it into smaller sections.
+          </p>
+
+          <h2 id="recap">Recap</h2>
+
+          <div class="callout callout-takeaway">
+            <span class="callout-title">What you learned</span>
+            <ul>
+              <li><strong><code>VStack</code></strong> arranges views vertically, <strong><code>HStack</code></strong> horizontally, and <strong><code>ZStack</code></strong> in layers.</li>
+              <li>Stacks can be <strong>nested</strong>; most layouts are small stacks inside bigger ones.</li>
+              <li><strong>Alignment</strong> lines children up relative to each other; <strong><code>spacing</code></strong> sets the gap between them.</li>
+              <li><strong><code>Spacer</code></strong> fills free space and pushes views apart.</li>
+              <li><strong><code>.padding()</code></strong> adds space around a view; <strong><code>.background()</code></strong> fills behind it; <strong><code>.clipShape()</code></strong> rounds it.</li>
+              <li><strong><code>.frame(maxWidth: .infinity)</code></strong> lets a view stretch to the available width.</li>
+              <li><strong>Modifier order matters</strong> — each modifier wraps the result of the ones above it.</li>
+              <li>Build any screen by breaking it down: <strong>Screen → Sections → Stacks → Views → Modifiers</strong>.</li>
+            </ul>
+          </div>
+
+          <h2 id="challenge">Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+            <p>Build a <code>ProfileView</code> that looks roughly like this:</p>
+            <figure class="diagram">
+              <pre role="img" aria-label="Sketch of the challenge profile screen: a person symbol on a circle at the top, a name and job title below, a card containing an envelope row with an email address and a location row with a city, empty space, and a full-width Edit Profile button at the bottom.">         ( person )
+
+        Your Name
+      iOS Developer
+
+ ┌─────────────────────────────┐
+ │ [envelope]  you@example.com │
+ │ [pin]       Your City       │
+ └─────────────────────────────┘
+
+
+
+ ┌─────────────────────────────┐
+ │        Edit Profile         │
+ └─────────────────────────────┘</pre>
+            </figure>
+            <p>Start by breaking it down before writing any code:</p>
+            <ul>
+              <li>Is the whole screen vertical or horizontal?</li>
+              <li>Which part is a <code>ZStack</code>? (Hint: the avatar.)</li>
+              <li>Each row in the card is an icon beside text — which stack is that?</li>
+              <li>What pushes the button to the bottom?</li>
+            </ul>
+            <p>
+              Useful symbol names: <code>"person.fill"</code>,
+              <code>"envelope"</code> and <code>"mappin.and.ellipse"</code>.
+              Use your own name and details, and change the colors to
+              whatever you like. If your card's background looks too
+              tight, check your modifier order.
+            </p>
+          </div>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <a href="/learn/ios/swiftui/getting-started/" class="pagination-link">
+              <span class="pagination-label">Previous lesson</span>
+              Lesson 1 — Getting Started with SwiftUI
+            </a>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 3 — Making the Screen Interactive
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
