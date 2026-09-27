@@ -1,0 +1,137 @@
+/* =========================================================
+   Apps — styles for the Apps homepage (/)
+
+   Loaded after /assets/css/style.css. The shared site shell
+   (header, footer, page shell, hero, section headers, buttons,
+   badges, icon tiles) and all design tokens come from
+   style.css; this file only adds the app card grid.
+========================================================= */
+
+/* auto-fit: the few available apps share the row instead of
+   leaving empty columns; the compact grid keeps fixed columns. */
+.app-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-md);
+}
+
+.app-grid-compact {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.app-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition:
+    transform var(--transition-normal),
+    border-color var(--transition-normal),
+    background-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.app-card:not(.is-upcoming):hover {
+  transform: translateY(-2px);
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.app-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xs);
+}
+
+.app-card-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.app-card-title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.app-card-title a {
+  color: inherit;
+  transition: color var(--transition-fast);
+}
+
+.app-card-title a:hover {
+  color: var(--color-link);
+}
+
+.app-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.app-card-links {
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.app-card-links ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.app-card-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  font-size: 14px;
+  color: var(--color-text-body);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.app-card-links a:hover {
+  color: var(--color-link);
+  border-color: var(--color-accent-border);
+  background: var(--color-surface-hover);
+}
+
+/* Upcoming apps: informational only — no links, quieter surface. */
+.app-card.is-upcoming {
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  background: transparent;
+}
+
+.app-card.is-upcoming .app-card-title {
+  font-size: 17px;
+  color: var(--color-text-body);
+}
+
+.app-card.is-upcoming p {
+  font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .app-card:not(.is-upcoming):hover {
+    transform: none;
+  }
+}

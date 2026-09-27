@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Swift Closures Explained — TechBuzz Apps</title>
+  <meta name="description" content="A practical guide to Swift closures: syntax, parameters and return values, trailing closures, value capture, a real iOS example, common mistakes, and an interview tip.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swift/closures/">
+
+  <meta property="og:title" content="Swift Closures Explained — TechBuzz Apps">
+  <meta property="og:description" content="A practical guide to Swift closures: syntax, trailing closures, value capture, and a real iOS example.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swift/closures/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swift/">Swift</a></li>
+          <li aria-current="page">Closures</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Article contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#what-is-a-closure">What is a Closure?</a></li>
+                <li><a href="#basic-syntax">Basic Syntax</a></li>
+                <li><a href="#parameters-and-return-values">Parameters &amp; Return Values</a></li>
+                <li><a href="#trailing-closures">Trailing Closures</a></li>
+                <li><a href="#capturing-values">Capturing Values</a></li>
+                <li><a href="#common-ios-example">Common iOS Example</a></li>
+                <li><a href="#common-mistakes">Common Mistakes</a></li>
+                <li><a href="#interview-tip">Interview Tip</a></li>
+                <li><a href="#key-takeaways">Key Takeaways</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>In This Section</summary>
+            <nav data-series aria-label="Swift topics">
+              <ul>
+                <li><span class="is-current" aria-current="page">Closures</span></li>
+                <li><span class="is-future">Swift Basics</span></li>
+                <li><span class="is-future">Optionals</span></li>
+                <li><span class="is-future">Protocols</span></li>
+                <li><span class="is-future">Generics</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow">Swift</p>
+            <h1>Swift Closures</h1>
+            <p class="subtitle">
+              Closures are one of the first Swift features that feel
+              unfamiliar coming from other languages — and one of the
+              most common topics in iOS interviews. This guide covers
+              what they are, how to write them, and where you'll
+              actually use them.
+            </p>
+          </header>
+
+          <h2 id="what-is-a-closure">What is a Closure?</h2>
+
+          <p>
+            A closure is a self-contained block of functionality that
+            can be passed around and used in your code, much like a
+            function. Closures can capture and store references to
+            variables and constants from the surrounding context in
+            which they're defined — this is called
+            <strong>capturing</strong> those values.
+          </p>
+
+          <p>
+            In fact, Swift functions are just a special case of
+            closures. Anywhere you can pass a function, you can pass
+            a closure instead.
+          </p>
+
+          <h2 id="basic-syntax">Basic Syntax</h2>
+
+          <p>
+            A closure expression has the following general form:
+          </p>
+
+          <pre><code>{ (parameters) -> ReturnType in
+    statements
+}</code></pre>
+
+          <p>
+            For example, a closure that adds two integers:
+          </p>
+
+          <pre><code>let add: (Int, Int) -> Int = { (a, b) -> Int in
+    return a + b
+}
+
+add(2, 3) // 5</code></pre>
+
+          <h2 id="parameters-and-return-values">Parameters and Return Values</h2>
+
+          <p>
+            Closures can take parameters and return values just like
+            functions. Swift can often infer parameter and return
+            types from context, which lets you drop them entirely:
+          </p>
+
+          <pre><code>let numbers = [5, 2, 8, 1]
+
+let sorted = numbers.sorted(by: { (a: Int, b: Int) -> Bool in
+    return a &lt; b
+})
+
+// Types inferred from `sorted(by:)`, so this is equivalent:
+let sortedShort = numbers.sorted(by: { a, b in a &lt; b })</code></pre>
+
+          <p>
+            A single-expression closure can also drop the
+            <code>return</code> keyword, since Swift implicitly
+            returns the result of that one expression.
+          </p>
+
+          <h2 id="trailing-closures">Trailing Closures</h2>
+
+          <p>
+            When a closure is the last argument to a function, Swift
+            lets you write it <strong>after</strong> the parentheses
+            instead of inside them. This is called a trailing
+            closure, and it's the style you'll see most often in
+            real Swift and SwiftUI code.
+          </p>
+
+          <pre><code>// Without a trailing closure
+let sortedNumbers = numbers.sorted(by: { a, b in a &lt; b })
+
+// With a trailing closure
+let sortedNumbersTrailing = numbers.sorted { a, b in a &lt; b }
+
+// Shorthand argument names ($0, $1) go a step further
+let sortedNumbersShorthand = numbers.sorted { $0 &lt; $1 }</code></pre>
+
+          <h2 id="capturing-values">Capturing Values</h2>
+
+          <p>
+            A closure can capture variables and constants from its
+            surrounding scope and use — or even modify — them later,
+            even after that scope has finished executing.
+          </p>
+
+          <pre><code>func makeCounter() -> () -> Int {
+    var count = 0
+    return {
+        count += 1
+        return count
+    }
+}
+
+let counter = makeCounter()
+counter() // 1
+counter() // 2
+counter() // 3</code></pre>
+
+          <p>
+            Each call to <code>makeCounter()</code> creates a new,
+            independent <code>count</code> variable that its returned
+            closure captures by reference.
+          </p>
+
+          <h2 id="common-ios-example">Common iOS Example</h2>
+
+          <p>
+            Closures show up constantly in iOS development, most
+            often as completion handlers for asynchronous work:
+          </p>
+
+          <pre><code>func fetchTempleList(completion: @escaping (Result&lt;[Temple], Error&gt;) -> Void) {
+    URLSession.shared.dataTask(with: templesURL) { data, _, error in
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+
+        guard let data = data,
+              let temples = try? JSONDecoder().decode([Temple].self, from: data) else {
+            completion(.failure(URLError(.cannotParseResponse)))
+            return
+        }
+
+        completion(.success(temples))
+    }.resume()
+}</code></pre>
+
+          <p>
+            The <code>@escaping</code> keyword marks that the closure
+            may be called after the function returns — necessary
+            here because the network request finishes asynchronously.
+          </p>
+
+          <h2 id="common-mistakes">Common Mistakes</h2>
+
+          <div class="callout callout-warning">
+            <span class="callout-title">Watch out</span>
+            <ul>
+              <li>
+                Forgetting <code>@escaping</code> on a closure
+                parameter that's stored or called later, instead of
+                being called before the function returns.
+              </li>
+              <li>
+                Creating a strong reference cycle by capturing
+                <code>self</code> strongly inside a long-lived
+                closure (for example, one stored on a view
+                controller or view model). Use
+                <code>[weak self]</code> when the closure might
+                outlive the object that created it.
+              </li>
+              <li>
+                Assuming a closure runs synchronously just because
+                it was written inline — asynchronous APIs run their
+                closures later, not immediately.
+              </li>
+            </ul>
+          </div>
+
+          <pre><code>// Avoid a retain cycle when self may outlive the closure
+networkService.fetchTempleList { [weak self] result in
+    guard let self else { return }
+    self.handle(result)
+}</code></pre>
+
+          <h2 id="interview-tip">Interview Tip</h2>
+
+          <div class="callout callout-tip">
+            <span class="callout-title">Interview Tip</span>
+            <p>
+              If you're asked "what's the difference between a
+              function and a closure?", the honest answer is: very
+              little — a named function is really just a closure with
+              a name and no captured values. A strong follow-up is
+              being able to explain <em>why</em> <code>[weak self]</code>
+              matters, since it's one of the most commonly asked
+              closure-related questions in iOS interviews.
+            </p>
+          </div>
+
+          <h2 id="key-takeaways">Key Takeaways</h2>
+
+          <div class="callout callout-takeaway">
+            <span class="callout-title">Key Takeaways</span>
+            <ul>
+              <li>A closure is a block of code that can capture and store references to values from its surrounding context.</li>
+              <li>Swift functions are a special case of closures.</li>
+              <li>Trailing closure syntax is the idiomatic way to pass a closure as the last argument.</li>
+              <li>Closures capture variables by reference, not by value — this is what makes them powerful and occasionally surprising.</li>
+              <li>Use <code>[weak self]</code> in closures that may outlive the object that created them, to avoid retain cycles.</li>
+            </ul>
+          </div>
+
+          <nav class="article-pagination" aria-label="Article navigation">
+            <span class="pagination-placeholder">← This is the first published Swift article</span>
+            <span class="pagination-placeholder is-next">More Swift topics are coming soon →</span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
