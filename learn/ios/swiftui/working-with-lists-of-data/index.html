@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>SwiftUI Lists, ForEach &amp; Identifiable for Beginners | TechBuzz Apps</title>
+  <meta name="description" content="Learn how SwiftUI turns collections of data into views using arrays, Swift models, ForEach, List, Identifiable and UUID, and build a simple task list.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swiftui/working-with-lists-of-data/">
+
+  <meta property="og:title" content="Working With Lists of Data — SwiftUI for Beginners, Lesson 4">
+  <meta property="og:description" content="Learn how SwiftUI turns collections of data into views using arrays, Swift models, ForEach, List, Identifiable and UUID, and build a simple task list.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swiftui/working-with-lists-of-data/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swiftui/">SwiftUI</a></li>
+          <li aria-current="page">Working With Lists of Data</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#hardcoded-views">Hardcoded Views</a></li>
+                <li><a href="#arrays">Arrays</a></li>
+                <li><a href="#foreach">ForEach</a></li>
+                <li><a href="#identity">Identity (id: \.self)</a></li>
+                <li><a href="#models">Models</a></li>
+                <li><a href="#identifiable">Identifiable</a></li>
+                <li><a href="#vstack-vs-list">VStack vs List</a></li>
+                <li><a href="#reusable-row">Reusable Row</a></li>
+                <li><a href="#task-list">Task List</a></li>
+                <li><a href="#counting-completed">Counting Completed</a></li>
+                <li><a href="#let-vs-state">let vs @State</a></li>
+                <li><a href="#mental-model">Mental Model</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+                <li><a href="#recap">Recap</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>SwiftUI for Beginners</summary>
+            <nav data-series aria-label="SwiftUI for Beginners lessons">
+              <ul>
+                <li><a href="/learn/ios/swiftui/getting-started/">1. Getting Started</a></li>
+                <li><a href="/learn/ios/swiftui/building-your-first-screen/">2. Your First Screen</a></li>
+                <li><a href="/learn/ios/swiftui/making-your-screen-interactive/">3. Interactivity</a></li>
+                <li><span class="is-current" aria-current="page">4. Lists of Data</span></li>
+                <li><span class="is-future">5. Navigation</span></li>
+                <li><span class="is-future">6. Sharing State</span></li>
+                <li><span class="is-future">7. Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow"><span aria-hidden="true">📘</span> SwiftUI for Beginners · Lesson 4 of 9</p>
+            <h1>Working With Lists of Data</h1>
+          </header>
+
+          <p>So far, we've written views individually.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">Text("Apple")
+Text("Banana")
+Text("Orange")</code></pre>
+          <p>That works when we have three items.</p>
+          <p>But imagine an app containing:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Examples of app data: 10 tasks, 50 contacts, 200 products, 1,000 messages.">10 tasks
+50 contacts
+200 products
+1,000 messages</pre>
+          </figure>
+          <p>We obviously don't want to write 1,000 <code>Text</code> views ourselves.</p>
+          <p>Instead, real applications usually work like this:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: data goes into SwiftUI, which produces the UI.">DATA
+  ↓
+SwiftUI
+  ↓
+UI</pre>
+          </figure>
+          <p>In this lesson, we'll learn how to represent data with Swift models and turn collections of that data into views using:</p>
+          <p><strong>Array → Model → <code>ForEach</code> → <code>List</code> → <code>Identifiable</code></strong></p>
+          <p>By the end, we'll build a simple <strong>Task List</strong>:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the screen this lesson builds: the title My Tasks, then Learn SwiftUI marked complete, Build a small app and Practice every day not complete, and the summary 1 of 3 completed.">┌──────────────────────────────┐
+│                              │
+│          My Tasks            │
+│                              │
+│  ✓ Learn SwiftUI             │
+│                              │
+│  ○ Build a small app         │
+│                              │
+│  ○ Practice every day        │
+│                              │
+│  1 of 3 completed            │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>But the important lesson isn't the task list itself.</p>
+          <p>It's this:</p>
+          <blockquote class="callout"><p><strong>Your data can determine how many views SwiftUI creates.</strong></p></blockquote>
+
+          <h2 id="hardcoded-views">1. The Problem With Hardcoded Views</h2>
+
+          <p>Suppose we want to display three fruits.</p>
+          <p>We could write:</p>
+          <pre><code class="language-swift">VStack {
+    Text("Apple")
+    Text("Banana")
+    Text("Orange")
+}</code></pre>
+          <p>And we'd get:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The output: Apple, Banana, Orange.">Apple
+Banana
+Orange</pre>
+          </figure>
+          <p>Nothing is wrong with this code.</p>
+          <p>But what happens when our data changes?</p>
+          <p>Suppose tomorrow we have:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A longer list of fruits: Apple, Banana, Orange, Mango, Grapes, Watermelon, Strawberry.">Apple
+Banana
+Orange
+Mango
+Grapes
+Watermelon
+Strawberry</pre>
+          </figure>
+          <p>Now we'd have to modify the UI manually:</p>
+          <pre><code class="language-swift">VStack {
+    Text("Apple")
+    Text("Banana")
+    Text("Orange")
+    Text("Mango")
+    Text("Grapes")
+    Text("Watermelon")
+    Text("Strawberry")
+}</code></pre>
+          <p>That's not how we want to build a real application.</p>
+          <p>The problem is that our <strong>data is mixed directly into our UI structure</strong>.</p>
+          <p>Instead, we'd like to say:</p>
+          <blockquote class="callout"><p>Here is my data. SwiftUI, create one view for each item.</p></blockquote>
+
+          <h2 id="arrays">2. Meet Arrays <span aria-hidden="true">📦</span></h2>
+
+          <p>Swift gives us an <code>Array</code> for storing multiple values.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">let fruits = ["Apple", "Banana", "Orange"]</code></pre>
+          <p>You can imagine it like this:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The fruits array holds three values: Apple, Banana and Orange.">fruits
+  │
+  ├── "Apple"
+  ├── "Banana"
+  └── "Orange"</pre>
+          </figure>
+          <p>Instead of having three separate variables:</p>
+          <pre><code class="language-swift">let fruit1 = "Apple"
+let fruit2 = "Banana"
+let fruit3 = "Orange"</code></pre>
+          <p>we have one collection:</p>
+          <pre><code class="language-swift">let fruits = ["Apple", "Banana", "Orange"]</code></pre>
+          <p>We can access individual values using their position:</p>
+          <pre><code class="language-swift">fruits[0]
+fruits[1]
+fruits[2]</code></pre>
+          <p>which gives us:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The output: Apple, Banana, Orange.">Apple
+Banana
+Orange</pre>
+          </figure>
+          <p>Arrays become extremely useful in SwiftUI because many screens display <strong>collections of things</strong>:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Kinds of collections apps display: Messages, Contacts, Tasks, Products, Photos, Notifications, Search Results.">Messages
+Contacts
+Tasks
+Products
+Photos
+Notifications
+Search Results</pre>
+          </figure>
+          <p>So now we have the data.</p>
+          <p>The next question is:</p>
+          <blockquote class="callout"><p>How do we turn every item in that array into a SwiftUI view?</p></blockquote>
+
+          <h2 id="foreach">3. Meet <code>ForEach</code> <span aria-hidden="true">🔁</span></h2>
+
+          <p>This is where <code>ForEach</code> comes in.</p>
+          <p>Let's start with our fruit array:</p>
+          <pre><code class="language-swift">let fruits = ["Apple", "Banana", "Orange"]</code></pre>
+          <p>Now:</p>
+          <pre><code class="language-swift">VStack {
+    ForEach(fruits, id: \.self) { fruit in
+        Text(fruit)
+    }
+}</code></pre>
+          <p>SwiftUI creates:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The output: Apple, Banana, Orange.">Apple
+Banana
+Orange</pre>
+          </figure>
+          <p>But notice something important.</p>
+          <p>We only wrote:</p>
+          <pre><code class="language-swift">Text(fruit)</code></pre>
+          <p><strong>once</strong>.</p>
+          <p>SwiftUI repeated that view for every item in <code>fruits</code>.</p>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each item in fruits becomes a view: Apple becomes Text(&quot;Apple&quot;), Banana becomes Text(&quot;Banana&quot;), Orange becomes Text(&quot;Orange&quot;).">fruits
+  │
+  ├── Apple  ─────→ Text("Apple")
+  │
+  ├── Banana ─────→ Text("Banana")
+  │
+  └── Orange ─────→ Text("Orange")</pre>
+          </figure>
+          <p>That's our new mental model:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Mental model: a collection of data goes through ForEach, producing one view per item.">Collection of Data
+        ↓
+     ForEach
+        ↓
+One View Per Item</pre>
+          </figure>
+
+          <h2 id="reading-foreach">4. Reading <code>ForEach</code></h2>
+
+          <p>This syntax may look strange at first:</p>
+          <pre><code class="language-swift">ForEach(fruits, id: \.self) { fruit in
+    Text(fruit)
+}</code></pre>
+          <p>Let's break it down.</p>
+          <h3 id="reading-fruits"><code>fruits</code></h3>
+          <pre><code class="language-swift">ForEach(fruits, ...)</code></pre>
+          <p>means:</p>
+          <blockquote class="callout"><p>Go through the values inside <code>fruits</code>.</p></blockquote>
+          <h3 id="reading-fruit"><code>fruit</code></h3>
+          <pre><code class="language-swift">{ fruit in</code></pre>
+          <p>means:</p>
+          <blockquote class="callout"><p>For the current item, call it <code>fruit</code>.</p></blockquote>
+          <p>So as SwiftUI moves through the array:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each pass through the array: the first time fruit is Apple, the second time Banana, the third time Orange.">First time:
+fruit = "Apple"
+
+Second time:
+fruit = "Banana"
+
+Third time:
+fruit = "Orange"</pre>
+          </figure>
+          <p>Then:</p>
+          <pre><code class="language-swift">Text(fruit)</code></pre>
+          <p>creates the view for that particular value.</p>
+          <p>You can mentally read the entire thing as:</p>
+          <blockquote class="callout"><p>For each fruit in fruits, create a Text showing that fruit.</p></blockquote>
+          <p>That's much less mysterious.</p>
+
+          <h2 id="identity">5. Why Do We Need <code>id: \.self</code>? <span aria-hidden="true">🤔</span></h2>
+
+          <p>You probably noticed this:</p>
+          <pre><code class="language-swift">id: \.self</code></pre>
+          <p>Why does SwiftUI need it?</p>
+          <p>Because SwiftUI needs a way to <strong>identify each item</strong>.</p>
+          <p>Imagine the array changes:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Before: Apple, Banana, Orange.">Before
+
+Apple
+Banana
+Orange</pre>
+          </figure>
+          <p>Then:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="After: Apple, Mango, Orange.">After
+
+Apple
+Mango
+Orange</pre>
+          </figure>
+          <p>SwiftUI needs to understand:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="What SwiftUI needs to work out: Apple is still Apple, Banana was removed, Mango is new, Orange is still Orange.">Apple   → still Apple
+Banana  → removed
+Mango   → new
+Orange  → still Orange</pre>
+          </figure>
+          <p>Identity helps SwiftUI understand which piece of data corresponds to which view.</p>
+          <p>For simple unique strings in a beginner example, we can use:</p>
+          <pre><code class="language-swift">id: \.self</code></pre>
+          <p>which roughly means:</p>
+          <blockquote class="callout"><p>Use the value itself as its identity.</p></blockquote>
+          <p>So:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each string is identified by its own value: Apple by Apple, Banana by Banana, Orange by Orange.">"Apple"  → identified by "Apple"
+"Banana" → identified by "Banana"
+"Orange" → identified by "Orange"</pre>
+          </figure>
+          <p>But real app data is usually more complicated than strings.</p>
+          <p>That's where <strong>models</strong> become useful.</p>
+
+          <h2 id="models">6. Real Apps Use Models <span aria-hidden="true">🧱</span></h2>
+
+          <p>Imagine we're building a task app.</p>
+          <p>A task isn't just a piece of text.</p>
+          <p>It might contain:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="What a task might contain: title, completed status, priority, due date, notes.">Title
+Completed status
+Priority
+Due date
+Notes</pre>
+          </figure>
+          <p>We could represent a simple task with a Swift <code>struct</code>:</p>
+          <pre><code class="language-swift">struct Task {
+    let title: String
+    let isCompleted: Bool
+}</code></pre>
+          <p>Now a <code>Task</code> represents one piece of app data.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">let task = Task(
+    title: "Learn SwiftUI",
+    isCompleted: true
+)</code></pre>
+          <p>Think of the model like a small container:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A Task holds a title of Learn SwiftUI and isCompleted set to true.">Task
+├── title: "Learn SwiftUI"
+└── isCompleted: true</pre>
+          </figure>
+          <p>We can access its values:</p>
+          <pre><code class="language-swift">task.title
+task.isCompleted</code></pre>
+          <p>This is a big step toward how real apps are structured.</p>
+          <p>Instead of our UI containing all the information directly, we have:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: the data model drives the UI.">DATA MODEL
+    ↓
+   UI</pre>
+          </figure>
+
+          <h2 id="multiple-tasks">7. Creating Multiple Tasks</h2>
+
+          <p>Now let's create several tasks:</p>
+          <pre><code class="language-swift">let tasks = [
+    Task(title: "Learn SwiftUI", isCompleted: true),
+    Task(title: "Build a small app", isCompleted: false),
+    Task(title: "Practice every day", isCompleted: false)
+]</code></pre>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The tasks array holds three Task values: Learn SwiftUI, true; Build a small app, false; Practice every day, false.">tasks
+  │
+  ├── Task
+  │    ├── Learn SwiftUI
+  │    └── true
+  │
+  ├── Task
+  │    ├── Build a small app
+  │    └── false
+  │
+  └── Task
+       ├── Practice every day
+       └── false</pre>
+          </figure>
+          <p>Now our screen has actual structured data to work with.</p>
+          <p>But we still need one thing.</p>
+          <p>SwiftUI needs to know the identity of each <code>Task</code>.</p>
+
+          <h2 id="identifiable">8. Meet <code>Identifiable</code> <span aria-hidden="true">🪪</span></h2>
+
+          <p>Swift has a protocol called:</p>
+          <pre><code class="language-swift">Identifiable</code></pre>
+          <p>We can make our model conform to it:</p>
+          <pre><code class="language-swift">struct Task: Identifiable {
+    let id = UUID()
+    let title: String
+    let isCompleted: Bool
+}</code></pre>
+          <p>Now every task gets its own unique <code>id</code>.</p>
+          <p>You can imagine:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A Task with id A1F2..., title Learn SwiftUI and isCompleted true.">Task
+├── id: A1F2...
+├── title: "Learn SwiftUI"
+└── isCompleted: true</pre>
+          </figure>
+          <p>Another task:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A Task with id B7C4..., title Build a small app and isCompleted false.">Task
+├── id: B7C4...
+├── title: "Build a small app"
+└── isCompleted: false</pre>
+          </figure>
+          <p>Even if two tasks happen to have the same title, their IDs can still be different.</p>
+          <p>For example:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Two tasks with the same title, Practice, but different ids: 101 and 202.">Task
+id: 101
+title: "Practice"
+
+Task
+id: 202
+title: "Practice"</pre>
+          </figure>
+          <p>Same title.</p>
+          <p>Different identity.</p>
+          <p>That's much more reliable than using the title itself as the identity.</p>
+
+          <h2 id="foreach-identifiable">9. <code>ForEach</code> Gets Cleaner With <code>Identifiable</code></h2>
+
+          <p>Earlier we wrote:</p>
+          <pre><code class="language-swift">ForEach(fruits, id: \.self) { fruit in
+    Text(fruit)
+}</code></pre>
+          <p>But when our model conforms to <code>Identifiable</code>, SwiftUI already knows how to identify each item.</p>
+          <p>So we can write:</p>
+          <pre><code class="language-swift">ForEach(tasks) { task in
+    Text(task.title)
+}</code></pre>
+          <p>That's it.</p>
+          <p>No:</p>
+          <pre><code class="language-swift">id: \.self</code></pre>
+          <p>needed.</p>
+          <p>SwiftUI uses:</p>
+          <pre><code class="language-swift">task.id</code></pre>
+          <p>behind the scenes.</p>
+          <p>Our data flow now looks like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: tasks go into ForEach, and each of Task 1, Task 2 and Task 3 becomes a view.">tasks
+  │
+  ▼
+ForEach
+  │
+  ├── Task 1 ───→ View
+  ├── Task 2 ───→ View
+  └── Task 3 ───→ View</pre>
+          </figure>
+          <p>This pattern appears constantly in SwiftUI applications.</p>
+
+          <h2 id="richer-rows">10. Let's Make Each Row More Interesting</h2>
+
+          <p>We don't have to create only a <code>Text</code>.</p>
+          <p>Each item can produce an entire layout.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">ForEach(tasks) { task in
+
+    HStack {
+
+        Image(
+            systemName: task.isCompleted
+                ? "checkmark.circle.fill"
+                : "circle"
+        )
+
+        Text(task.title)
+
+        Spacer()
+    }
+}</code></pre>
+          <p>Now our data controls multiple parts of the UI.</p>
+          <p>If:</p>
+          <pre><code class="language-swift">task.isCompleted == true</code></pre>
+          <p>we show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A completed row: a checkmark next to Learn SwiftUI.">✓ Learn SwiftUI</pre>
+          </figure>
+          <p>Otherwise:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="An incomplete row: an empty circle next to Build a small app.">○ Build a small app</pre>
+          </figure>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The task data drives the row: title drives the Text, and isCompleted drives the Image.">Task Data
+   │
+   ├── title ───────────→ Text
+   │
+   └── isCompleted ─────→ Image</pre>
+          </figure>
+          <p>This is the same idea we learned in Lesson 3:</p>
+          <blockquote class="callout"><p><strong>State and data determine the UI.</strong></p></blockquote>
+          <p>We're simply applying it to <strong>collections of data</strong> now.</p>
+
+          <h2 id="vstack-vs-list">11. <code>VStack</code> vs <code>List</code></h2>
+
+          <p>We could display our tasks using:</p>
+          <pre><code class="language-swift">VStack {
+    ForEach(tasks) { task in
+        Text(task.title)
+    }
+}</code></pre>
+          <p>That's perfectly valid.</p>
+          <p>But SwiftUI also provides a container specifically designed for displaying collections of rows:</p>
+          <pre><code class="language-swift">List</code></pre>
+          <p>For example:</p>
+          <pre><code class="language-swift">List {
+    ForEach(tasks) { task in
+        Text(task.title)
+    }
+}</code></pre>
+          <p>Now the interface behaves more like a standard scrolling list.</p>
+          <p>You can think of the difference like this:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Comparison. VStack: general vertical layout, you control the surrounding layout, useful for smaller groups of views. List: designed for collections of rows, scrolls naturally, useful for list-style interfaces.">VStack
+│
+├── General vertical layout
+├── You control the surrounding layout
+└── Useful for smaller groups of views
+
+
+List
+│
+├── Designed for collections of rows
+├── Scrolls naturally
+└── Useful for list-style interfaces</pre>
+          </figure>
+          <p>We'll learn more advanced <code>List</code> features later.</p>
+          <p>For now, the important idea is simply:</p>
+          <blockquote class="callout"><p><code>List</code> is a container designed for displaying collections of data.</p></blockquote>
+
+          <h2 id="list-with-data">12. <code>List</code> Can Work Directly With Data</h2>
+
+          <p>Because our <code>Task</code> model is <code>Identifiable</code>, we can make the code even shorter.</p>
+          <p>Instead of:</p>
+          <pre><code class="language-swift">List {
+    ForEach(tasks) { task in
+        Text(task.title)
+    }
+}</code></pre>
+          <p>we can write:</p>
+          <pre><code class="language-swift">List(tasks) { task in
+    Text(task.title)
+}</code></pre>
+          <p>Read that as:</p>
+          <blockquote class="callout"><p>Create a list using these tasks, and create this row for each task.</p></blockquote>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: tasks go into a List, each Task becomes a row.">tasks
+  ↓
+List
+  ↓
+Task
+  ↓
+Row</pre>
+          </figure>
+          <p>This is a very common SwiftUI pattern.</p>
+
+          <h2 id="reusable-row">13. Let's Create a Reusable Row <span aria-hidden="true">🧩</span></h2>
+
+          <p>Our task row is starting to contain several views:</p>
+          <pre><code class="language-swift">HStack {
+    Image(...)
+    Text(...)
+    Spacer()
+}</code></pre>
+          <p>Rather than keeping all of that inside our <code>List</code>, we can create another SwiftUI view.</p>
+          <pre><code class="language-swift">struct TaskRow: View {
+
+    let task: Task
+
+    var body: some View {
+
+        HStack {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+
+            Text(task.title)
+
+            Spacer()
+        }
+    }
+}</code></pre>
+          <p>Notice this line:</p>
+          <pre><code class="language-swift">let task: Task</code></pre>
+          <p><code>TaskRow</code> receives a task and uses it to build its UI.</p>
+          <p>Now our list becomes:</p>
+          <pre><code class="language-swift">List(tasks) { task in
+    TaskRow(task: task)
+}</code></pre>
+          <p>Much cleaner.</p>
+          <p>The flow is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: TaskListView holds tasks, which go into a List, which passes each Task to a TaskRow.">TaskListView
+     │
+     ▼
+   tasks
+     │
+     ▼
+    List
+     │
+     ▼
+  each Task
+     │
+     ▼
+  TaskRow</pre>
+          </figure>
+          <p>This is our first taste of building interfaces from <strong>small reusable views</strong>.</p>
+
+          <h2 id="task-list">14. Let's Build the Task List <span aria-hidden="true">🛠️</span></h2>
+
+          <p>Now let's combine everything.</p>
+          <pre><code class="language-swift">struct Task: Identifiable {
+    let id = UUID()
+    let title: String
+    let isCompleted: Bool
+}</code></pre>
+          <p>Then our row:</p>
+          <pre><code class="language-swift">struct TaskRow: View {
+
+    let task: Task
+
+    var body: some View {
+
+        HStack(spacing: 12) {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+
+            Text(task.title)
+
+            Spacer()
+        }
+    }
+}</code></pre>
+          <p>And finally the screen:</p>
+          <pre><code class="language-swift">struct TaskListView: View {
+
+    let tasks = [
+        Task(
+            title: "Learn SwiftUI",
+            isCompleted: true
+        ),
+        Task(
+            title: "Build a small app",
+            isCompleted: false
+        ),
+        Task(
+            title: "Practice every day",
+            isCompleted: false
+        )
+    ]
+
+    var body: some View {
+
+        VStack(alignment: .leading, spacing: 16) {
+
+            Text("My Tasks")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            List(tasks) { task in
+                TaskRow(task: task)
+            }
+        }
+        .padding()
+    }
+}</code></pre>
+          <p>Now look at how the pieces fit together:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="How the pieces fit: Task defines one item, tasks stores many Task values, List goes through the tasks, and TaskRow turns each Task into UI.">Task
+  ↓
+defines one item
+
+tasks
+  ↓
+stores many Task values
+
+List
+  ↓
+goes through the tasks
+
+TaskRow
+  ↓
+turns each Task into UI</pre>
+          </figure>
+          <p>The important thing is that we aren't manually creating:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Rows we do not create by hand: TaskRow 1, TaskRow 2, TaskRow 3.">TaskRow 1
+TaskRow 2
+TaskRow 3</pre>
+          </figure>
+          <p>Our <strong>data determines how many rows exist</strong>.</p>
+
+          <h2 id="adding-a-task">15. What Happens If We Add Another Task?</h2>
+
+          <p>This is where the benefit becomes obvious.</p>
+          <p>Suppose we add:</p>
+          <pre><code class="language-swift">Task(
+    title: "Read Swift documentation",
+    isCompleted: false
+)</code></pre>
+          <p>Our array now contains four tasks.</p>
+          <p>We don't need to add another <code>TaskRow</code>.</p>
+          <p>We don't need to change the <code>List</code>.</p>
+          <p>We don't need to change <code>ForEach</code>.</p>
+          <p>The data changed:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The data grows from 3 tasks to 4 tasks.">3 Tasks
+   ↓
+4 Tasks</pre>
+          </figure>
+          <p>and therefore the UI becomes:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The UI grows from 3 rows to 4 rows.">3 Rows
+   ↓
+4 Rows</pre>
+          </figure>
+          <p>That's the key idea.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Data changes, so the number of items changes, so SwiftUI builds the appropriate UI.">DATA CHANGES
+     ↓
+NUMBER OF ITEMS CHANGES
+     ↓
+SWIFTUI BUILDS THE APPROPRIATE UI</pre>
+          </figure>
+
+          <h2 id="counting-completed">16. Counting Completed Tasks</h2>
+
+          <p>Because our information is now represented as data, we can do more with it.</p>
+          <p>Suppose we want to show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The summary text: 1 of 3 completed.">1 of 3 completed</pre>
+          </figure>
+          <p>We can calculate the completed tasks:</p>
+          <pre><code class="language-swift">let completedCount = tasks.filter { task in
+    task.isCompleted
+}.count</code></pre>
+          <p>Then display:</p>
+          <pre><code class="language-swift">Text("\(completedCount) of \(tasks.count) completed")</code></pre>
+          <p>Our screen can now derive information from the same data used to build the list.</p>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="One tasks collection feeds two things: the List, which produces rows, and completedCount, which produces the text 1 of 3 completed.">              tasks
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+      List          completedCount
+        │                │
+        ▼                ▼
+     Rows         "1 of 3 completed"</pre>
+          </figure>
+          <p>One collection of data can drive multiple parts of the interface.</p>
+
+          <h2 id="data-and-ui">17. Models Keep UI and Data Clear</h2>
+
+          <p>Compare these two approaches.</p>
+          <h3 id="hardcoded-ui">Hardcoded UI</h3>
+          <pre><code class="language-swift">Text("✓ Learn SwiftUI")
+Text("○ Build a small app")
+Text("○ Practice every day")</code></pre>
+          <p>The information is buried directly inside the views.</p>
+          <p>Now compare that with:</p>
+          <pre><code class="language-swift">let tasks = [
+    Task(title: "Learn SwiftUI", isCompleted: true),
+    Task(title: "Build a small app", isCompleted: false),
+    Task(title: "Practice every day", isCompleted: false)
+]</code></pre>
+          <p>and:</p>
+          <pre><code class="language-swift">List(tasks) { task in
+    TaskRow(task: task)
+}</code></pre>
+          <p>Now we have a much clearer separation:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Separation: data is Task and tasks; UI is TaskRow and TaskListView.">DATA
+Task
+tasks
+
+        ↓
+
+UI
+TaskRow
+TaskListView</pre>
+          </figure>
+          <p>This becomes increasingly important as applications grow.</p>
+
+          <h2 id="let-vs-state">18. A Very Important Distinction</h2>
+
+          <p>You might be wondering:</p>
+          <blockquote class="callout"><p>Why are our tasks declared with <code>let</code>? Didn't Lesson 3 teach us <code>@State</code>?</p></blockquote>
+          <p>Good question.</p>
+          <p>In this lesson, we're focusing on <strong>representing and displaying collections of data</strong>.</p>
+          <p>Our tasks aren't changing yet:</p>
+          <pre><code class="language-swift">let tasks = [...]</code></pre>
+          <p>The user cannot add, delete or complete tasks.</p>
+          <p>That is intentional.</p>
+          <p>If we tried to introduce:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Too much at once: arrays, models, ForEach, List, Identifiable, @State arrays, bindings, editing, deleting, adding.">Arrays
+Models
+ForEach
+List
+Identifiable
+@State arrays
+Bindings
+Editing
+Deleting
+Adding</pre>
+          </figure>
+          <p>all at once, we'd bury the important idea.</p>
+          <p>For now:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 3: state can change UI. Lesson 4: collections of data can create UI.">Lesson 3
+State can change UI.
+
+Lesson 4
+Collections of data can create UI.</pre>
+          </figure>
+          <p>Later, we'll combine those ideas.</p>
+          <p>That's when things get really interesting.</p>
+
+          <h2 id="foreach-or-list">19. <code>ForEach</code> or <code>List</code>? <span aria-hidden="true">🤔</span></h2>
+
+          <p>Beginners often wonder which one they should use.</p>
+          <p>They aren't really competitors.</p>
+          <p><code>ForEach</code> means:</p>
+          <blockquote class="callout"><p>Create views for each item in a collection.</p></blockquote>
+          <p><code>List</code> means:</p>
+          <blockquote class="callout"><p>Display content using a list-style container.</p></blockquote>
+          <p>You can use them together:</p>
+          <pre><code class="language-swift">List {
+    ForEach(tasks) { task in
+        TaskRow(task: task)
+    }
+}</code></pre>
+          <p>Or <code>List</code> can work directly with identifiable data:</p>
+          <pre><code class="language-swift">List(tasks) { task in
+    TaskRow(task: task)
+}</code></pre>
+          <p>And <code>ForEach</code> can be used outside a <code>List</code>:</p>
+          <pre><code class="language-swift">VStack {
+    ForEach(tasks) { task in
+        TaskRow(task: task)
+    }
+}</code></pre>
+          <p>So remember:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="ForEach repeats views from data; List provides a list-style container.">ForEach
+   ↓
+Repeats views from data
+
+List
+   ↓
+Provides a list-style container</pre>
+          </figure>
+
+          <h2 id="mental-model">20. Lesson 4 Mental Model <span aria-hidden="true">🧠</span></h2>
+
+          <p>If you remember one diagram from this lesson, remember this:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 4 mental model: the tasks data flows into List or ForEach, which splits into three Task items, each becoming a Row.">             DATA
+
+       ┌──────────────┐
+       │    tasks     │
+       └──────┬───────┘
+              │
+              ▼
+       ┌──────────────┐
+       │ List/ForEach │
+       └──────┬───────┘
+              │
+      ┌───────┼────────┐
+      ▼       ▼        ▼
+    Task    Task      Task
+      │       │        │
+      ▼       ▼        ▼
+     Row     Row      Row</pre>
+          </figure>
+          <p>Or even more simply:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Simplified: data goes through ForEach or List to become UI.">DATA
+  ↓
+ForEach / List
+  ↓
+UI</pre>
+          </figure>
+          <p>Lesson 3 taught us:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 3: state drives the UI.">STATE
+  ↓
+ UI</pre>
+          </figure>
+          <p>Lesson 4 adds:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 4: collections of data drive the UI.">COLLECTIONS OF DATA
+        ↓
+       UI</pre>
+          </figure>
+          <p>Those two ideas are going to come together repeatedly throughout SwiftUI.</p>
+
+          <h2 id="challenge"><span aria-hidden="true">🎯</span> Your Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+          <p>Build a simple <strong>Favourite Movies</strong> screen.</p>
+          <p>Your data should contain at least four movies.</p>
+          <p>Start with a model:</p>
+          <pre><code class="language-swift">struct Movie: Identifiable {
+    let id = UUID()
+    let title: String
+    let year: Int
+}</code></pre>
+          <p>Create an array:</p>
+          <pre><code class="language-swift">let movies = [
+    Movie(title: "Movie One", year: 2022),
+    Movie(title: "Movie Two", year: 2023),
+    Movie(title: "Movie Three", year: 2024),
+    Movie(title: "Movie Four", year: 2025)
+]</code></pre>
+          <p>Your screen might look like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the challenge screen: the title Favourite Movies, then four rows, each with a film icon, a movie title and its year: Movie One 2022, Movie Two 2023, Movie Three 2024, Movie Four 2025.">┌──────────────────────────────┐
+│                              │
+│      Favourite Movies       │
+│                              │
+│  🎬 Movie One               │
+│     2022                     │
+│                              │
+│  🎬 Movie Two               │
+│     2023                     │
+│                              │
+│  🎬 Movie Three             │
+│     2024                     │
+│                              │
+│  🎬 Movie Four              │
+│     2025                     │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>Requirements:</p>
+          <ul>
+            <li>Create a <code>Movie</code> model.</li>
+            <li>Make it conform to <code>Identifiable</code>.</li>
+            <li>Store several movies in an array.</li>
+            <li>Display them using <code>List</code> or <code>ForEach</code>.</li>
+            <li>Show both the movie title and year.</li>
+            <li>Create a separate <code>MovieRow</code> view.</li>
+          </ul>
+          <h3 id="bonus-challenge"><span aria-hidden="true">⭐</span> Bonus challenge</h3>
+          <p>Add another property:</p>
+          <pre><code class="language-swift">let isFavorite: Bool</code></pre>
+          <p>Then display:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A filled heart.">♥</pre>
+          </figure>
+          <p>for favourite movies and:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="An empty heart.">♡</pre>
+          </figure>
+          <p>for the others.</p>
+          <p>Don't make the heart interactive yet.</p>
+          <p>For now, let the <strong>model's data determine which image the UI displays</strong>.</p>
+          </div>
+
+          <h2 id="recap"><span aria-hidden="true">✅</span> What You Now Know</h2>
+
+          <p>You can now represent collections of information and turn them into SwiftUI views.</p>
+          <p>You've learned:</p>
+          <pre><code class="language-swift">Array
+
+struct
+
+ForEach
+
+List
+
+Identifiable
+
+UUID
+
+filter</code></pre>
+          <p>You also understand why models matter.</p>
+          <p>Instead of:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Thinking in individual views: UI, UI, UI, UI, UI.">UI
+UI
+UI
+UI
+UI</pre>
+          </figure>
+          <p>we can think:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Thinking in data: data goes into SwiftUI, which produces many views.">       DATA
+         ↓
+      SwiftUI
+         ↓
+    MANY VIEWS</pre>
+          </figure>
+          <p>And our first four lessons now form a very useful progression:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The first four lessons. Lesson 1: what is a SwiftUI view? Lesson 2: how do we arrange views? Lesson 3: how does user interaction change the UI? Lesson 4: how does data create repeated UI?">Lesson 1
+What is a SwiftUI View?
+        ↓
+Lesson 2
+How do we arrange views?
+        ↓
+Lesson 3
+How does user interaction change the UI?
+        ↓
+Lesson 4
+How does data create repeated UI?</pre>
+          </figure>
+          <p>We're now ready for something every real application eventually needs:</p>
+
+          <h2 id="lesson-5"><span aria-hidden="true">📗</span> Lesson 5 — Navigation &amp; Multiple Screens</h2>
+
+          <p>So far, everything we've built lives on one screen.</p>
+          <p>Next we'll learn how to move from:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A single screen: Task List.">Task List</pre>
+          </figure>
+          <p>to:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Navigation from the Task List screen to a Task Details screen.">Task List
+    ↓
+Task Details</pre>
+          </figure>
+          <p>using <strong><code>NavigationStack</code></strong>, <strong><code>NavigationLink</code></strong>, and passing data from one screen to another.</p>
+          <p>That's when our small SwiftUI examples begin turning into a multi-screen application.</p>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <a href="/learn/ios/swiftui/making-your-screen-interactive/" class="pagination-link">
+              <span class="pagination-label">Previous lesson</span>
+              Lesson 3 — Making Your Screen Interactive
+            </a>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 5 — Navigation &amp; Multiple Screens
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
