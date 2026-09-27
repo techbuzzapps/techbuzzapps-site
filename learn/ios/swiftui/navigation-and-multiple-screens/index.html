@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>SwiftUI NavigationStack &amp; NavigationLink for Beginners | TechBuzz Apps</title>
+  <meta name="description" content="Learn SwiftUI navigation for beginners: use NavigationStack, NavigationLink and navigation titles, pass selected data to a detail screen, and build a multi-screen task app.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swiftui/navigation-and-multiple-screens/">
+
+  <meta property="og:title" content="Navigation &amp; Multiple Screens — SwiftUI for Beginners, Lesson 5">
+  <meta property="og:description" content="Learn SwiftUI navigation for beginners: use NavigationStack, NavigationLink and navigation titles, pass selected data to a detail screen, and build a multi-screen task app.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swiftui/navigation-and-multiple-screens/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swiftui/">SwiftUI</a></li>
+          <li aria-current="page">Navigation &amp; Multiple Screens</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#multiple-screens">Multiple Screens</a></li>
+                <li><a href="#navigationstack">NavigationStack</a></li>
+                <li><a href="#navigationlink">NavigationLink</a></li>
+                <li><a href="#how-the-stack-works">How the Stack Works</a></li>
+                <li><a href="#task-detail-view">Task Detail Screen</a></li>
+                <li><a href="#passing-data">Passing Data</a></li>
+                <li><a href="#list-and-navigationlink">List + NavigationLink</a></li>
+                <li><a href="#complete-example">Complete Example</a></li>
+                <li><a href="#where-navigationstack-goes">Where NavigationStack Goes</a></li>
+                <li><a href="#navigation-vs-sheet">Navigation vs Sheet</a></li>
+                <li><a href="#data-driven-navigation">Data-Driven Navigation</a></li>
+                <li><a href="#mental-model">Mental Model</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+                <li><a href="#recap">Recap</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>SwiftUI for Beginners</summary>
+            <nav data-series aria-label="SwiftUI for Beginners lessons">
+              <ul>
+                <li><a href="/learn/ios/swiftui/getting-started/">1. Getting Started</a></li>
+                <li><a href="/learn/ios/swiftui/building-your-first-screen/">2. Your First Screen</a></li>
+                <li><a href="/learn/ios/swiftui/making-your-screen-interactive/">3. Interactivity</a></li>
+                <li><a href="/learn/ios/swiftui/working-with-lists-of-data/">4. Lists of Data</a></li>
+                <li><span class="is-current" aria-current="page">5. Navigation</span></li>
+                <li><span class="is-future">6. Sharing State</span></li>
+                <li><span class="is-future">7. Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow"><span aria-hidden="true">📘</span> SwiftUI for Beginners · Lesson 5 of 9</p>
+            <h1>Navigation &amp; Multiple Screens</h1>
+          </header>
+
+          <p>So far, everything we've built has lived on a <strong>single screen</strong>.</p>
+          <p>In Lesson 4, we created a list of data:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The Lesson 4 task list: My Tasks, with Learn SwiftUI marked complete, and Build a small app and Practice every day not complete.">My Tasks
+
+✓ Learn SwiftUI
+○ Build a small app
+○ Practice every day</pre>
+          </figure>
+          <p>But real apps rarely have only one screen.</p>
+          <p>Think about apps you already use:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Familiar app flows: Messages leads to a Conversation, Products to Product Details, Contacts to Contact Details, and Settings to Account Settings.">Messages
+   ↓
+Conversation
+
+Products
+   ↓
+Product Details
+
+Contacts
+   ↓
+Contact Details
+
+Settings
+   ↓
+Account Settings</pre>
+          </figure>
+          <p>A very common pattern is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A common pattern: a list, then the user selects an item, then a detail screen.">LIST
+  ↓
+SELECT AN ITEM
+  ↓
+DETAIL SCREEN</pre>
+          </figure>
+          <p>In this lesson, we'll learn how SwiftUI handles navigation using:</p>
+          <p><strong><code>NavigationStack</code> → <code>NavigationLink</code> → Destination → Passing Data</strong></p>
+          <p>By the end, we'll turn our task list into a small multi-screen app:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the app this lesson builds. The My Tasks screen lists three tasks, each with a chevron showing it can be tapped. Tapping Learn SwiftUI opens a Task Details screen with a back button labelled My Tasks, showing Learn SwiftUI and the status Completed.">┌──────────────────────────────┐
+│          My Tasks            │
+│                              │
+│  ✓ Learn SwiftUI          &gt;  │
+│                              │
+│  ○ Build a small app      &gt;  │
+│                              │
+│  ○ Practice every day     &gt;  │
+│                              │
+└──────────────────────────────┘
+
+              ↓ Tap
+
+┌──────────────────────────────┐
+│  &lt; My Tasks                  │
+│                              │
+│         Task Details         │
+│                              │
+│       Learn SwiftUI          │
+│                              │
+│          Completed           │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>The important idea is:</p>
+          <blockquote class="callout"><p><strong>Navigation lets the user move between screens while carrying the data needed by the next screen.</strong></p></blockquote>
+
+          <h2 id="multiple-screens">1. Why Do Apps Need Multiple Screens?</h2>
+
+          <p>Imagine putting an entire app on one screen:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Everything on one screen: Tasks, Task Details, Profile, Settings, Search, Notifications and Help.">Tasks
+Task Details
+Profile
+Settings
+Search
+Notifications
+Help</pre>
+          </figure>
+          <p>That would quickly become overwhelming.</p>
+          <p>Instead, we divide the app into smaller screens.</p>
+          <p>For example:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="An app divided into screens: Home leads to Tasks, which leads to Task Details; Home also leads to Profile and Settings.">Home
+ │
+ ├── Tasks
+ │     │
+ │     └── Task Details
+ │
+ ├── Profile
+ │
+ └── Settings</pre>
+          </figure>
+          <p>Each screen has a particular responsibility.</p>
+          <p>In SwiftUI, each screen is usually just another <code>View</code>.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">struct HomeView: View {
+    var body: some View {
+        Text("Home")
+    }
+}</code></pre>
+          <p>and:</p>
+          <pre><code class="language-swift">struct DetailView: View {
+    var body: some View {
+        Text("Details")
+    }
+}</code></pre>
+          <p>We already know how to create views.</p>
+          <p>Now we need a way to move between them.</p>
+
+          <h2 id="navigationstack">2. Meet <code>NavigationStack</code> <span aria-hidden="true">🧭</span></h2>
+
+          <p>SwiftUI provides:</p>
+          <pre><code class="language-swift">NavigationStack</code></pre>
+          <p>A <code>NavigationStack</code> creates an environment where views can navigate from one screen to another.</p>
+          <p>Let's start with:</p>
+          <pre><code class="language-swift">struct HomeView: View {
+
+    var body: some View {
+
+        NavigationStack {
+            Text("Home")
+        }
+    }
+}</code></pre>
+          <p>Visually, nothing dramatic happens yet.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A screen showing the word Home.">┌──────────────────────────────┐
+│                              │
+│             Home             │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>But now the screen is inside a navigation system.</p>
+          <p>Think of <code>NavigationStack</code> as the container that manages our navigation history.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="NavigationStack contains the Home screen.">NavigationStack
+      │
+      ▼
+    Home</pre>
+          </figure>
+          <p>Later, when we move to another screen:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="NavigationStack contains Home, followed by Details.">NavigationStack
+      │
+      ├── Home
+      │
+      └── Details</pre>
+          </figure>
+          <p>SwiftUI remembers that Details came after Home.</p>
+          <p>That allows the user to go back.</p>
+
+          <h2 id="navigation-title">3. Adding a Navigation Title</h2>
+
+          <p>Screens inside a <code>NavigationStack</code> can have navigation titles.</p>
+          <pre><code class="language-swift">NavigationStack {
+
+    Text("Welcome!")
+
+        .navigationTitle("Home")
+}</code></pre>
+          <p>Now we get something like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A screen with the navigation title Home, showing the text Welcome!">┌──────────────────────────────┐
+│ Home                         │
+│                              │
+│          Welcome!            │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>The modifier:</p>
+          <pre><code class="language-swift">.navigationTitle("Home")</code></pre>
+          <p>tells the navigation system what title this screen should display.</p>
+          <p>For our task app, we might write:</p>
+          <pre><code class="language-swift">.navigationTitle("My Tasks")</code></pre>
+
+          <h2 id="navigationlink">4. Meet <code>NavigationLink</code> <span aria-hidden="true">🔗</span></h2>
+
+          <p>Now we need something the user can tap.</p>
+          <p>SwiftUI provides:</p>
+          <pre><code class="language-swift">NavigationLink</code></pre>
+          <p>Here's a simple example:</p>
+          <pre><code class="language-swift">NavigationStack {
+
+    NavigationLink("Show Details") {
+        DetailView()
+    }
+}</code></pre>
+          <p>When the user sees:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A tappable row labelled Show Details, with a chevron.">Show Details &gt;</pre>
+          </figure>
+          <p>and taps it, SwiftUI displays:</p>
+          <pre><code class="language-swift">DetailView()</code></pre>
+          <p>The flow is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: tapping the NavigationLink on HomeView opens DetailView.">HomeView
+   │
+   │ Tap NavigationLink
+   ▼
+DetailView</pre>
+          </figure>
+          <p>Let's create the destination:</p>
+          <pre><code class="language-swift">struct DetailView: View {
+
+    var body: some View {
+        Text("This is the detail screen")
+            .navigationTitle("Details")
+    }
+}</code></pre>
+          <p>Now we have two screens.</p>
+
+          <h2 id="first-multi-screen-app">5. Our First Multi-Screen App</h2>
+
+          <p>Let's put everything together.</p>
+          <pre><code class="language-swift">struct HomeView: View {
+
+    var body: some View {
+
+        NavigationStack {
+
+            VStack(spacing: 20) {
+
+                Text("Welcome")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                NavigationLink("Open Details") {
+                    DetailView()
+                }
+            }
+            .navigationTitle("Home")
+        }
+    }
+}</code></pre>
+          <p>And:</p>
+          <pre><code class="language-swift">struct DetailView: View {
+
+    var body: some View {
+
+        VStack(spacing: 20) {
+
+            Text("Details")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Text("You navigated to another screen!")
+        }
+        .navigationTitle("Details")
+    }
+}</code></pre>
+          <p>The user experience becomes:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The user experience: the Home screen shows Welcome and an Open Details button. Tapping it opens the Details screen, which says You navigated to another screen!">HOME
+
+Welcome
+
+[ Open Details ]
+       │
+       │ tap
+       ▼
+DETAILS
+
+You navigated to another screen!</pre>
+          </figure>
+          <p>SwiftUI also gives us a Back button automatically.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The navigation bar on the Details screen: a back button labelled Home, and the title Details.">&lt; Home        Details</pre>
+          </figure>
+          <p>We didn't have to create it ourselves.</p>
+          <p>Because the screens are inside a <code>NavigationStack</code>, SwiftUI understands the navigation history.</p>
+
+          <h2 id="how-the-stack-works">6. How the Navigation Stack Works <span aria-hidden="true">🧠</span></h2>
+
+          <p>The word <strong>stack</strong> is important.</p>
+          <p>Imagine a stack of cards.</p>
+          <p>Initially:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The stack starts with one card: Home.">┌─────────────┐
+│    Home     │
+└─────────────┘</pre>
+          </figure>
+          <p>Navigate to Details:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="After navigating, Details sits on top of Home.">┌─────────────┐
+│   Details   │
+├─────────────┤
+│    Home     │
+└─────────────┘</pre>
+          </figure>
+          <p>Details is now on top.</p>
+          <p>Navigate again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="After navigating again, More Info sits on top of Details, which sits on top of Home.">┌─────────────┐
+│ More Info   │
+├─────────────┤
+│   Details   │
+├─────────────┤
+│    Home     │
+└─────────────┘</pre>
+          </figure>
+          <p>When the user taps Back:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Tapping Back removes More Info, and Details becomes visible again.">More Info
+    ↓ removed
+
+Details becomes visible again</pre>
+          </figure>
+          <p>Back again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Tapping Back again removes Details, and Home becomes visible again.">Details
+   ↓ removed
+
+Home becomes visible again</pre>
+          </figure>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Push adds screens in order: Home, then Details, then More Info. Pop goes back the other way: More Info, then Details, then Home.">PUSH
+ ↓
+
+Home → Details → More Info
+
+                  ↑
+                 POP
+
+Home ← Details ← More Info</pre>
+          </figure>
+          <p>You don't need to memorize the words <strong>push</strong> and <strong>pop</strong> right now.</p>
+          <p>The important idea is:</p>
+          <blockquote class="callout"><p><code>NavigationStack</code> remembers the screens the user moved through.</p></blockquote>
+
+          <h2 id="navigation-with-data">7. Navigation Becomes More Useful With Data</h2>
+
+          <p>Opening a generic Detail screen is useful for learning navigation.</p>
+          <p>But real apps usually need something more.</p>
+          <p>Imagine our task list:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The task titles: Learn SwiftUI, Build a small app, Practice every day.">Learn SwiftUI
+Build a small app
+Practice every day</pre>
+          </figure>
+          <p>If the user taps:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The tapped task: Learn SwiftUI.">Learn SwiftUI</pre>
+          </figure>
+          <p>the detail screen should show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The detail screen shows: Learn SwiftUI.">Learn SwiftUI</pre>
+          </figure>
+          <p>If they tap:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The tapped task: Practice every day.">Practice every day</pre>
+          </figure>
+          <p>the detail screen should show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The detail screen shows: Practice every day.">Practice every day</pre>
+          </figure>
+          <p>We don't want to create:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Separate detail views we do not want to create: LearnSwiftUIDetailView, BuildSmallAppDetailView, PracticeEveryDayDetailView.">LearnSwiftUIDetailView
+BuildSmallAppDetailView
+PracticeEveryDayDetailView</pre>
+          </figure>
+          <p>Instead, we'll create <strong>one reusable detail screen</strong> and pass the selected task into it.</p>
+
+          <h2 id="task-model">8. Bringing Back Our <code>Task</code> Model</h2>
+
+          <p>From Lesson 4, we had a model like this:</p>
+          <pre><code class="language-swift">struct Task: Identifiable {
+    let id = UUID()
+    let title: String
+    let isCompleted: Bool
+}</code></pre>
+          <p>And some data:</p>
+          <pre><code class="language-swift">let tasks = [
+    Task(
+        title: "Learn SwiftUI",
+        isCompleted: true
+    ),
+    Task(
+        title: "Build a small app",
+        isCompleted: false
+    ),
+    Task(
+        title: "Practice every day",
+        isCompleted: false
+    )
+]</code></pre>
+          <p>Remember the relationship:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Task represents one item; tasks contains many Task values.">Task
+  ↓
+represents one item
+
+tasks
+  ↓
+contains many Task values</pre>
+          </figure>
+          <p>Now we're going to use the same data for navigation.</p>
+
+          <h2 id="task-detail-view">9. Creating a Task Detail Screen</h2>
+
+          <p>Let's create:</p>
+          <pre><code class="language-swift">struct TaskDetailView: View {
+
+    let task: Task
+
+    var body: some View {
+
+        VStack(spacing: 20) {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+            .font(.system(size: 60))
+
+            Text(task.title)
+                .font(.title)
+                .fontWeight(.bold)
+
+            Text(
+                task.isCompleted
+                    ? "Completed"
+                    : "Not Completed"
+            )
+            .foregroundStyle(.secondary)
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Task Details")
+    }
+}</code></pre>
+          <p>The most important line is:</p>
+          <pre><code class="language-swift">let task: Task</code></pre>
+          <p>This means:</p>
+          <blockquote class="callout"><p><code>TaskDetailView</code> needs a <code>Task</code> in order to display itself.</p></blockquote>
+          <p>The screen doesn't own a particular task.</p>
+          <p>It receives one.</p>
+
+          <h2 id="passing-data">10. Passing Data to Another Screen <span aria-hidden="true">📦</span></h2>
+
+          <p>Suppose we have:</p>
+          <pre><code class="language-swift">let task = Task(
+    title: "Learn SwiftUI",
+    isCompleted: true
+)</code></pre>
+          <p>We can create the detail screen like this:</p>
+          <pre><code class="language-swift">TaskDetailView(task: task)</code></pre>
+          <p>We're passing the task into the next view.</p>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: on TaskListView, the selected Task is passed as data to TaskDetailView.">TaskListView
+
+selected Task
+     │
+     │ pass data
+     ▼
+
+TaskDetailView</pre>
+          </figure>
+          <p>Then the detail screen can read:</p>
+          <pre><code class="language-swift">task.title</code></pre>
+          <p>and:</p>
+          <pre><code class="language-swift">task.isCompleted</code></pre>
+          <p>So the destination isn't hardcoded.</p>
+          <p>Its UI depends on the task it receives.</p>
+
+          <h2 id="list-and-navigationlink">11. Combining <code>List</code> and <code>NavigationLink</code></h2>
+
+          <p>Now we can connect everything.</p>
+          <pre><code class="language-swift">struct TaskListView: View {
+
+    let tasks = [
+        Task(
+            title: "Learn SwiftUI",
+            isCompleted: true
+        ),
+        Task(
+            title: "Build a small app",
+            isCompleted: false
+        ),
+        Task(
+            title: "Practice every day",
+            isCompleted: false
+        )
+    ]
+
+    var body: some View {
+
+        NavigationStack {
+
+            List(tasks) { task in
+
+                NavigationLink {
+                    TaskDetailView(task: task)
+                } label: {
+                    TaskRow(task: task)
+                }
+            }
+            .navigationTitle("My Tasks")
+        }
+    }
+}</code></pre>
+          <p>Look carefully at this part:</p>
+          <pre><code class="language-swift">List(tasks) { task in</code></pre>
+          <p>For every task, SwiftUI creates a row.</p>
+          <p>Then:</p>
+          <pre><code class="language-swift">NavigationLink {
+    TaskDetailView(task: task)
+} label: {
+    TaskRow(task: task)
+}</code></pre>
+          <p>The row becomes tappable.</p>
+          <p>Tap that row and SwiftUI creates:</p>
+          <pre><code class="language-swift">TaskDetailView(task: task)</code></pre>
+          <p>using the exact task that was selected.</p>
+
+          <h2 id="follow-one-task">12. Follow One Task Through the App</h2>
+
+          <p>This is worth visualizing.</p>
+          <p>Our array contains:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The array contains three tasks. Task 1: Learn SwiftUI, completed true. Task 2: Build a small app, completed false. Task 3: Practice every day, completed false.">Task 1
+title: Learn SwiftUI
+completed: true
+
+Task 2
+title: Build a small app
+completed: false
+
+Task 3
+title: Practice every day
+completed: false</pre>
+          </figure>
+          <p><code>List</code> creates:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The rows List creates, each with a chevron: Learn SwiftUI marked complete, Build a small app and Practice every day not complete.">✓ Learn SwiftUI          &gt;
+○ Build a small app      &gt;
+○ Practice every day     &gt;</pre>
+          </figure>
+          <p>Now the user taps:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The tapped row: Build a small app, not complete.">○ Build a small app      &gt;</pre>
+          </figure>
+          <p>That row represents:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="That row represents a Task with the title Build a small app and isCompleted false.">Task
+├── title: Build a small app
+└── isCompleted: false</pre>
+          </figure>
+          <p>SwiftUI passes that value into:</p>
+          <pre><code class="language-swift">TaskDetailView(task: task)</code></pre>
+          <p>The detail screen reads the data and displays:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The detail screen: the title Task Details, an empty circle, Build a small app, and Not Completed.">Task Details
+
+○
+
+Build a small app
+
+Not Completed</pre>
+          </figure>
+          <p>The flow is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: tasks go into a List of TaskRows. The user taps a task, the NavigationLink passes the selected Task, and TaskDetailView displays it.">tasks
+  ↓
+List
+  ↓
+TaskRow
+  ↓
+User taps a task
+  ↓
+NavigationLink
+  ↓
+Selected Task
+  ↓
+TaskDetailView</pre>
+          </figure>
+          <p>This is an extremely common app pattern.</p>
+
+          <h2 id="one-detail-screen">13. One Detail Screen, Many Possible Results</h2>
+
+          <p>The nice part is that we only created:</p>
+          <pre><code class="language-swift">TaskDetailView</code></pre>
+          <p>once.</p>
+          <p>But it can display many different tasks.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="One TaskDetailView serves three tasks: Task 1 shows Learn SwiftUI, Task 2 shows Build small app, and Task 3 shows Practice every day.">TaskDetailView
+      ▲
+      │
+ ┌────┼──────────────┐
+ │    │              │
+ │    │              │
+Task 1             Task 2             Task 3
+ │                   │                  │
+ ▼                   ▼                  ▼
+Learn SwiftUI   Build small app   Practice every day</pre>
+          </figure>
+          <p>The <strong>view structure stays the same</strong>.</p>
+          <p>The <strong>data changes</strong>.</p>
+          <p>This should feel familiar from previous lessons.</p>
+          <p>Lesson 3:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 3: state changes, so the UI changes.">State changes
+     ↓
+UI changes</pre>
+          </figure>
+          <p>Lesson 4:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 4: the collection changes, so the repeated UI changes.">Collection changes
+      ↓
+Repeated UI changes</pre>
+          </figure>
+          <p>Lesson 5:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 5: the selected data determines the destination UI.">Selected data
+      ↓
+Destination UI</pre>
+          </figure>
+          <p>We're gradually building the SwiftUI mental model.</p>
+
+          <h2 id="task-row">14. Let's Create a Better Task Row</h2>
+
+          <p>We can keep our row reusable:</p>
+          <pre><code class="language-swift">struct TaskRow: View {
+
+    let task: Task
+
+    var body: some View {
+
+        HStack(spacing: 12) {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+
+            Text(task.title)
+
+            Spacer()
+        }
+    }
+}</code></pre>
+          <p>Notice that <code>TaskRow</code> doesn't know anything about navigation.</p>
+          <p>It only knows:</p>
+          <blockquote class="callout"><p>Give me a task and I'll display a row.</p></blockquote>
+          <p>Then <code>TaskListView</code> decides:</p>
+          <blockquote class="callout"><p>This row should navigate somewhere when tapped.</p></blockquote>
+          <p>That's a useful separation.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each view has a job. TaskRow: how one task looks. TaskListView: how tasks are listed and where tapping goes. TaskDetailView: how one selected task looks on its own screen.">TaskRow
+   ↓
+How one task looks
+
+
+TaskListView
+   ↓
+How tasks are listed
+and where tapping goes
+
+
+TaskDetailView
+   ↓
+How one selected task
+looks on its own screen</pre>
+          </figure>
+          <p>Each view has a clear job.</p>
+
+          <h2 id="complete-example">15. The Complete Example <span aria-hidden="true">🛠️</span></h2>
+
+          <p>Here's the complete version.</p>
+          <p>First, our model:</p>
+          <pre><code class="language-swift">struct Task: Identifiable {
+    let id = UUID()
+    let title: String
+    let isCompleted: Bool
+}</code></pre>
+          <p>Our reusable row:</p>
+          <pre><code class="language-swift">struct TaskRow: View {
+
+    let task: Task
+
+    var body: some View {
+
+        HStack(spacing: 12) {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+
+            Text(task.title)
+
+            Spacer()
+        }
+    }
+}</code></pre>
+          <p>Our detail screen:</p>
+          <pre><code class="language-swift">struct TaskDetailView: View {
+
+    let task: Task
+
+    var body: some View {
+
+        VStack(spacing: 20) {
+
+            Image(
+                systemName: task.isCompleted
+                    ? "checkmark.circle.fill"
+                    : "circle"
+            )
+            .font(.system(size: 60))
+
+            Text(task.title)
+                .font(.title)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+
+            Text(
+                task.isCompleted
+                    ? "Completed"
+                    : "Not Completed"
+            )
+            .foregroundStyle(.secondary)
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Task Details")
+    }
+}</code></pre>
+          <p>And our main screen:</p>
+          <pre><code class="language-swift">struct TaskListView: View {
+
+    let tasks = [
+        Task(
+            title: "Learn SwiftUI",
+            isCompleted: true
+        ),
+        Task(
+            title: "Build a small app",
+            isCompleted: false
+        ),
+        Task(
+            title: "Practice every day",
+            isCompleted: false
+        )
+    ]
+
+    var body: some View {
+
+        NavigationStack {
+
+            List(tasks) { task in
+
+                NavigationLink {
+                    TaskDetailView(task: task)
+                } label: {
+                    TaskRow(task: task)
+                }
+            }
+            .navigationTitle("My Tasks")
+        }
+    }
+}</code></pre>
+          <p>Our application now has an actual screen flow:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Screen flow: from TaskListView, the user selects a Task and TaskDetailView opens; Back returns to TaskListView.">TaskListView
+     │
+     │ User selects Task
+     ▼
+TaskDetailView
+     │
+     │ Back
+     ▼
+TaskListView</pre>
+          </figure>
+
+          <h2 id="where-navigationstack-goes">16. Where Should <code>NavigationStack</code> Go?</h2>
+
+          <p>A common beginner question is:</p>
+          <blockquote class="callout"><p>Should every screen have its own <code>NavigationStack</code>?</p></blockquote>
+          <p>Usually, no.</p>
+          <p>For this example, the stack starts around the main screen:</p>
+          <pre><code class="language-swift">NavigationStack {
+    List {
+        // ...
+    }
+}</code></pre>
+          <p>Then the destination is pushed <strong>inside that same navigation stack</strong>.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="One NavigationStack contains TaskListView, followed by TaskDetailView.">NavigationStack
+      │
+      ├── TaskListView
+      │
+      └── TaskDetailView</pre>
+          </figure>
+          <p>We generally don't need:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="What we generally do not need: a NavigationStack containing TaskListView, which then contains another NavigationStack for TaskDetailView.">NavigationStack
+    ↓
+TaskListView
+    ↓
+another NavigationStack
+    ↓
+TaskDetailView</pre>
+          </figure>
+          <p>Think of one <code>NavigationStack</code> as managing a particular navigation journey.</p>
+          <p>For now, our simple rule is:</p>
+          <blockquote class="callout"><p>Put the main screen of this navigation flow inside a <code>NavigationStack</code>, then navigate to destination views from there.</p></blockquote>
+
+          <h2 id="titles-belong-to-screens">17. Navigation Titles Belong to Screens</h2>
+
+          <p>Our list screen has:</p>
+          <pre><code class="language-swift">.navigationTitle("My Tasks")</code></pre>
+          <p>Our detail screen has:</p>
+          <pre><code class="language-swift">.navigationTitle("Task Details")</code></pre>
+          <p>That means each screen describes its own navigation title.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each screen sets its own title: TaskListView shows My Tasks, and TaskDetailView shows Task Details.">TaskListView
+     ↓
+"My Tasks"
+
+TaskDetailView
+     ↓
+"Task Details"</pre>
+          </figure>
+          <p>This keeps the responsibility close to the screen itself.</p>
+
+          <h2 id="passing-more-values">18. Passing More Than One Value</h2>
+
+          <p>A destination doesn't have to receive an entire model.</p>
+          <p>For example, we could write:</p>
+          <pre><code class="language-swift">struct ProfileView: View {
+
+    let name: String
+    let age: Int
+
+    var body: some View {
+
+        VStack {
+            Text(name)
+            Text("Age: \(age)")
+        }
+    }
+}</code></pre>
+          <p>Then:</p>
+          <pre><code class="language-swift">ProfileView(
+    name: "Alex",
+    age: 28
+)</code></pre>
+          <p>But when several values belong together, a model often makes more sense.</p>
+          <p>Instead of:</p>
+          <pre><code class="language-swift">TaskDetailView(
+    title: task.title,
+    isCompleted: task.isCompleted
+)</code></pre>
+          <p>we can simply pass:</p>
+          <pre><code class="language-swift">TaskDetailView(task: task)</code></pre>
+          <p>Conceptually:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Instead of carrying title, status, priority, due date and notes separately, carry one Task.">Instead of carrying:
+
+title
+status
+priority
+due date
+notes
+
+separately...
+
+carry:
+
+Task</pre>
+          </figure>
+          <p>That's another reason models are so useful.</p>
+
+          <h2 id="navigation-vs-sheet">19. Navigation Is Not the Same as a Sheet</h2>
+
+          <p>You may eventually see SwiftUI code like:</p>
+          <pre><code class="language-swift">.sheet(...)</code></pre>
+          <p>A sheet is another way of presenting content, but it represents a different interaction.</p>
+          <p>Navigation usually feels like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Navigation moves forward: List, then Details, then More Details.">List
+  ↓
+Details
+  ↓
+More Details</pre>
+          </figure>
+          <p>A sheet usually appears temporarily over the current screen:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A sheet appears temporarily over the current screen.">Current Screen
+      │
+      ▼
+┌─────────────────────┐
+│                     │
+│        Sheet        │
+│                     │
+└─────────────────────┘</pre>
+          </figure>
+          <p>For example:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Examples: navigation opens a product&#x27;s details; a sheet shows a temporary Add Item form.">Navigation
+→ Open a product's details
+
+Sheet
+→ Show a temporary Add Item form</pre>
+          </figure>
+          <p>We don't need to learn sheets yet.</p>
+          <p>For this lesson, keep the mental model focused on:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The lesson&#x27;s focus: NavigationStack, then NavigationLink, then the destination.">NavigationStack
+       ↓
+NavigationLink
+       ↓
+Destination</pre>
+          </figure>
+
+          <h2 id="avoid-giant-views">20. Don't Put Everything in One View</h2>
+
+          <p>Now that we're creating multiple screens, it's tempting to write everything inside one giant view.</p>
+          <p>For example:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="One giant TaskListView containing model code, row layout, detail layout, list layout, navigation and everything else.">TaskListView
+├── model code
+├── row layout
+├── detail layout
+├── list layout
+├── navigation
+└── everything else</pre>
+          </figure>
+          <p>It may work initially, but it becomes harder to understand.</p>
+          <p>Our current structure is much clearer:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A clearer structure: Task is the data model, TaskRow is one row, TaskListView is the list screen, and TaskDetailView is the detail screen.">Task
+   ↓
+Data model
+
+TaskRow
+   ↓
+One row
+
+TaskListView
+   ↓
+List screen
+
+TaskDetailView
+   ↓
+Detail screen</pre>
+          </figure>
+          <p>This is one of the most useful habits you can develop early:</p>
+          <blockquote class="callout"><p>Break a screen into views that have clear responsibilities.</p></blockquote>
+          <p>That doesn't mean every <code>Text</code> needs its own view.</p>
+          <p>It means meaningful pieces of UI can become reusable components.</p>
+
+          <h2 id="beginner-mistake">21. A Common Beginner Mistake</h2>
+
+          <p>Imagine we have:</p>
+          <pre><code class="language-swift">NavigationLink("Learn SwiftUI") {
+    TaskDetailView(
+        task: Task(
+            title: "Learn SwiftUI",
+            isCompleted: true
+        )
+    )
+}</code></pre>
+          <p>Then:</p>
+          <pre><code class="language-swift">NavigationLink("Build a small app") {
+    TaskDetailView(
+        task: Task(
+            title: "Build a small app",
+            isCompleted: false
+        )
+    )
+}</code></pre>
+          <p>Then another one.</p>
+          <p>This works, but we've gone back to hardcoding our data into the UI.</p>
+          <p>Lesson 4 taught us a better approach:</p>
+          <pre><code class="language-swift">List(tasks) { task in</code></pre>
+          <p>and then:</p>
+          <pre><code class="language-swift">NavigationLink {
+    TaskDetailView(task: task)
+} label: {
+    TaskRow(task: task)
+}</code></pre>
+          <p>Now the same structure works for:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The same structure works for 3 tasks, 30 tasks or 300 tasks.">3 tasks
+30 tasks
+300 tasks</pre>
+          </figure>
+          <p>The navigation is being created from the data.</p>
+
+          <h2 id="data-driven-navigation">22. Data-Driven Navigation</h2>
+
+          <p>Let's look at the bigger idea.</p>
+          <p>Our data is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The data: tasks.">tasks</pre>
+          </figure>
+          <p>That data creates:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="That data creates rows.">rows</pre>
+          </figure>
+          <p>Each row creates a navigation opportunity:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each row creates a NavigationLink.">row
+ ↓
+NavigationLink</pre>
+          </figure>
+          <p>And the selected data creates the destination:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The selected task creates the TaskDetailView.">selected task
+     ↓
+TaskDetailView</pre>
+          </figure>
+          <p>So the entire flow is driven by data:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Data-driven navigation: tasks go into a List, which creates three Task rows. When the user taps one, the selected Task goes to TaskDetailView.">             tasks
+               │
+               ▼
+              List
+               │
+      ┌────────┼────────┐
+      ▼        ▼        ▼
+    Task     Task      Task
+      │        │         │
+      ▼        ▼         ▼
+     Row      Row       Row
+      │        │         │
+      └────────┼─────────┘
+               │
+            User taps
+               │
+               ▼
+         Selected Task
+               │
+               ▼
+        TaskDetailView</pre>
+          </figure>
+          <p>That's a much more powerful mental model than thinking:</p>
+          <blockquote class="callout"><p>Button 1 opens screen 1, Button 2 opens screen 2...</p></blockquote>
+
+          <h2 id="mental-model">23. Lesson 5 Mental Model <span aria-hidden="true">🧠</span></h2>
+
+          <p>If you remember one flow from this lesson, remember:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 5 mental model: a NavigationStack holds the list screen. A NavigationLink leads to the selected data, which is passed to the detail screen.">┌─────────────────┐
+│ NavigationStack │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│   List Screen   │
+└────────┬────────┘
+         │
+         │ NavigationLink
+         │
+         ▼
+┌─────────────────┐
+│  Selected Data  │
+└────────┬────────┘
+         │
+         │ pass data
+         ▼
+┌─────────────────┐
+│  Detail Screen  │
+└─────────────────┘</pre>
+          </figure>
+          <p>Or more simply:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Simplified: on a screen, the user selects something, the selected data is passed on, and the next screen appears.">SCREEN
+  ↓
+USER SELECTS SOMETHING
+  ↓
+PASS THE SELECTED DATA
+  ↓
+NEXT SCREEN</pre>
+          </figure>
+          <p>And SwiftUI's basic tools are:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="SwiftUI&#x27;s basic tools: NavigationStack, then NavigationLink, then the destination view.">NavigationStack
+      ↓
+NavigationLink
+      ↓
+Destination View</pre>
+          </figure>
+
+          <h2 id="challenge"><span aria-hidden="true">🎯</span> Your Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+          <p>Build a small <strong>Recipe Browser</strong>.</p>
+          <p>Start with a model:</p>
+          <pre><code class="language-swift">struct Recipe: Identifiable {
+    let id = UUID()
+    let name: String
+    let time: Int
+    let difficulty: String
+}</code></pre>
+          <p>Create several recipes:</p>
+          <pre><code class="language-swift">let recipes = [
+    Recipe(
+        name: "Pasta",
+        time: 25,
+        difficulty: "Easy"
+    ),
+    Recipe(
+        name: "Vegetable Curry",
+        time: 40,
+        difficulty: "Medium"
+    ),
+    Recipe(
+        name: "Pancakes",
+        time: 20,
+        difficulty: "Easy"
+    )
+]</code></pre>
+          <p>Your first screen should look roughly like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the challenge&#x27;s first screen, Recipes: Pasta, 25 minutes; Vegetable Curry, 40 minutes; Pancakes, 20 minutes. Each row has a food icon and a chevron.">┌──────────────────────────────┐
+│ Recipes                      │
+│                              │
+│ 🍝 Pasta                  &gt;  │
+│    25 minutes                │
+│                              │
+│ 🍛 Vegetable Curry        &gt;  │
+│    40 minutes                │
+│                              │
+│ 🥞 Pancakes               &gt;  │
+│    20 minutes                │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>When the user taps:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The tapped recipe: Vegetable Curry.">Vegetable Curry</pre>
+          </figure>
+          <p>navigate to:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the Recipe Details screen, with a back button labelled Recipes, showing Vegetable Curry, 40 minutes, and Medium.">┌──────────────────────────────┐
+│ &lt; Recipes     Recipe Details │
+│                              │
+│      Vegetable Curry         │
+│                              │
+│        40 minutes            │
+│                              │
+│          Medium              │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>Requirements:</p>
+          <ul>
+            <li>Create a <code>Recipe</code> model.</li>
+            <li>Make it conform to <code>Identifiable</code>.</li>
+            <li>Store multiple recipes in an array.</li>
+            <li>Put the main screen inside a <code>NavigationStack</code>.</li>
+            <li>Display the recipes using <code>List</code>.</li>
+            <li>Make each recipe navigable using <code>NavigationLink</code>.</li>
+            <li>Create a separate <code>RecipeRow</code>.</li>
+            <li>Create a separate <code>RecipeDetailView</code>.</li>
+            <li>Pass the selected <code>Recipe</code> into the detail screen.</li>
+            <li>Display its name, cooking time, and difficulty.</li>
+          </ul>
+          <h3 id="bonus-challenge"><span aria-hidden="true">⭐</span> Bonus challenge</h3>
+          <p>Add another property:</p>
+          <pre><code class="language-swift">let isFavorite: Bool</code></pre>
+          <p>Show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A filled heart with the word Favourite.">♥ Favourite</pre>
+          </figure>
+          <p>on the detail screen when it's <code>true</code>.</p>
+          <p>Otherwise show:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="An empty heart with the words Not Favourite.">♡ Not Favourite</pre>
+          </figure>
+          <p>Don't make the favourite status interactive yet.</p>
+          <p>The goal is still:</p>
+          <blockquote class="callout"><p><strong>Pass data from one screen to another and let that data determine the destination UI.</strong></p></blockquote>
+          </div>
+
+          <h2 id="recap"><span aria-hidden="true">✅</span> What You Now Know</h2>
+
+          <p>You can now build a basic multi-screen SwiftUI application.</p>
+          <p>You've learned:</p>
+          <pre><code class="language-swift">NavigationStack
+
+NavigationLink
+
+.navigationTitle()
+
+Destination Views
+
+Passing Data Between Views</code></pre>
+          <p>And you've combined them with concepts from previous lessons:</p>
+          <pre><code class="language-swift">struct
+
+Identifiable
+
+List
+
+ForEach
+
+Reusable Views</code></pre>
+          <p>Our course progression now looks like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The course so far. Lesson 1: what is a SwiftUI view? Lesson 2: how do we arrange views? Lesson 3: how does interaction change state and UI? Lesson 4: how does data create repeated UI? Lesson 5: how do we move between screens and pass selected data?">Lesson 1
+What is a SwiftUI View?
+        ↓
+Lesson 2
+How do we arrange views?
+        ↓
+Lesson 3
+How does interaction change state and UI?
+        ↓
+Lesson 4
+How does data create repeated UI?
+        ↓
+Lesson 5
+How do we move between screens
+and pass selected data?</pre>
+          </figure>
+          <p>We've now reached an important point.</p>
+          <p>Our app can:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="What our app can do, each item checked: display UI, respond to interaction, represent collections of data, create repeated views, navigate between screens, and pass data forward.">Display UI
+   ✓
+
+Respond to interaction
+   ✓
+
+Represent collections of data
+   ✓
+
+Create repeated views
+   ✓
+
+Navigate between screens
+   ✓
+
+Pass data forward
+   ✓</pre>
+          </figure>
+          <p>But there's a new problem.</p>
+          <p>So far, when a child view receives something like:</p>
+          <pre><code class="language-swift">let task: Task</code></pre>
+          <p>it can <strong>read</strong> that data.</p>
+          <p>What if the child view needs to <strong>change data owned by another view</strong>?</p>
+          <p>That's where our next lesson begins.</p>
+
+          <h2 id="lesson-6"><span aria-hidden="true">📗</span> Lesson 6 — Sharing State Between Views</h2>
+
+          <p>We'll learn how a parent and child view can work with the same state using concepts such as:</p>
+          <pre><code class="language-swift">@State
+@Binding</code></pre>
+          <p>and build the mental model:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Preview of Lesson 6: the parent owns the state, the child receives a binding, the child changes the value, and parent and child stay in sync.">Parent owns the state
+        ↓
+Child receives a binding
+        ↓
+Child changes the value
+        ↓
+Parent and child stay in sync</pre>
+          </figure>
+          <p>That's when the <code>@State</code> we learned in Lesson 3 and the reusable views we've been building start working together across multiple views.</p>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <a href="/learn/ios/swiftui/working-with-lists-of-data/" class="pagination-link">
+              <span class="pagination-label">Previous lesson</span>
+              Lesson 4 — Working With Lists of Data
+            </a>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 6 — Sharing State Between Views
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
