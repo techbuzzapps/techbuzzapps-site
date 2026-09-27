@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Understanding Combine — Combine for Beginners, Lesson 1 — TechBuzz Apps</title>
+  <meta name="description" content="Lesson 1 of Combine for Beginners: understand values changing over time, the Publisher → Subscriber model, sink, operators and map, and write your first Combine pipeline.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/combine/understanding-combine/">
+
+  <meta property="og:title" content="Understanding Combine — Combine for Beginners, Lesson 1">
+  <meta property="og:description" content="Publishers, subscribers and values over time — the core Combine mental model and your first Combine code.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/combine/understanding-combine/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/combine/">Combine</a></li>
+          <li aria-current="page">Understanding Combine</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#every-keystroke-is-an-event">Every Keystroke Is an Event</a></li>
+                <li><a href="#what-exactly-is-combine">What Exactly Is Combine?</a></li>
+                <li><a href="#publisher">Publisher</a></li>
+                <li><a href="#subscriber">Subscriber</a></li>
+                <li><a href="#your-first-combine-code">Your First Combine Code</a></li>
+                <li><a href="#listening-with-sink">Listening with sink</a></li>
+                <li><a href="#what-actually-happened">What Actually Happened?</a></li>
+                <li><a href="#combine-as-a-pipe">Combine as a Pipe</a></li>
+                <li><a href="#multiple-values">Multiple Values</a></li>
+                <li><a href="#your-first-transformation">Your First Transformation</a></li>
+                <li><a href="#keeping-a-subscription">Keeping a Subscription</a></li>
+                <li><a href="#three-ideas-to-remember">Three Ideas to Remember</a></li>
+                <li><a href="#tiny-challenge">Tiny Challenge</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>Combine for Beginners</summary>
+            <nav aria-label="Combine for Beginners lessons">
+              <ul>
+                <li><span class="is-current" aria-current="page">1. Understanding Combine</span></li>
+                <li><span class="is-future">2. Data Streams</span></li>
+                <li><span class="is-future">3. Subjects</span></li>
+                <li><span class="is-future">4. A Real iOS Screen</span></li>
+                <li><span class="is-future">5. Managing Subscriptions</span></li>
+                <li><span class="is-future">6. Multiple Publishers</span></li>
+                <li><span class="is-future">7. Async &amp; Networking</span></li>
+                <li><span class="is-future">8. Real-World Operators</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+              <a href="/learn/ios/combine/" class="sidebar-back">← Combine for Beginners</a>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow">Combine for Beginners · Lesson 1 of 9</p>
+            <h1>Understanding Combine</h1>
+            <p class="subtitle">
+              Before any operators or APIs, this lesson builds the one
+              idea everything in Combine rests on: values that change
+              over time, flowing from a publisher to a subscriber. By
+              the end, you'll have written your first Combine code.
+            </p>
+          </header>
+
+          <h2 id="every-keystroke-is-an-event">Every Keystroke Is an Event</h2>
+
+          <p>
+            Picture a search box in an app. You start typing the word
+            "Swift", one letter at a time:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The text in a search box as someone types: S, then Sw, then Swi, then Swif, then Swift.">S
+Sw
+Swi
+Swif
+Swift</pre>
+            <figcaption>The search text changes five times while you type one word.</figcaption>
+          </figure>
+
+          <p>
+            Every time the text changes, something happens. A good
+            search screen doesn't fire off a search for every single
+            letter. It waits for a moment of calm, then searches, then
+            shows the results:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: the user types, the text changes, the app waits briefly, performs a search, receives results, and updates the screen.">User types
+    ↓
+Text changes
+    ↓
+Wait briefly
+    ↓
+Search
+    ↓
+Receive results
+    ↓
+Update screen</pre>
+            <figcaption>What a search screen does each time the text changes.</figcaption>
+          </figure>
+
+          <p>
+            Notice what's really going on here. The search text isn't a
+            single value you read once — it's a value that keeps
+            <strong>changing over time</strong>, and the app needs to
+            react each time it does.
+          </p>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>Values changing over time are at the heart of Combine.</p>
+          </div>
+
+          <p>
+            By the end of this lesson you'll understand this simple
+            chain — and you'll have written your first Combine code
+            that uses it:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A publisher produces a value, which reaches a subscriber.">Publisher
+    ↓
+  Value
+    ↓
+Subscriber</pre>
+          </figure>
+
+          <h2 id="what-exactly-is-combine">What Exactly Is Combine?</h2>
+
+          <p>
+            The official description is that Combine is Apple's
+            framework for working with <strong>asynchronous
+            events</strong> and <strong>changing values</strong>. That's
+            accurate, but it doesn't help much when you're new to it. So
+            let's use something you already know.
+          </p>
+
+          <p>
+            Think about subscribing to a YouTube channel. Once you
+            subscribe, you don't keep checking the channel yourself.
+            Whenever the channel publishes a new video, it simply
+            arrives for you:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="YouTube analogy: a YouTube channel publishes a new video, which reaches you, the subscriber.">YouTube Channel
+      ↓
+   publishes
+      ↓
+   New Video
+      ↓
+     You</pre>
+            <figcaption>You subscribe once; new videos come to you whenever they're published.</figcaption>
+          </figure>
+
+          <p>Combine works exactly the same way. Only the names change:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The same shape in Combine terms: a Publisher publishes a Value, which reaches a Subscriber.">Publisher
+    ↓
+ publishes
+    ↓
+  Value
+    ↓
+Subscriber</pre>
+            <figcaption>The channel is the <strong>Publisher</strong>, the new video is the <strong>value</strong>, and you are the <strong>Subscriber</strong>.</figcaption>
+          </figure>
+
+          <p>
+            Keep this picture in mind. Almost everything else in this
+            course is a variation of it.
+          </p>
+
+          <h2 id="publisher">Publisher</h2>
+
+          <p>
+            A <strong>Publisher</strong> produces values. The important
+            part is that those values can change over time.
+          </p>
+
+          <p>Imagine a publisher that reports the temperature outside:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A temperature publisher produces 24 degrees Celsius, then 25, then 27, then 26.">Temperature Publisher
+
+24°C
+ ↓
+25°C
+ ↓
+27°C
+ ↓
+26°C</pre>
+            <figcaption>One publisher, four values, arriving one after another.</figcaption>
+          </figure>
+
+          <p>
+            It isn't one number — it's a stream of numbers, each
+            arriving when the temperature changes. The search box from
+            earlier is the same idea, with text instead of numbers:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A search field publishes the text S, then Sw, then Swi, then Swift.">"S"
+ ↓
+"Sw"
+ ↓
+"Swi"
+ ↓
+"Swift"</pre>
+            <figcaption>A search field as a publisher of text values.</figcaption>
+          </figure>
+
+          <p>And a network request moves through stages over time as well:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A network request goes from request, to loading, to response.">Request
+   ↓
+Loading
+   ↓
+Response</pre>
+            <figcaption>A network request as a sequence of events.</figcaption>
+          </figure>
+
+          <p>
+            A temperature, some text, a network request — very
+            different things. But they have one thing in common: they
+            all involve <strong>events happening over time</strong>.
+            That is exactly the kind of thing a publisher represents.
+          </p>
+
+          <h2 id="subscriber">Subscriber</h2>
+
+          <p>
+            If a publisher produces values, somebody needs to receive
+            them. That somebody is the <strong>Subscriber</strong>.
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A publisher sends a value down to a subscriber.">Publisher
+    │
+    │ sends value
+    ↓
+Subscriber</pre>
+          </figure>
+
+          <p>Back to the temperature example. Suppose the screen of a weather app is subscribed to the temperature publisher:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The temperature publisher sends the value 27 degrees Celsius to the screen.">Temperature Publisher
+        │
+        │ 27°C
+        ↓
+      Screen</pre>
+            <figcaption>The screen is the subscriber.</figcaption>
+          </figure>
+
+          <p>
+            The publisher is effectively saying:
+            <em>"The temperature is now 27°C."</em> The subscriber — the
+            screen — receives that value and reacts to it, for example
+            by updating the label that shows the temperature. When the
+            next value arrives, it reacts again.
+          </p>
+
+          <h2 id="your-first-combine-code">Your First Combine Code</h2>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              The easiest place to try these examples is an Xcode
+              Playground: <em>File → New → Playground</em>, choose
+              <em>Blank</em>, and paste the code in. The output appears
+              in the console at the bottom.
+            </p>
+          </div>
+
+          <p>Every Combine file starts by importing the framework:</p>
+
+          <pre><code class="language-swift">import Combine</code></pre>
+
+          <p>Now let's create a publisher:</p>
+
+          <pre><code class="language-swift">let publisher = Just("Hello Combine!")</code></pre>
+
+          <p>
+            Don't worry about the details of <code>Just</code> yet.
+            For now, think of it as a very simple publisher that has
+            exactly <strong>one value to give</strong>:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Just publishes the single value Hello Combine!">Just
+ │
+ │ publishes
+ ↓
+"Hello Combine!"</pre>
+          </figure>
+
+          <p>
+            But if you run this code, nothing happens. Nothing is
+            printed and nothing changes. Why? Because
+            <strong>nobody is listening yet</strong>. It's a YouTube
+            channel with no subscribers — the video exists, but nobody
+            is there to receive it.
+          </p>
+
+          <h2 id="listening-with-sink">Listening with sink</h2>
+
+          <p>
+            To listen to a publisher, we attach a subscriber. The
+            simplest way to do that is with <code>sink</code>:
+          </p>
+
+          <pre><code class="language-swift">let publisher = Just("Hello Combine!")
+
+publisher
+    .sink { value in
+        print(value)
+    }</code></pre>
+
+          <p>Run it, and the console shows:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Console output: Hello Combine!">Hello Combine!</pre>
+            <figcaption>Console output.</figcaption>
+          </figure>
+
+          <p>
+            The closure you give to <code>sink</code> runs whenever a
+            value arrives. Here the value is
+            <code>"Hello Combine!"</code>, and we print it.
+          </p>
+
+          <p>
+            That's it — you've just created your <strong>first Combine
+            pipeline</strong>.
+          </p>
+
+          <h2 id="what-actually-happened">What Actually Happened?</h2>
+
+          <p>Let's slow down and trace the value through the code:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Just Hello Combine publishes its value to sink, and sink passes it to print.">Just("Hello Combine!")
+          │
+          │ publishes
+          ↓
+        sink
+          │
+          ↓
+       print()</pre>
+            <figcaption>The value travels from <code>Just</code>, to <code>sink</code>, to <code>print()</code>.</figcaption>
+          </figure>
+
+          <p>Strip away the details, and it's the same picture as before:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Publisher arrow Subscriber.">Publisher → Subscriber</pre>
+          </figure>
+
+          <ul>
+            <li><code>Just("Hello Combine!")</code> is the <strong>Publisher</strong>. It produces the value.</li>
+            <li><code>sink { … }</code> is the <strong>Subscriber</strong>. It listens for the published value and decides what to do with it — in this case, print it.</li>
+          </ul>
+
+          <h2 id="combine-as-a-pipe">Combine as a Pipe</h2>
+
+          <p>
+            Here's a second way to picture Combine that becomes very
+            useful as pipelines grow: think of it as a
+            <strong>water pipe</strong>.
+          </p>
+
+          <p>
+            At one end there's a source — a tank that releases water.
+            At the other end there's a tap where you collect it. The
+            water flows through the pipe from one end to the other. In
+            Combine, the publisher is the source, the values are the
+            water, and the subscriber is the tap at the end:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Pipe model: values flow from the publisher at one end down to the subscriber at the other.">Publisher      (the source)
+    ↓
+  Value        (what flows through)
+    ↓
+Subscriber     (where it comes out)</pre>
+          </figure>
+
+          <p>
+            Real water pipes often have things fitted along the way — a
+            filter that cleans the water, a heater that warms it — so
+            what comes out of the tap isn't quite what went in. Combine
+            pipes work the same way. Between the publisher and the
+            subscriber, you can change values or let only some of them
+            through:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Pipe with steps along the way: a publisher sends a value, it is transformed, then filtered, then reaches the subscriber.">Publisher
+    ↓
+  Value
+    ↓
+ Transform
+    ↓
+  Filter
+    ↓
+Subscriber</pre>
+            <figcaption>Steps can be fitted along the pipe between publisher and subscriber.</figcaption>
+          </figure>
+
+          <p>
+            These steps along the pipe are called
+            <strong>operators</strong>. Combine has many of them, but
+            you don't need a list right now — you'll meet them one at a
+            time, when they solve a real problem. You'll use your first
+            one later in this lesson.
+          </p>
+
+          <h2 id="multiple-values">Multiple Values</h2>
+
+          <p>
+            <code>Just</code> publishes only one value. But the whole
+            point of Combine is values over time — so let's try a
+            publisher that sends several:
+          </p>
+
+          <pre><code class="language-swift">[1, 2, 3, 4, 5].publisher
+    .sink { number in
+        print(number)
+    }</code></pre>
+
+          <p>
+            Adding <code>.publisher</code> to an array turns it into a
+            publisher that sends each element, one after another. The
+            output is:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Console output: 1, 2, 3, 4, 5, each on its own line.">1
+2
+3
+4
+5</pre>
+            <figcaption>Console output.</figcaption>
+          </figure>
+
+          <p>
+            The <code>sink</code> closure didn't run once — it ran
+            <strong>five times</strong>, once for each value as it
+            arrived:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Each number from 1 to 5 flows separately from the publisher to sink, which runs once per value.">Publisher
+    │
+    ├── 1 ──→ sink  → prints 1
+    ├── 2 ──→ sink  → prints 2
+    ├── 3 ──→ sink  → prints 3
+    ├── 4 ──→ sink  → prints 4
+    └── 5 ──→ sink  → prints 5</pre>
+            <figcaption>Each value travels down the pipe on its own.</figcaption>
+          </figure>
+
+          <p>
+            This points to the biggest mental shift in Combine.
+            Normal code often feels like a list of instructions:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Step-by-step thinking: do this, then this, then this.">Do this
+then this
+then this</pre>
+            <figcaption>Step-by-step thinking.</figcaption>
+          </figure>
+
+          <p>Combine encourages you to think differently:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Reactive thinking: when a value arrives, do something with it.">When a value arrives
+        ↓
+do something with it.</pre>
+            <figcaption>Reactive thinking.</figcaption>
+          </figure>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>
+              In Combine you don't ask for values; you describe what
+              should happen <strong>whenever a value arrives</strong> —
+              whether that's one value, five, or a new one every time
+              the user types.
+            </p>
+          </div>
+
+          <h2 id="your-first-transformation">Your First Transformation</h2>
+
+          <p>Here's a small problem. A publisher sends the number:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The publisher sends 5.">5</pre>
+          </figure>
+
+          <p>But the subscriber should receive:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="The subscriber should receive 10.">10</pre>
+          </figure>
+
+          <p>
+            We need something along the pipe that doubles the value on
+            its way through. That's the job of the <code>map</code>
+            operator:
+          </p>
+
+          <pre><code class="language-swift">Just(5)
+    .map { number in
+        number * 2
+    }
+    .sink { result in
+        print(result)
+    }</code></pre>
+
+          <p>The result:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Console output: 10">10</pre>
+            <figcaption>Console output.</figcaption>
+          </figure>
+
+          <p>Trace the value from top to bottom:</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Just 5 is the publisher. It sends 5, map multiplies it by 2 to make 10, and sink receives 10.">Just(5)
+   ↓
+Publisher
+   ↓
+   5
+   ↓
+map { × 2 }
+   ↓
+  10
+   ↓
+ sink</pre>
+            <figcaption><code>map</code> takes each value, changes it, and passes the new value on.</figcaption>
+          </figure>
+
+          <p>
+            <code>map</code> sits between the publisher and the
+            subscriber, exactly where the pipe diagram said operators
+            would go.
+          </p>
+
+          <h3 id="reading-longer-pipelines">Reading longer pipelines</h3>
+
+          <p>
+            As you explore Combine code in real apps, you'll come
+            across pipelines that look like this:
+          </p>
+
+          <pre><code class="language-swift">publisher
+    .map(...)
+    .filter(...)
+    .debounce(...)
+    .sink(...)</code></pre>
+
+          <p>
+            At first glance that can look intimidating. But you already
+            know how to read it: a value comes out of the publisher and
+            flows down through each step in order. Conceptually, it's
+            just this:
+          </p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="Reading the pipeline: the value is changed by map, checked by filter, waited on by debounce, and received by sink.">VALUE
+  ↓
+change it     .map(...)
+  ↓
+check it      .filter(...)
+  ↓
+wait          .debounce(...)
+  ↓
+receive it    .sink(...)</pre>
+            <figcaption>Every step is one small, readable job.</figcaption>
+          </figure>
+
+          <p>
+            You'll learn <code>filter</code> and
+            <code>debounce</code> properly in later lessons — the point
+            for now is that a long pipeline is only a series of small
+            steps along the same pipe.
+          </p>
+
+          <h2 id="keeping-a-subscription">Keeping a Subscription</h2>
+
+          <p>
+            If you type the <code>sink</code> examples into an app
+            project, Xcode may show a warning like:
+            <em>Result of call to 'sink(receiveValue:)' is unused</em>.
+            That's because <code>sink</code> returns something: the
+            subscription itself.
+          </p>
+
+          <p>The usual first step is to store it in a constant:</p>
+
+          <pre><code class="language-swift">let cancellable = Just("Hello")
+    .sink { value in
+        print(value)
+    }</code></pre>
+
+          <p>
+            The value stored in <code>cancellable</code> is an
+            <code>AnyCancellable</code>. For now, remember one simple
+            rule: <strong>a Combine subscription needs to be kept alive
+            for as long as you want to receive values.</strong> Holding
+            on to it is how you keep it alive.
+          </p>
+
+          <div class="callout callout-note">
+            <span class="callout-title">Note</span>
+            <p>
+              That's all you need about subscriptions for now. Lesson 5,
+              <em>Managing Subscriptions</em>, covers exactly how long
+              they live, how to store several of them, and how to stop
+              them properly.
+            </p>
+          </div>
+
+          <h2 id="three-ideas-to-remember">Three Ideas to Remember</h2>
+
+          <p>Everything in this lesson comes down to three ideas.</p>
+
+          <h3 id="idea-publisher">1. Publisher</h3>
+
+          <p>Produces values.</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A publisher produces a value.">Publisher
+   ↓
+ value</pre>
+          </figure>
+
+          <h3 id="idea-subscriber">2. Subscriber</h3>
+
+          <p>Receives values.</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A value reaches a subscriber.">  value
+    ↓
+Subscriber</pre>
+          </figure>
+
+          <h3 id="idea-operator">3. Operator</h3>
+
+          <p>Does something to values while they travel between them.</p>
+
+          <figure class="diagram">
+            <pre role="img" aria-label="A publisher sends a value to an operator, which produces a new value for the subscriber.">Publisher
+    ↓
+  value
+    ↓
+ Operator
+    ↓
+new value
+    ↓
+Subscriber</pre>
+          </figure>
+
+          <div class="callout callout-key">
+            <span class="callout-title">Key idea</span>
+            <p>Put the three together and you have the whole Combine mental model:</p>
+            <figure class="diagram">
+              <pre role="img" aria-label="The core Combine mental model: a publisher produces values, operators work on them, and a subscriber receives them.">Publisher
+    ↓
+ Values
+    ↓
+Operators
+    ↓
+Subscriber</pre>
+            </figure>
+          </div>
+
+          <h2 id="tiny-challenge">Tiny Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+            <p>Look at this pipeline and work out what it prints <strong>before</strong> you run it:</p>
+            <pre><code class="language-swift">[1, 2, 3, 4].publisher
+    .map { number in
+        number * 10
+    }
+    .sink { value in
+        print(value)
+    }</code></pre>
+            <p>Trace each value through the pipe, one at a time:</p>
+            <figure class="diagram">
+              <pre role="img" aria-label="Tracing prompt: 1 times 10 is what? 2 times 10 is what? 3 times 10 is what? 4 times 10 is what?">1 → ×10 → ?
+2 → ×10 → ?
+3 → ×10 → ?
+4 → ×10 → ?</pre>
+            </figure>
+            <p>
+              Write your answer down, then paste the code into a
+              Playground and see whether the output matches. If it
+              doesn't, trace it again and find the step where your
+              prediction changed.
+            </p>
+          </div>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <span class="pagination-placeholder">This is the first lesson</span>
+            <span class="pagination-placeholder is-next">
+              <span class="pagination-label">Coming soon</span>
+              Lesson 2 — Creating &amp; Transforming Data Streams
+            </span>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>

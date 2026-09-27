@@ -13,7 +13,12 @@
 
    2. Primary navigation state
       Marks the nav link for the current page/section with
-      aria-current once the header has been inserted.
+      aria-current once the header has been inserted. A link is
+      the current page when its href matches exactly, and the
+      current section when the path starts with its href or with
+      any prefix in its optional data-section attribute (used
+      because Learn lives at "/" while its pages live under
+      /learn/).
 
    3. Article "On this page" highlighting
       Progressive enhancement only — articles are fully
@@ -50,9 +55,11 @@
 
     document.querySelectorAll('.top-nav a[href], .footer-nav a[href]').forEach((link) => {
       const href = link.getAttribute('href');
+      const sections = (link.dataset.section || '').split(/\s+/).filter(Boolean);
+      if (href !== '/') sections.push(href);
       if (href === path) {
         link.setAttribute('aria-current', 'page');
-      } else if (href !== '/' && path.startsWith(href)) {
+      } else if (sections.some((prefix) => path.startsWith(prefix))) {
         link.setAttribute('aria-current', 'true');
       }
     });

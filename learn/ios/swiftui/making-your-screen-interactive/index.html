@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>Making Your Screen Interactive — SwiftUI for Beginners | TechBuzz Apps</title>
+  <meta name="description" content="Learn how SwiftUI responds to user interaction using Button, @State, TextField, Toggle, bindings and state-driven UI.">
+  <link rel="canonical" href="https://techbuzzapps.com/learn/ios/swiftui/making-your-screen-interactive/">
+
+  <meta property="og:title" content="Making Your Screen Interactive — SwiftUI for Beginners, Lesson 3">
+  <meta property="og:description" content="Learn how SwiftUI responds to user interaction using Button, @State, TextField, Toggle, bindings and state-driven UI.">
+  <meta property="og:url" content="https://techbuzzapps.com/learn/ios/swiftui/making-your-screen-interactive/">
+  <meta property="og:type" content="article">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+</head>
+
+<body class="site-shell">
+
+  <div data-component="site-header"></div>
+
+  <main id="main" class="site-main">
+    <div class="container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swiftui/">SwiftUI</a></li>
+          <li aria-current="page">Making Your Screen Interactive</li>
+        </ol>
+      </nav>
+
+      <div class="article-layout">
+
+        <aside class="article-sidebar" aria-label="Lesson contents">
+
+          <details open>
+            <summary>On This Page</summary>
+            <nav data-toc aria-label="On this page">
+              <ul>
+                <li><a href="#button">Button</a></li>
+                <li><a href="#meet-state">@State</a></li>
+                <li><a href="#state-to-ui">State → UI</a></li>
+                <li><a href="#state-driven-ui">State-Driven UI</a></li>
+                <li><a href="#textfield">TextField</a></li>
+                <li><a href="#binding">Binding ($name)</a></li>
+                <li><a href="#toggle">Toggle</a></li>
+                <li><a href="#interactive-screen">Interactive Screen</a></li>
+                <li><a href="#state-ownership">State Ownership</a></li>
+                <li><a href="#mental-model">Mental Model</a></li>
+                <li><a href="#challenge">Challenge</a></li>
+                <li><a href="#recap">Recap</a></li>
+              </ul>
+            </nav>
+          </details>
+
+          <details open>
+            <summary>SwiftUI for Beginners</summary>
+            <nav data-series aria-label="SwiftUI for Beginners lessons">
+              <ul>
+                <li><a href="/learn/ios/swiftui/getting-started/">1. Getting Started</a></li>
+                <li><a href="/learn/ios/swiftui/building-your-first-screen/">2. Your First Screen</a></li>
+                <li><span class="is-current" aria-current="page">3. Interactivity</span></li>
+                <li><a href="/learn/ios/swiftui/working-with-lists-of-data/">4. Lists of Data</a></li>
+                <li><a href="/learn/ios/swiftui/navigation-and-multiple-screens/">5. Navigation</a></li>
+                <li><span class="is-future">6. Sharing State</span></li>
+                <li><span class="is-future">7. Real App Interfaces</span></li>
+                <li><span class="is-future">8. Loading Data &amp; MVVM</span></li>
+                <li><span class="is-future">9. Beginner Project</span></li>
+              </ul>
+            </nav>
+          </details>
+
+        </aside>
+
+        <article class="article-content">
+
+          <header class="article-header page-intro">
+            <p class="eyebrow"><span aria-hidden="true">📘</span> SwiftUI for Beginners · Lesson 3 of 9</p>
+            <h1>Making Your Screen Interactive</h1>
+          </header>
+
+          <p>In Lesson 2, we learned how to build layouts using:</p>
+          <pre><code class="language-swift">VStack
+HStack
+ZStack
+Spacer
+padding
+frame
+background</code></pre>
+          <p>Now we'll make those screens <strong>respond to the user</strong>.</p>
+          <p>By the end of this lesson, you'll understand how to build something like:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the screen this lesson builds towards: the title Daily Progress, the number 3 with the words tasks completed, a Complete +1 button, a Your Name text field containing Alex, a Daily Reminder setting switched on, and a Reset button.">┌──────────────────────────────┐
+│                              │
+│        Daily Progress        │
+│                              │
+│             3                │
+│       tasks completed        │
+│                              │
+│        [ Complete +1 ]       │
+│                              │
+│  Your Name                   │
+│  ┌────────────────────────┐  │
+│  │ Alex                   │  │
+│  └────────────────────────┘  │
+│                              │
+│  Daily Reminder       ON     │
+│                              │
+│          Reset               │
+│                              │
+└──────────────────────────────┘</pre>
+          </figure>
+          <p>This introduces four important SwiftUI concepts:</p>
+          <p><strong>Button → State → TextField → Toggle</strong></p>
+          <p>But the real lesson is bigger:</p>
+          <blockquote class="callout"><p><strong>When data changes, SwiftUI updates the screen.</strong></p></blockquote>
+
+          <h2 id="button">1. Let's Start With a Button <span aria-hidden="true">👆</span></h2>
+
+          <p>A button can be incredibly simple:</p>
+          <pre><code class="language-swift">Button("Tap Me") {
+    print("Button tapped!")
+}</code></pre>
+          <p>There are two parts here:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The two parts of a button: the title in parentheses is what we see, and the code inside the braces is what happens when it is tapped.">Button("Tap Me") {
+       ↑             ↑
+   what we see    what happens
+}</pre>
+          </figure>
+          <p>When the user taps the button, Swift executes the code inside <code>{ }</code>.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">Button("Say Hello") {
+    print("Hello!")
+}</code></pre>
+          <p>Tap it five times and <code>"Hello!"</code> gets printed five times.</p>
+          <p>But printing something to Xcode isn't particularly exciting.</p>
+          <p>Let's make the <strong>screen itself change</strong>.</p>
+
+          <h2 id="meet-state">2. Meet <code>@State</code> <span aria-hidden="true">⭐</span></h2>
+
+          <p>Suppose we want to create a counter:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of a counter: the number 0 above an Increase button.">       0
+
+   [ Increase ]</pre>
+          </figure>
+          <p>When the user taps <strong>Increase</strong>:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each tap increases the number: 0, then 1, 2, 3, 4 and so on.">0 → 1 → 2 → 3 → 4...</pre>
+          </figure>
+          <p>We need somewhere to store that number.</p>
+          <p>Normally in Swift, you might write:</p>
+          <pre><code class="language-swift">var count = 0</code></pre>
+          <p>In a SwiftUI <code>View</code>, however, local UI state is commonly declared using:</p>
+          <pre><code class="language-swift">@State private var count = 0</code></pre>
+          <p>Our view becomes:</p>
+          <pre><code class="language-swift">struct CounterView: View {
+
+    @State private var count = 0
+
+    var body: some View {
+        VStack(spacing: 20) {
+
+            Text("\(count)")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Button("Increase") {
+                count += 1
+            }
+        }
+    }
+}</code></pre>
+          <p>Run it.</p>
+          <p>Initially:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 0.">0</pre>
+          </figure>
+          <p>Tap the button:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 1.">1</pre>
+          </figure>
+          <p>Again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 2.">2</pre>
+          </figure>
+          <p>Again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 3.">3</pre>
+          </figure>
+          <p>But something very important just happened.</p>
+          <p>We never told the <code>Text</code> to update.</p>
+          <p>We only changed:</p>
+          <pre><code class="language-swift">count += 1</code></pre>
+          <p>SwiftUI took care of the rest.</p>
+
+          <h2 id="state-to-ui">3. This Is the SwiftUI Mental Model <span aria-hidden="true">🧠</span></h2>
+
+          <p>This concept is worth slowing down for.</p>
+          <p>Our state is:</p>
+          <pre><code class="language-swift">@State private var count = 0</code></pre>
+          <p>Our interface uses that state:</p>
+          <pre><code class="language-swift">Text("\(count)")</code></pre>
+          <p>The button changes the state:</p>
+          <pre><code class="language-swift">count += 1</code></pre>
+          <p>So the flow is:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow diagram: the state count = 0 produces a UI showing 0. When the user taps the button, count becomes 1, SwiftUI updates, and the UI shows 1.">           STATE
+             │
+             ▼
+          count = 0
+             │
+             ▼
+            UI
+             │
+             ▼
+             0
+
+
+        User taps button
+             │
+             ▼
+          count = 1
+             │
+             ▼
+        SwiftUI updates
+             │
+             ▼
+             1</pre>
+          </figure>
+          <p>Think of it as:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="State flows down into the UI.">STATE
+  ↓
+ UI</pre>
+          </figure>
+          <p>Change the state:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="When state changes, SwiftUI notices, and the UI reflects the new state.">STATE CHANGES
+      ↓
+SwiftUI notices
+      ↓
+UI reflects new state</pre>
+          </figure>
+          <p>This is one of the biggest differences from traditional UIKit programming.</p>
+          <p>Instead of thinking:</p>
+          <blockquote class="callout"><p>Find this label and manually change its text.</p></blockquote>
+          <p>you increasingly think:</p>
+          <blockquote class="callout"><p>Change my data. The UI describes what that data should look like.</p></blockquote>
+
+          <h2 id="what-is-state">4. What Exactly Is <code>@State</code>?</h2>
+
+          <p>Let's break this down:</p>
+          <pre><code class="language-swift">@State private var count = 0</code></pre>
+          <h3 id="state-var-count"><code>var count</code></h3>
+          <p>This is our variable.</p>
+          <pre><code class="language-swift">count</code></pre>
+          <p>stores an <code>Int</code>.</p>
+          <h3 id="state-private"><code>private</code></h3>
+          <pre><code class="language-swift">private var count</code></pre>
+          <p>means this state belongs to this view and isn't intended to be accessed directly from outside it.</p>
+          <p>That's generally a good habit for local view state.</p>
+          <h3 id="state-attribute"><code>@State</code></h3>
+          <p>This is the special SwiftUI part.</p>
+          <pre><code class="language-swift">@State</code></pre>
+          <p>tells SwiftUI:</p>
+          <blockquote class="callout"><p>This value can change, and changes to it may affect this view's UI.</p></blockquote>
+          <p>So:</p>
+          <pre><code class="language-swift">@State private var count = 0</code></pre>
+          <p>can be thought of as:</p>
+          <blockquote class="callout"><p>"<code>count</code> is mutable state owned by this view."</p></blockquote>
+
+          <h2 id="another-button">5. Let's Add Another Button</h2>
+
+          <p>We currently have:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch: the number 3 above an Increase button.">3
+
+[ Increase ]</pre>
+          </figure>
+          <p>Let's add Reset.</p>
+          <pre><code class="language-swift">VStack(spacing: 20) {
+
+    Text("\(count)")
+        .font(.largeTitle)
+        .fontWeight(.bold)
+
+    Button("Increase") {
+        count += 1
+    }
+
+    Button("Reset") {
+        count = 0
+    }
+}</code></pre>
+          <p>Now:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch: the number 0 above an Increase button and a Reset button.">0
+
+[ Increase ]
+[ Reset ]</pre>
+          </figure>
+          <p>Tap Increase three times:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 3.">3</pre>
+          </figure>
+          <p>Tap Reset:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows 0.">0</pre>
+          </figure>
+          <p>Both buttons are modifying the <strong>same state</strong>.</p>
+
+          <h2 id="state-driven-ui">6. The UI Can Depend on State</h2>
+
+          <p>State isn't only useful for displaying numbers.</p>
+          <p>It can control how the interface looks.</p>
+          <p>For example:</p>
+          <pre><code class="language-swift">Text(count == 0 ? "Let's get started!" : "Great progress!")</code></pre>
+          <p>Now when:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="count equals 0.">count = 0</pre>
+          </figure>
+          <p>the screen says:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows: Let&#x27;s get started!">Let's get started!</pre>
+          </figure>
+          <p>But after tapping Increase:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows: Great progress!">Great progress!</pre>
+          </figure>
+          <p>The UI is reacting to the data.</p>
+          <p>We can go even further:</p>
+          <pre><code class="language-swift">Image(systemName: count == 0 ? "circle" : "checkmark.circle.fill")</code></pre>
+          <p>Now the image can change too.</p>
+          <p>This is <strong>state-driven UI</strong>.</p>
+
+          <h2 id="showing-and-hiding-views">7. Showing and Hiding Views</h2>
+
+          <p>State can even determine whether a view exists.</p>
+          <pre><code class="language-swift">if count &gt;= 5 {
+    Text("🎉 Goal completed!")
+        .font(.headline)
+}</code></pre>
+          <p>Initially:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows Count: 0.">Count: 0</pre>
+          </figure>
+          <p>At 4:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows Count: 4.">Count: 4</pre>
+          </figure>
+          <p>At 5:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows Count: 5, followed by the message Goal completed!">Count: 5
+
+🎉 Goal completed!</pre>
+          </figure>
+          <p>The interesting part is that we're not manually hiding or showing a label.</p>
+          <p>We're describing a rule:</p>
+          <blockquote class="callout"><p><strong>If</strong> <code>count</code> is at least 5, this <code>Text</code> should exist.</p></blockquote>
+          <p>That's very SwiftUI-like thinking.</p>
+
+          <h2 id="textfield">8. <code>TextField</code> — Let the User Enter Text <span aria-hidden="true">✍️</span></h2>
+
+          <p>So far the user can tap things.</p>
+          <p>What about typing?</p>
+          <p>SwiftUI gives us <code>TextField</code>.</p>
+          <p>Let's create another piece of state:</p>
+          <pre><code class="language-swift">@State private var name = ""</code></pre>
+          <p>Then:</p>
+          <pre><code class="language-swift">TextField("Enter your name", text: $name)</code></pre>
+          <p>You'll notice something new:</p>
+          <pre><code class="language-swift">$name</code></pre>
+          <p>instead of:</p>
+          <pre><code class="language-swift">name</code></pre>
+          <p>Don't worry—we'll come back to <code>$</code> shortly.</p>
+          <p>Let's use it:</p>
+          <pre><code class="language-swift">struct WelcomeView: View {
+
+    @State private var name = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+
+            TextField("Enter your name", text: $name)
+                .textFieldStyle(.roundedBorder)
+
+            Text("Hello, \(name)!")
+        }
+        .padding()
+    }
+}</code></pre>
+          <p>Type:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The user types Sam.">Sam</pre>
+          </figure>
+          <p>and immediately:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows: Hello, Sam!">Hello, Sam!</pre>
+          </figure>
+          <p>appears.</p>
+          <p>Type:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The user types Taylor.">Taylor</pre>
+          </figure>
+          <p>and the UI becomes:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The screen shows: Hello, Taylor!">Hello, Taylor!</pre>
+          </figure>
+          <p>Again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: the user types, name changes, SwiftUI notices, and the Text updates.">User types
+    ↓
+name changes
+    ↓
+SwiftUI notices
+    ↓
+Text updates</pre>
+          </figure>
+          <p>Same idea.</p>
+          <p>Different control.</p>
+
+          <h2 id="binding">9. What Does <code>$name</code> Mean? <span aria-hidden="true">🤔</span></h2>
+
+          <p>This is one of those things that looks mysterious when you're new.</p>
+          <p>Compare:</p>
+          <pre><code class="language-swift">Text("Hello \(name)")</code></pre>
+          <p>with:</p>
+          <pre><code class="language-swift">TextField("Name", text: $name)</code></pre>
+          <p>Why does one use:</p>
+          <pre><code class="language-swift">name</code></pre>
+          <p>and the other:</p>
+          <pre><code class="language-swift">$name</code></pre>
+          <p>Because they need different things.</p>
+          <h3 id="binding-name"><code>name</code></h3>
+          <p>means:</p>
+          <blockquote class="callout"><p>Give me the current value.</p></blockquote>
+          <p>If:</p>
+          <pre><code class="language-swift">name = "Sam"</code></pre>
+          <p>then:</p>
+          <pre><code class="language-swift">Text(name)</code></pre>
+          <p>needs to <strong>read</strong> <code>"Sam"</code>.</p>
+          <h3 id="binding-dollar-name"><code>$name</code></h3>
+          <p>means roughly:</p>
+          <blockquote class="callout"><p>Give this control a connection to the value so it can read <strong>and change</strong> it.</p></blockquote>
+          <p>A <code>TextField</code> needs that connection because when the user types, the text field needs to update <code>name</code>.</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Two-way connection: changes flow in both directions between name and the TextField.">            name
+             ▲
+             │
+             ▼
+          TextField</pre>
+          </figure>
+          <p>Changes can flow between them.</p>
+          <p>SwiftUI calls this connection a <strong>Binding</strong>.</p>
+          <p>For now, just remember:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="name means the current value; $name means a connection, or binding, to the value.">name     → current value
+
+$name    → connection/binding to the value</pre>
+          </figure>
+          <p>We'll understand bindings much more deeply in a later lesson.</p>
+
+          <h2 id="toggle">10. <code>Toggle</code> — Working With <code>Bool</code></h2>
+
+          <p>Suppose our app has a setting:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="A setting row: Daily Reminder, switched on.">Daily Reminder        ON</pre>
+          </figure>
+          <p>That's either:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The value true.">true</pre>
+          </figure>
+          <p>or:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The value false.">false</pre>
+          </figure>
+          <p>So we create:</p>
+          <pre><code class="language-swift">@State private var reminderEnabled = false</code></pre>
+          <p>Then:</p>
+          <pre><code class="language-swift">Toggle("Daily Reminder", isOn: $reminderEnabled)</code></pre>
+          <p>Now the user can switch it:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="The toggle switches from off to on.">OFF → ON</pre>
+          </figure>
+          <p>and our state changes:</p>
+          <pre><code class="language-swift">false → true</code></pre>
+          <p>We can display that state too:</p>
+          <pre><code class="language-swift">Text(reminderEnabled ? "Reminder is on" : "Reminder is off")</code></pre>
+          <p>So once again:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Flow: the toggle changes, reminderEnabled changes, and the UI updates.">Toggle changes
+      ↓
+reminderEnabled changes
+      ↓
+UI updates</pre>
+          </figure>
+          <p>Notice the pattern repeating?</p>
+          <p>That's intentional.</p>
+
+          <h2 id="interactive-screen"><span aria-hidden="true">🛠️</span> Let's Build an Interactive Screen</h2>
+
+          <p>Now let's combine everything.</p>
+          <pre><code class="language-swift">struct DailyProgressView: View {
+
+    @State private var count = 0
+    @State private var name = ""
+    @State private var reminderEnabled = false
+
+    var body: some View {
+
+        VStack(spacing: 24) {
+
+            Text("Daily Progress")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            VStack(spacing: 8) {
+
+                Text("\(count)")
+                    .font(.system(size: 60))
+                    .fontWeight(.bold)
+
+                Text("tasks completed")
+                    .foregroundStyle(.secondary)
+            }
+
+            Button {
+                count += 1
+            } label: {
+                Text("Complete +1")
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.blue)
+                    .foregroundStyle(.white)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 14)
+                    )
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+
+                Text("Your Name")
+                    .font(.headline)
+
+                TextField("Enter your name", text: $name)
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            Toggle(
+                "Daily Reminder",
+                isOn: $reminderEnabled
+            )
+
+            if count &gt;= 5 {
+                Text("🎉 Daily goal completed!")
+                    .font(.headline)
+            }
+
+            Spacer()
+
+            Button("Reset") {
+                count = 0
+            }
+        }
+        .padding()
+    }
+}</code></pre>
+          <p>There's quite a bit of code here, but look at the <strong>state</strong> first:</p>
+          <pre><code class="language-swift">@State private var count = 0
+@State private var name = ""
+@State private var reminderEnabled = false</code></pre>
+          <p>That's our screen's data.</p>
+          <p>Then look at the UI:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each piece of state drives part of the UI: count drives the counter, name drives the text field, and reminderEnabled drives the toggle.">count
+  ↓
+Counter
+
+name
+  ↓
+TextField
+
+reminderEnabled
+  ↓
+Toggle</pre>
+          </figure>
+          <p>And finally the user changes that data:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Each control changes one piece of state: the Button changes count, the TextField changes name, and the Toggle changes reminderEnabled.">Button ──────→ count
+
+TextField ───→ name
+
+Toggle ──────→ reminderEnabled</pre>
+          </figure>
+          <p>That's the important part of this lesson—not memorizing the syntax.</p>
+
+          <h2 id="state-ownership"><span aria-hidden="true">🧩</span> One More Important Idea: State Has an Owner</h2>
+
+          <p>We wrote:</p>
+          <pre><code class="language-swift">struct DailyProgressView: View {
+    @State private var count = 0
+}</code></pre>
+          <p>That means:</p>
+          <blockquote class="callout"><p><code>DailyProgressView</code> <strong>owns</strong> <code>count</code>.</p></blockquote>
+          <p>This will become important later.</p>
+          <p>For now, a useful beginner rule is:</p>
+          <h3 id="use-state-rule">Use <code>@State</code> when a view owns simple UI state.</h3>
+          <p>Good examples include:</p>
+          <pre><code class="language-swift">@State private var count = 0
+
+@State private var isShowingDetails = false
+
+@State private var searchText = ""
+
+@State private var isEnabled = true</code></pre>
+          <p>Don't worry yet about all the other SwiftUI property wrappers you've probably seen:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Property wrappers that are not covered yet: @Binding, @Environment, @Observable, @StateObject and @ObservedObject.">@Binding
+@Environment
+@Observable
+@StateObject
+@ObservedObject</pre>
+          </figure>
+          <p>We'll introduce them when there's a reason to use them.</p>
+          <p>Learning all of them at once usually makes SwiftUI unnecessarily confusing.</p>
+
+          <h2 id="mental-model"><span aria-hidden="true">🧠</span> Lesson 3 Mental Model</h2>
+
+          <p>If you remember only <strong>one diagram</strong> from this lesson, remember this:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Lesson 3 mental model: a STATE box holding count = 3 flows down into a UI box showing Count: 3. User interaction with a Button flows back up to change the state.">             ┌─────────────┐
+             │    STATE    │
+             │             │
+             │ count = 3   │
+             └──────┬──────┘
+                    │
+                    ▼
+             ┌─────────────┐
+             │     UI      │
+             │             │
+             │  Count: 3   │
+             └─────────────┘
+
+                    ▲
+                    │
+              User Interaction
+                    │
+             ┌─────────────┐
+             │   Button    │
+             └─────────────┘</pre>
+          </figure>
+          <p>The user interacts with the interface.</p>
+          <p>That changes state.</p>
+          <p>SwiftUI uses the new state to update the interface.</p>
+          <h3 id="uikit-thinking">UIKit thinking</h3>
+          <figure class="diagram">
+            <pre role="img" aria-label="UIKit thinking: a button is tapped, you find the UI element, then change its properties.">Button tapped
+    ↓
+Find UI element
+    ↓
+Change its properties</pre>
+          </figure>
+          <h3 id="swiftui-thinking">SwiftUI thinking</h3>
+          <figure class="diagram">
+            <pre role="img" aria-label="SwiftUI thinking: a button is tapped, you change state, and the UI reflects the state.">Button tapped
+    ↓
+Change state
+    ↓
+UI reflects state</pre>
+          </figure>
+          <p>That shift in thinking is much more important than memorizing individual SwiftUI APIs.</p>
+
+          <h2 id="challenge"><span aria-hidden="true">🎯</span> Your Challenge</h2>
+
+          <div class="callout callout-challenge">
+            <span class="callout-title">Your turn</span>
+          <p>Build a tiny <strong>Water Tracker</strong>:</p>
+          <figure class="diagram">
+            <pre role="img" aria-label="Sketch of the Water Tracker challenge: a water drop, the title Water Tracker, the number 3 with the words glasses today, an Add Glass button, the text Goal: 8 glasses, a Notifications setting switched on, and a Reset button.">💧
+
+Water Tracker
+
+3
+
+glasses today
+
+[ + Add Glass ]
+
+Goal: 8 glasses
+
+Notifications          ON
+
+[ Reset ]</pre>
+          </figure>
+          <p>Your state might start with:</p>
+          <pre><code class="language-swift">@State private var glasses = 0
+@State private var notificationsEnabled = false</code></pre>
+          <p>Requirements:</p>
+          <ul>
+            <li><strong>Add Glass</strong> increases <code>glasses</code>.</li>
+            <li><strong>Reset</strong> changes it back to <code>0</code>.</li>
+            <li>A <code>Toggle</code> controls notifications.</li>
+            <li>When <code>glasses &gt;= 8</code>, show:</li>
+          </ul>
+          <figure class="diagram">
+            <pre role="img" aria-label="The message: Daily goal reached!">🎉 Daily goal reached!</pre>
+          </figure>
+          <h3 id="bonus-challenge"><span aria-hidden="true">⭐</span> Bonus challenge</h3>
+          <p>Don't let the counter go higher than 8.</p>
+          <p>Think about what could go inside:</p>
+          <pre><code class="language-swift">Button {
+    // What condition could go here?
+}</code></pre>
+          <p>You already know enough Swift to solve that. 😎</p>
+          </div>
+
+          <h2 id="recap"><span aria-hidden="true">✅</span> What You Now Know</h2>
+
+          <p>After only three lessons, you can already understand the foundations of a surprising amount of SwiftUI code:</p>
+          <pre><code class="language-swift">Text
+Image
+
+VStack
+HStack
+ZStack
+Spacer
+
+.padding()
+.frame()
+.background()
+.foregroundStyle()
+
+Button
+@State
+TextField
+Toggle
+
+if</code></pre>
+          <p>More importantly, you now understand the fundamental relationship:</p>
+          <blockquote class="callout"><p><strong>State → UI</strong></p></blockquote>
+          <p>Our next lesson should <strong>not</strong> be another pile of small controls.</p>
+
+          <h2 id="lesson-4"><span aria-hidden="true">📗</span> Lesson 4 — Working With Lists of Data</h2>
+
+          <p>Instead of hardcoding:</p>
+          <pre><code class="language-swift">Text("Apple")
+Text("Banana")
+Text("Orange")</code></pre>
+          <p>we'll learn how real apps represent data using <strong>Swift models</strong>, then turn collections of that data into UI using <strong><code>ForEach</code>, <code>List</code>, and <code>Identifiable</code></strong>.</p>
+          <p>That's where SwiftUI starts feeling much more like building a real application.</p>
+
+          <nav class="article-pagination" aria-label="Lesson navigation">
+            <a href="/learn/ios/swiftui/building-your-first-screen/" class="pagination-link">
+              <span class="pagination-label">Previous lesson</span>
+              Lesson 2 — Building Your First Screen
+            </a>
+            <a href="/learn/ios/swiftui/working-with-lists-of-data/" class="pagination-link is-next">
+              <span class="pagination-label">Next lesson</span>
+              Lesson 4 — Working With Lists of Data
+            </a>
+          </nav>
+
+        </article>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div data-component="site-footer"></div>
+
+</body>
+
+</html>
