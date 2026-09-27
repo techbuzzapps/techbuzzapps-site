@@ -1,0 +1,512 @@
+/* =========================================================
+   Learn — shared styles for the /learn/ section
+   Loaded together with /assets/css/style.css on every Learn
+   page. style.css provides the base reset, dark background,
+   typography (h1/h2/h3/p/a) and .container/.page-content/
+   .card/.apps patterns already used by the app pages — this
+   file only adds the layout/components that are specific to
+   learning content, so nothing here is duplicated from there.
+========================================================= */
+
+/* =========================
+   Site header (Learn pages)
+========================= */
+
+.site-header {
+  background: #0f172a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.site-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.site-header .brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+}
+
+.site-header .brand:hover {
+  color: white;
+}
+
+.top-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.top-nav a {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.top-nav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fde68a;
+}
+
+.top-nav a.active {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+}
+
+/* =========================
+   Site footer (Learn pages)
+========================= */
+
+.site-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  color: #9ca3af;
+  font-size: 14px;
+  text-align: center;
+}
+
+.site-footer a {
+  color: #9ca3af;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+.site-footer a:hover {
+  color: #fbbf24;
+}
+
+/* =========================
+   Breadcrumbs
+========================= */
+
+.breadcrumbs {
+  text-align: left;
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumbs a {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.breadcrumbs a:hover {
+  color: #fbbf24;
+}
+
+.breadcrumbs [aria-current="page"] {
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+/* =========================
+   Learn intro / hub intro
+   (kept compact on purpose —
+   not a large marketing hero)
+========================= */
+
+.learn-intro {
+  text-align: left;
+  max-width: 720px;
+  margin-bottom: 36px;
+}
+
+.learn-intro h1 {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.learn-intro .subtitle {
+  margin-bottom: 0;
+}
+
+/* =========================
+   Category / topic cards
+   (built on top of the
+   existing .apps / .card grid)
+========================= */
+
+.category-grid {
+  text-align: left;
+}
+
+.card .card-icon {
+  font-size: 26px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.card-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* =========================
+   Roadmap / topic lists
+   Used on hub pages to show
+   future topics without ever
+   linking to a page that
+   doesn't exist yet.
+========================= */
+
+.topic-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.topic-list li {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.topic-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d1d5db;
+}
+
+.topic-pill.is-available {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.topic-pill.is-future {
+  color: #9ca3af;
+}
+
+.topic-pill.is-future::after {
+  content: "Coming soon";
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+}
+
+/* =========================
+   Article layout
+========================= */
+
+.article-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 40px;
+  text-align: left;
+  align-items: start;
+}
+
+.article-sidebar {
+  font-size: 14px;
+}
+
+/* The sidebar uses native <details>/<summary> for its two
+   sections so the "On this page" / "In this section" lists
+   are collapsible on mobile with zero JavaScript. They render
+   open by default, so on desktop they simply read as a
+   permanent sidebar with two labeled groups. */
+.article-sidebar details + details {
+  margin-top: 22px;
+}
+
+.article-sidebar summary {
+  cursor: pointer;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.article-sidebar summary::-webkit-details-marker {
+  color: #6b7280;
+}
+
+.article-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.article-sidebar li {
+  margin-bottom: 6px;
+}
+
+.article-sidebar a {
+  color: #d1d5db;
+  font-weight: 500;
+  display: inline-block;
+  padding: 4px 0;
+}
+
+.article-sidebar a:hover,
+.article-sidebar a:focus-visible {
+  color: #fbbf24;
+}
+
+.article-sidebar .is-current {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.article-sidebar .is-future {
+  color: #6b7280;
+  font-weight: 500;
+  display: block;
+  padding: 4px 0;
+}
+
+/* =========================
+   Article content
+========================= */
+
+.article-content {
+  max-width: 720px;
+}
+
+.article-content > p:first-of-type {
+  font-size: 18px;
+  color: #d1d5db;
+}
+
+.article-content h2 {
+  scroll-margin-top: 20px;
+}
+
+.article-content h3 {
+  scroll-margin-top: 20px;
+  font-size: 19px;
+}
+
+.article-content > ol,
+.article-content > ul {
+  color: #d1d5db;
+  font-size: 17px;
+  line-height: 1.8;
+  margin: 0 0 22px;
+  padding-left: 22px;
+}
+
+.article-content li + li {
+  margin-top: 8px;
+}
+
+/* =========================
+   Code
+========================= */
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: #fde68a;
+}
+
+pre {
+  background: #0b1220;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  margin: 0 0 24px;
+  max-width: 100%;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  color: #e5e7eb;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+/* =========================
+   Callouts
+========================= */
+
+.callout {
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 0 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 15px;
+  line-height: 1.7;
+  color: #d1d5db;
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.callout-note {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.callout-note .callout-title {
+  color: #93c5fd;
+}
+
+.callout-warning {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.callout-warning .callout-title {
+  color: #fca5a5;
+}
+
+.callout-tip {
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.callout-tip .callout-title {
+  color: #fbbf24;
+}
+
+.callout-takeaway {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.28);
+}
+
+.callout-takeaway .callout-title {
+  color: #6ee7b7;
+}
+
+.callout-takeaway ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* =========================
+   Previous / next navigation
+========================= */
+
+.article-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.article-pagination .pagination-link {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.article-pagination .pagination-link.is-next {
+  text-align: right;
+}
+
+.article-pagination .pagination-label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.article-pagination .pagination-placeholder {
+  flex: 1;
+  padding: 14px 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 768px) {
+
+  .site-header-inner {
+    padding: 14px 16px;
+  }
+
+  .learn-intro h1 {
+    font-size: 28px;
+  }
+
+  .article-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .article-sidebar {
+    order: -1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 4px 16px;
+  }
+
+  .article-sidebar details {
+    padding: 12px 0;
+  }
+
+  .article-sidebar details + details {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 0;
+  }
+
+  .article-pagination {
+    flex-direction: column;
+  }
+
+  .article-pagination .pagination-link.is-next {
+    text-align: left;
+  }
+}
