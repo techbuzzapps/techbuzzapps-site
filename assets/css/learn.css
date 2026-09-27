@@ -533,6 +533,76 @@ pre code {
   overflow-wrap: normal;
 }
 
+/* Code blocks enhanced by common.js (enhanceCodeBlocks). The wrapper
+   anchors the Copy button, so it stays put while the <pre> scrolls
+   horizontally; the extra top padding keeps line 1 clear of it. */
+.code-block {
+  position: relative;
+  max-width: 100%;
+  margin: 0 0 var(--space-lg);
+}
+
+.code-block pre {
+  margin: 0;
+  padding-top: 58px;
+}
+
+.code-copy-button {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  top: 10px;
+  right: 10px;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 7px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(8, 18, 35, 0.88);
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.code-copy-button svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.code-copy-button:hover {
+  border-color: var(--color-accent-border);
+  color: var(--color-text);
+}
+
+.code-copy-button.is-copied {
+  color: var(--color-success);
+}
+
+.code-copy-button.is-failed {
+  color: var(--color-danger);
+}
+
+/* Content for assistive technology only (e.g. the copy status). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Diagrams: plain-text sketches (view trees, spacing, rough UI
    previews). Deliberately not styled as code — lighter dashed
    surface, body text colour — and captioned with <figcaption>.
