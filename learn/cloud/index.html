@@ -5,6 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Learn Cloud — TechBuzz Apps</title>
   <meta name="description" content="Google Cloud Platform (GCP) and AWS — cloud fundamentals, architecture, deployment, containers, serverless, and production infrastructure.">
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
 
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -27,29 +29,21 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand">TechBuzz <span class="highlight">Apps</span></a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="/">Apps</a>
-        <a href="/learn/" class="active">Learn</a>
-      </nav>
-    </div>
-  </header>
+  <div data-component="site-header"></div>
 
-  <main>
+  <main id="main" class="learn-main">
     <div class="container">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">TechBuzz Apps</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/">Learn</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Cloud</span>
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li aria-current="page">Cloud</li>
+        </ol>
       </nav>
 
       <div class="learn-intro">
-        <h1>☁️ Cloud</h1>
+        <h1><span class="heading-icon" aria-hidden="true">☁️</span> Cloud</h1>
         <p class="subtitle">
           Cloud architecture, deployment, and production infrastructure
           on the two platforms most engineers end up working with —
@@ -57,48 +51,41 @@
         </p>
       </div>
 
-      <div class="apps category-grid">
-
-        <div class="card">
-          <h2>
-            <a href="/learn/cloud/gcp/" class="app-title">Google Cloud Platform (GCP)</a>
-          </h2>
-          <p>
-            Cloud fundamentals, IAM, compute, storage, networking,
-            serverless, and hands-on GCP projects.
-          </p>
-          <ul class="topic-list">
+      <ul class="card-grid">
+        <li class="topic-card">
+          <h2 class="topic-card-title"><a href="/learn/cloud/gcp/">Google Cloud Platform (GCP)</a></h2>
+          <p>Cloud fundamentals, IAM, compute, storage, networking, serverless, and hands-on GCP projects.</p>
+          <ul class="topic-list" aria-label="Topics">
             <li><span class="topic-pill is-future">Cloud Fundamentals</span></li>
             <li><span class="topic-pill is-future">IAM</span></li>
             <li><span class="topic-pill is-future">Compute Engine</span></li>
             <li><span class="topic-pill is-future">Cloud Run</span></li>
           </ul>
-        </div>
-
-        <div class="card">
-          <h2>
-            <a href="/learn/cloud/aws/" class="app-title">Amazon Web Services (AWS)</a>
-          </h2>
-          <p>
-            Cloud fundamentals, IAM, compute, storage, networking,
-            serverless, and hands-on AWS projects.
-          </p>
-          <ul class="topic-list">
+          <div class="topic-card-meta">
+            <span class="badge">Roadmap</span>
+            <span class="topic-card-cta" aria-hidden="true">Explore →</span>
+          </div>
+        </li>
+        <li class="topic-card">
+          <h2 class="topic-card-title"><a href="/learn/cloud/aws/">Amazon Web Services (AWS)</a></h2>
+          <p>Cloud fundamentals, IAM, compute, storage, networking, serverless, and hands-on AWS projects.</p>
+          <ul class="topic-list" aria-label="Topics">
             <li><span class="topic-pill is-future">Cloud Fundamentals</span></li>
             <li><span class="topic-pill is-future">IAM</span></li>
             <li><span class="topic-pill is-future">EC2</span></li>
             <li><span class="topic-pill is-future">Lambda</span></li>
           </ul>
-        </div>
-
-      </div>
+          <div class="topic-card-meta">
+            <span class="badge">Roadmap</span>
+            <span class="topic-card-cta" aria-hidden="true">Explore →</span>
+          </div>
+        </li>
+      </ul>
 
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 TechBuzz Apps. All rights reserved. — <a href="/">Back to TechBuzz Apps</a></p>
-  </footer>
+  <div data-component="site-footer"></div>
 
 </body>
 

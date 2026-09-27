@@ -5,6 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Learn Swift — TechBuzz Apps</title>
   <meta name="description" content="Swift language guides for iOS engineers — closures, optionals, protocols, generics, error handling, and concurrency.">
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
 
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -27,27 +29,18 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand">TechBuzz <span class="highlight">Apps</span></a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="/">Apps</a>
-        <a href="/learn/" class="active">Learn</a>
-      </nav>
-    </div>
-  </header>
+  <div data-component="site-header"></div>
 
-  <main>
+  <main id="main" class="learn-main">
     <div class="container">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">TechBuzz Apps</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/">Learn</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/ios/">iOS</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Swift</span>
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li aria-current="page">Swift</li>
+        </ol>
       </nav>
 
       <div class="learn-intro">
@@ -59,35 +52,36 @@
         </p>
       </div>
 
-      <div class="page-content">
-
-        <h2>Topics</h2>
-
-        <ul class="features">
-          <li>
-            <a href="/learn/ios/swift/closures/">Closures</a>
-            — how Swift closures capture values and where you'll
-            use them day to day.
+      <section class="learn-section">
+        <div class="section-header">
+          <h2 class="section-title">Topics</h2>
+        </div>
+        <ul class="topic-index">
+          <li class="topic-item is-available">
+            <a href="/learn/ios/swift/closures/">
+              <span class="topic-item-body">
+                <span class="topic-item-title">Closures</span>
+                <span class="topic-item-desc">How Swift closures capture values and where you'll use them day to day.</span>
+              </span>
+              <span class="topic-item-arrow" aria-hidden="true">→</span>
+            </a>
           </li>
-          <li>Swift Basics <span class="card-badge">Coming soon</span></li>
-          <li>Optionals <span class="card-badge">Coming soon</span></li>
-          <li>Collections <span class="card-badge">Coming soon</span></li>
-          <li>Functions <span class="card-badge">Coming soon</span></li>
-          <li>Protocols <span class="card-badge">Coming soon</span></li>
-          <li>Generics <span class="card-badge">Coming soon</span></li>
-          <li>Error Handling <span class="card-badge">Coming soon</span></li>
-          <li>ARC &amp; Memory Management <span class="card-badge">Coming soon</span></li>
-          <li>Concurrency <span class="card-badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Swift Basics</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Optionals</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Collections</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Functions</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Protocols</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Generics</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Error Handling</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">ARC &amp; Memory Management</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Concurrency</span> <span class="badge">Coming soon</span></li>
         </ul>
-
-      </div>
+      </section>
 
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 TechBuzz Apps. All rights reserved. — <a href="/">Back to TechBuzz Apps</a></p>
-  </footer>
+  <div data-component="site-footer"></div>
 
 </body>
 

@@ -5,6 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Learn Generative AI — TechBuzz Apps</title>
   <meta name="description" content="LLM fundamentals, embeddings, vector search, retrieval-augmented generation, AI agents, and production AI applications.">
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
 
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -27,27 +29,18 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand">TechBuzz <span class="highlight">Apps</span></a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="/">Apps</a>
-        <a href="/learn/" class="active">Learn</a>
-      </nav>
-    </div>
-  </header>
+  <div data-component="site-header"></div>
 
-  <main>
+  <main id="main" class="learn-main">
     <div class="container">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">TechBuzz Apps</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/">Learn</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/ai-python/">AI &amp; Python</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Generative AI</span>
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ai-python/">AI &amp; Python</a></li>
+          <li aria-current="page">Generative AI</li>
+        </ol>
       </nav>
 
       <div class="learn-intro">
@@ -59,27 +52,24 @@
         </p>
       </div>
 
-      <div class="page-content">
-
-        <h2>Topics</h2>
-
-        <ul class="features">
-          <li>LLM Fundamentals <span class="card-badge">Coming soon</span></li>
-          <li>Embeddings <span class="card-badge">Coming soon</span></li>
-          <li>Vector Search <span class="card-badge">Coming soon</span></li>
-          <li>Retrieval-Augmented Generation (RAG) <span class="card-badge">Coming soon</span></li>
-          <li>AI Agents <span class="card-badge">Coming soon</span></li>
-          <li>Production AI Applications <span class="card-badge">Coming soon</span></li>
+      <section class="learn-section">
+        <div class="section-header">
+          <h2 class="section-title">Topics</h2>
+        </div>
+        <ul class="topic-index">
+          <li class="topic-item is-future"><span class="topic-item-title">LLM Fundamentals</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Embeddings</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Vector Search</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Retrieval-Augmented Generation (RAG)</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">AI Agents</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Production AI Applications</span> <span class="badge">Coming soon</span></li>
         </ul>
-
-      </div>
+      </section>
 
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 TechBuzz Apps. All rights reserved. — <a href="/">Back to TechBuzz Apps</a></p>
-  </footer>
+  <div data-component="site-footer"></div>
 
 </body>
 

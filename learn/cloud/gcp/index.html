@@ -5,6 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Learn Google Cloud Platform (GCP) — TechBuzz Apps</title>
   <meta name="description" content="A future GCP learning track combining core concepts, practical examples, console-based hands-on exercises, and real architecture and use cases.">
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
 
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -27,27 +29,18 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand">TechBuzz <span class="highlight">Apps</span></a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="/">Apps</a>
-        <a href="/learn/" class="active">Learn</a>
-      </nav>
-    </div>
-  </header>
+  <div data-component="site-header"></div>
 
-  <main>
+  <main id="main" class="learn-main">
     <div class="container">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">TechBuzz Apps</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/">Learn</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/cloud/">Cloud</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">GCP</span>
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/cloud/">Cloud</a></li>
+          <li aria-current="page">GCP</li>
+        </ol>
       </nav>
 
       <div class="learn-intro">
@@ -59,43 +52,37 @@
         </p>
       </div>
 
-      <div class="page-content">
+      <p class="section-lead">
+        As this track is built out, each topic below will combine core concepts, practical examples, console-based hands-on exercises, and real architecture and use cases — rather than being purely theoretical.
+      </p>
 
-        <p>
-          As this track is built out, each topic below will combine
-          core concepts, practical examples, console-based hands-on
-          exercises, and real architecture and use cases — rather
-          than being purely theoretical.
-        </p>
-
-        <h2>Topics</h2>
-
-        <ul class="features">
-          <li>Cloud Fundamentals <span class="card-badge">Coming soon</span></li>
-          <li>IAM <span class="card-badge">Coming soon</span></li>
-          <li>Compute Engine <span class="card-badge">Coming soon</span></li>
-          <li>Cloud Storage <span class="card-badge">Coming soon</span></li>
-          <li>VPC / Networking <span class="card-badge">Coming soon</span></li>
-          <li>Cloud Run <span class="card-badge">Coming soon</span></li>
-          <li>Cloud Functions <span class="card-badge">Coming soon</span></li>
-          <li>Pub/Sub <span class="card-badge">Coming soon</span></li>
-          <li>Cloud SQL <span class="card-badge">Coming soon</span></li>
-          <li>Firestore <span class="card-badge">Coming soon</span></li>
-          <li>Secret Manager <span class="card-badge">Coming soon</span></li>
-          <li>Google Kubernetes Engine (GKE) <span class="card-badge">Coming soon</span></li>
-          <li>Monitoring &amp; Logging <span class="card-badge">Coming soon</span></li>
-          <li>Cloud Architecture <span class="card-badge">Coming soon</span></li>
-          <li>Hands-on Projects <span class="card-badge">Coming soon</span></li>
+      <section class="learn-section">
+        <div class="section-header">
+          <h2 class="section-title">Topics</h2>
+        </div>
+        <ul class="topic-index">
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud Fundamentals</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">IAM</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Compute Engine</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud Storage</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">VPC / Networking</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud Run</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud Functions</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Pub/Sub</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud SQL</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Firestore</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Secret Manager</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Google Kubernetes Engine (GKE)</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Monitoring &amp; Logging</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Cloud Architecture</span> <span class="badge">Coming soon</span></li>
+          <li class="topic-item is-future"><span class="topic-item-title">Hands-on Projects</span> <span class="badge">Coming soon</span></li>
         </ul>
-
-      </div>
+      </section>
 
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 TechBuzz Apps. All rights reserved. — <a href="/">Back to TechBuzz Apps</a></p>
-  </footer>
+  <div data-component="site-footer"></div>
 
 </body>
 

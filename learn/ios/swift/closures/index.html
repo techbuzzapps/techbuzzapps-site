@@ -5,6 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
 
   <title>Swift Closures Explained — TechBuzz Apps</title>
   <meta name="description" content="A practical guide to Swift closures: syntax, parameters and return values, trailing closures, value capture, a real iOS example, common mistakes, and an interview tip.">
@@ -17,6 +18,7 @@
 
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/learn.css">
+  <script src="/assets/js/common.js" defer></script>
 
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -27,34 +29,24 @@
 
 <body>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a href="/" class="brand">TechBuzz <span class="highlight">Apps</span></a>
-      <nav class="top-nav" aria-label="Primary">
-        <a href="/">Apps</a>
-        <a href="/learn/" class="active">Learn</a>
-      </nav>
-    </div>
-  </header>
+  <div data-component="site-header"></div>
 
-  <main>
+  <main id="main" class="learn-main">
     <div class="container">
 
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">TechBuzz Apps</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/">Learn</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/ios/">iOS</a>
-        <span aria-hidden="true">/</span>
-        <a href="/learn/ios/swift/">Swift</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">Closures</span>
+        <ol>
+          <li><a href="/">TechBuzz Apps</a></li>
+          <li><a href="/learn/">Learn</a></li>
+          <li><a href="/learn/ios/">iOS</a></li>
+          <li><a href="/learn/ios/swift/">Swift</a></li>
+          <li aria-current="page">Closures</li>
+        </ol>
       </nav>
 
       <div class="article-layout">
 
-        <aside class="article-sidebar">
+        <aside class="article-sidebar" aria-label="Article contents">
 
           <details open>
             <summary>On This Page</summary>
@@ -77,7 +69,7 @@
             <summary>In This Section</summary>
             <nav data-series aria-label="Swift topics">
               <ul>
-                <li><span class="is-current">Closures</span></li>
+                <li><span class="is-current" aria-current="page">Closures</span></li>
                 <li><span class="is-future">Swift Basics</span></li>
                 <li><span class="is-future">Optionals</span></li>
                 <li><span class="is-future">Protocols</span></li>
@@ -90,14 +82,17 @@
 
         <article class="article-content">
 
-          <h1>Swift Closures</h1>
-          <p class="subtitle">
-            Closures are one of the first Swift features that feel
-            unfamiliar coming from other languages — and one of the
-            most common topics in iOS interviews. This guide covers
-            what they are, how to write them, and where you'll
-            actually use them.
-          </p>
+          <header class="article-header">
+            <p class="eyebrow">Swift</p>
+            <h1>Swift Closures</h1>
+            <p class="subtitle">
+              Closures are one of the first Swift features that feel
+              unfamiliar coming from other languages — and one of the
+              most common topics in iOS interviews. This guide covers
+              what they are, how to write them, and where you'll
+              actually use them.
+            </p>
+          </header>
 
           <h2 id="what-is-a-closure">What is a Closure?</h2>
 
@@ -307,9 +302,7 @@ networkService.fetchTempleList { [weak self] result in
     </div>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 TechBuzz Apps. All rights reserved. — <a href="/">Back to TechBuzz Apps</a></p>
-  </footer>
+  <div data-component="site-footer"></div>
 
 </body>
 
