@@ -13,6 +13,12 @@
 ========================= */
 
 :root {
+  /* The site is dark-only. Declaring it tells the browser the page
+     already supplies a dark design, so it paints a dark canvas,
+     scrollbars and form controls and does not apply its own
+     automatic/forced dark or light transformation after load. */
+  color-scheme: dark;
+
   /* Color — brand */
   --color-bg: #0f172a;
   --color-bg-deep: #111827;
