@@ -621,6 +621,14 @@ body.site-shell {
   border-color: var(--color-border);
 }
 
+/* Retains the legacy app-detail panel while placing it inside the
+   full-width shared header/footer shell. */
+.app-detail-main {
+  flex: 1;
+  width: 100%;
+  padding: 40px 20px;
+}
+
 /* =========================
    Section headers + hero helpers
 ========================= */
