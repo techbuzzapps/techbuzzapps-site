@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Xcode user-specific files
+DerivedData/
+build/
+
+*.xcuserdatad/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# Swift Package Manager
+.swiftpm/xcode/
+
+# Ignore workspace user data, but keep shared data
+*.xcworkspace/*
+!*.xcworkspace/xcshareddata/
+*.xcworkspace/xcshareddata/*
+!*.xcworkspace/xcshareddata/swiftpm/
+*.xcworkspace/xcshareddata/swiftpm/*
+!*.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# Build artifacts
+*.o
+*.dSYM/
+
+# Firebase
+GoogleService-Info.plist~
