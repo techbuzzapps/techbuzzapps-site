@@ -5,43 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f172a">
   <title>ColorBlitz Support — Help and Game Center</title>
-  <meta name="description" content="ColorBlitz support for game modes, Game Center leaderboards, Premium information, and common troubleshooting steps.">
+  <meta name="description" content="Help with ColorBlitz game modes, scores, Game Center, coins, Premium, ads, settings, and reminders.">
   <link rel="canonical" href="https://techbuzzapps.com/apps/colorblitz/support/">
   <meta property="og:title" content="ColorBlitz Support">
-  <meta property="og:description" content="Help with ColorBlitz game modes, Game Center leaderboards, and Premium information.">
+  <meta property="og:description" content="Help with ColorBlitz modes, scores, Game Center, purchases, ads, and settings.">
   <meta property="og:url" content="https://techbuzzapps.com/apps/colorblitz/support/">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="/assets/css/style.css">
   <script src="/assets/js/common.js" defer></script>
+  <style>
+    .navbar a[aria-current="page"] {
+      border: 1px solid var(--color-accent-border);
+      background: var(--color-accent-soft);
+    }
+  </style>
 </head>
 <body class="site-shell">
   <div data-component="site-header"></div>
   <main id="main" class="app-detail-main">
     <div class="container">
-      <h1>ColorBlitz Support</h1>
-      <p class="subtitle">Help for ColorBlitz game modes and Game Center.</p>
-
-      <div class="page-content">
-        <h2>Game Modes</h2>
-        <p>ColorBlitz includes Classic, Endless, Daily Challenge, and Color Master. Detailed gameplay instructions will be published with the approved release documentation.</p>
-
-        <h2>Game Center</h2>
-        <p>Classic and Endless have dedicated Game Center leaderboards.</p>
-        <p>If Game Center is unavailable, confirm that the device has an internet connection and that Game Center is signed in within the device settings. Then close and reopen ColorBlitz and check again.</p>
-
-        <h2>Premium and Purchases</h2>
-        <p>Confirmed Premium options, purchase guidance, and Restore Purchases instructions will be added after the StoreKit configuration is verified.</p>
-
-        <h2>Contact Support</h2>
-        <p>The official ColorBlitz support contact has not been published yet. It will be added here when confirmed.</p>
-      </div>
-
-      <nav class="card-links" aria-label="ColorBlitz resources">
-        <a href="/apps/colorblitz/">ColorBlitz</a>
+      <nav class="navbar" aria-label="ColorBlitz">
+        <a href="/apps/colorblitz/">Home</a>
+        <a href="/apps/colorblitz/premium/">Premium</a>
+        <a href="/apps/colorblitz/support/" aria-current="page">Support</a>
         <a href="/apps/colorblitz/privacy/">Privacy</a>
         <a href="/apps/colorblitz/terms/">Terms</a>
-        <a href="/apps/colorblitz/premium/">Premium</a>
       </nav>
+      <h1><a href="/apps/colorblitz/">ColorBlitz Support</a></h1>
+      <p class="subtitle">Answers about play, progress, Game Center, and purchases.</p>
+
+      <div class="page-content">
+        <section aria-labelledby="faq-gameplay">
+          <h2 id="faq-gameplay">Gameplay</h2>
+          <details class="card">
+            <summary>How do I play each mode?</summary>
+            <p><strong>Classic:</strong> Match the ink color to the prompt in a 60-second round. <strong>Endless:</strong> Keep answering as the response window gets shorter; you can pause and resume. <strong>Daily Challenge:</strong> Play the day's shared Classic-style challenge. <strong>Color Master:</strong> Play a timed round through Learn, Shades, Families, and Master tiers. Wrong answers cost 2 seconds in Color Master.</p>
+          </details>
+          <details class="card">
+            <summary>How do Classic scores and combos work?</summary>
+            <p>Each correct answer earns 10 points plus 2 points per combo step, up to a 20-point bonus. A wrong answer resets your combo.</p>
+          </details>
+        </section>
+
+        <section aria-labelledby="faq-game-center">
+          <h2 id="faq-game-center">Game Center and leaderboards</h2>
+          <details class="card">
+            <summary>What are Standard and Assisted scores?</summary>
+            <p>Classic Standard, Classic Assisted, Endless Standard, and Endless Assisted scores appear in separate categories. Using a hint puts that run in Assisted; turning hints off later in the same run does not change it back to Standard.</p>
+          </details>
+          <details class="card">
+            <summary>Which scores are eligible?</summary>
+            <p>Classic needs at least one answer, 60% accuracy, and a valid 60-second run. Endless needs at least one answer and a positive, valid score. Daily Challenge scores are not submitted. An Endless run continued with coins or a rewarded ad is not eligible.</p>
+          </details>
+          <details class="card">
+            <summary>Which Game Center account gets my score?</summary>
+            <p>An eligible run is tied to the Game Center account signed in when you start it. Runs played while signed out, and older runs without a recorded account, stay in your local progress. Signing in later or switching accounts does not move those scores to another account. Your local history and progress remain on your device.</p>
+          </details>
+          <details class="card">
+            <summary>Why can't I see my score?</summary>
+            <p>Check that Game Center is signed in and you have a connection. Make sure the run qualifies and you're viewing its Standard or Assisted category. Signed-out and older unassigned runs, Daily Challenge scores, and continued Endless runs won't appear. Game Center or network issues can also delay a submission or ranking; try again later.</p>
+          </details>
+        </section>
+
+        <section aria-labelledby="faq-rewards">
+          <h2 id="faq-rewards">Coins and rewards</h2>
+          <details class="card">
+            <summary>How do coins and XP work?</summary>
+            <p>Coins and XP build your local progress. Classic rewards depend on your run; a perfect Classic run adds 10 coins. Completing Daily Challenge adds 5 coins once per day. An earned coin ad gives 10 coins, up to five times per day.</p>
+          </details>
+          <details class="card">
+            <summary>What can I spend coins on?</summary>
+            <p>Spend 100 coins for one Endless continue or 500 coins for one Color Master run. Endless allows at most one continue per run.</p>
+          </details>
+        </section>
+
+        <section aria-labelledby="faq-premium">
+          <h2 id="faq-premium">Premium and purchases</h2>
+          <details class="card">
+            <summary>What comes with Premium?</summary>
+            <p>Monthly and yearly Premium subscriptions provide unlimited Color Master access while active and suppress forced interstitial ads. Optional rewarded ads remain available.</p>
+          </details>
+          <details class="card">
+            <summary>How do I buy or restore Premium?</summary>
+            <p>Open the Store inside ColorBlitz to choose a monthly or yearly plan. To refresh an eligible purchase, choose Restore Purchases in the Store. The current price is shown before purchase.</p>
+          </details>
+        </section>
+
+        <section aria-labelledby="faq-ads">
+          <h2 id="faq-ads">Ads and Continue</h2>
+          <details class="card">
+            <summary>When might I see ads?</summary>
+            <p>Free players may see a forced interstitial when choosing Play Again after two eligible non-Daily Classic rounds; shown ads are spaced by at least 60 seconds. Premium suppresses forced interstitials. Rewarded ads are optional, may be unavailable, and grant a reward only when the ad confirms it was earned.</p>
+          </details>
+          <details class="card">
+            <summary>How does Endless Continue work?</summary>
+            <p>Once per Endless run, you can continue for 100 coins or by earning an available rewarded ad. Continued runs stay in local history but don't qualify for Game Center scores.</p>
+          </details>
+        </section>
+
+        <section aria-labelledby="faq-settings">
+          <h2 id="faq-settings">Settings and reminders</h2>
+          <details class="card">
+            <summary>Where can I change settings?</summary>
+            <p>Open Profile to adjust sound, color hints, appearance, and Daily Challenge reminders.</p>
+          </details>
+          <details class="card">
+            <summary>How do Daily Challenge reminders work?</summary>
+            <p>Turn reminders on in Profile and allow notifications when asked. The reminder is scheduled for 7:00 p.m. local time. Turn it off in Profile or iOS Settings whenever you like.</p>
+          </details>
+        </section>
+
+        <h2>Contact Support</h2>
+        <p>Need more help with ColorBlitz? Email us at <a href="mailto:techbuzzapps@gmail.com">techbuzzapps@gmail.com</a>.</p>
+      </div>
+
     </div>
   </main>
   <div data-component="site-footer"></div>
